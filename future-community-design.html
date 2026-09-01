@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>取阿那亚之长、补城市社区之短——终极未来理想社区完整设计方案</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Serif SC', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)),
+                        url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1920&q=80') center/cover;
+            z-index: 0;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 107, 107, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 3rem;
+        }
+
+        .hero h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #d4af37 0%, #f5e6a3 50%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: #a0a0a0;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .hero .main-concept {
+            font-size: 1.25rem;
+            color: #c0c0c0;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 2;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            z-index: 2;
+        }
+
+        .scroll-hint span {
+            display: block;
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, #d4af37, transparent);
+            margin: 0 auto;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* Section Styling */
+        section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2.5rem;
+            color: #d4af37;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 4rem;
+            font-size: 1.1rem;
+        }
+
+        /* Core Concept */
+        .core-concept {
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            padding: 4rem;
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .core-concept h2 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2rem;
+            color: #d4af37;
+            margin-bottom: 2rem;
+        }
+
+        .core-concept p {
+            font-size: 1.3rem;
+            line-height: 2.2;
+            color: #c8c8c8;
+        }
+
+        /* Inherit Section */
+        .inherit-container {
+            position: relative;
+        }
+
+        .inherit-item {
+            background: rgba(26, 26, 46, 0.6);
+            border-left: 4px solid #d4af37;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border-radius: 0 15px 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .inherit-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateX(10px);
+        }
+
+        .inherit-item .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .inherit-item h3 {
+            font-family: 'Noto Serif SC', serif;
+            color: #d4af37;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .inherit-item h3 .number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #d4af37, #b8962e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .inherit-item .image-wrapper {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .inherit-item .image-wrapper img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .inherit-item:hover .image-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .inherit-item .image-wrapper .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        }
+
+        .inherit-item .image-wrapper .overlay span {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .inherit-item ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .inherit-item li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: #b0b0b0;
+        }
+
+        .inherit-item li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #d4af37;
+        }
+
+        .inherit-item .highlight {
+            color: #d4af37;
+            font-weight: 500;
+        }
+
+        .inherit-item .description {
+            color: #a0a0a0;
+            margin-bottom: 1rem;
+        }
+
+        /* Innovation Section */
+        .innovation-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .innovation-card {
+            background: linear-gradient(145deg, rgba(255, 107, 107, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .innovation-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.2);
+        }
+
+        .innovation-card .card-image {
+            width: 100%;
+            height: 200px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .innovation-card .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .innovation-card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .innovation-card h3 {
+            color: #ff6b6b;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .innovation-card .problem {
+            color: #888;
+            font-style: italic;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .innovation-card .solution {
+            color: #c0c0c0;
+            line-height: 1.9;
+        }
+
+        .innovation-card ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .innovation-card li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #a0a0a0;
+        }
+
+        .innovation-card li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: #ff6b6b;
+        }
+
+        /* Zone Division */
+        .zone-section {
+            background: linear-gradient(145deg, rgba(102, 126, 234, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .zone-image {
+            width: 100%;
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .zone-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .zone-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .zone-item {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .zone-item:hover {
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        .zone-item h4 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .zone-item.zone-1 h4 { color: #4ecdc4; }
+        .zone-item.zone-2 h4 { color: #ffe66d; }
+        .zone-item.zone-3 h4 { color: #ff6b6b; }
+
+        .zone-item p {
+            color: #888;
+            font-size: 0.95rem;
+        }
+
+        /* Final Form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .form-card {
+            background: linear-gradient(145deg, rgba(46, 213, 115, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%);
+            border: 1px solid rgba(46, 213, 115, 0.3);
+            border-radius: 20px;
+            padding: 2.5rem;
+            overflow: hidden;
+        }
+
+        .form-card .form-image {
+            width: 100%;
+            height: 180px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-card .form-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .form-card:hover .form-image img {
+            transform: scale(1.05);
+        }
+
+        .form-card h3 {
+            font-family: 'Noto Serif SC', serif;
+            color: #2ed573;
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-card h3::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #2ed573;
+            border-radius: 50%;
+        }
+
+        .form-card p, .form-card li {
+            color: #b0b0b0;
+            line-height: 1.9;
+        }
+
+        .form-card ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .form-card li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .form-card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #2ed573;
+        }
+
+        /* Summary */
+        .summary {
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.15) 0%, rgba(26, 26, 46, 0.95) 100%);
+            border: 2px solid #d4af37;
+            border-radius: 25px;
+            padding: 4rem;
+            text-align: center;
+            margin: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-image {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 2rem auto;
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.3);
+        }
+
+        .summary-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .summary::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .summary-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .summary h2 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2rem;
+            color: #d4af37;
+            margin-bottom: 2rem;
+        }
+
+        .summary p {
+            font-size: 1.2rem;
+            line-height: 2.2;
+            color: #c0c0c0;
+            margin-bottom: 1rem;
+        }
+
+        .summary .highlight-text {
+            color: #d4af37;
+            font-weight: 600;
+            font-size: 1.4rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1rem;
+            }
+
+            .hero .main-concept {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .zone-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .innovation-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .inherit-item .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .core-concept,
+            .summary,
+            .inherit-item {
+                padding: 1.5rem;
+            }
+
+            .zone-image,
+            .summary-image {
+                height: 250px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            .hero::before,
+            .summary::before {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-image"></div>
+            <div class="hero-content">
+                <h1>取阿那亚之长、补城市社区之短</h1>
+                <p class="subtitle">终极未来理想社区完整设计方案</p>
+                <p class="main-concept">
+                    我结合阿那亚的灵魂（美学+社群+运营） + 城市常住社区的刚需（烟火气+公平+安稳+低成本），<br>
+                    取长补短、彻底去短板，帮你设计一套完美、可落地、能普及、不割裂生活的<br>
+                    <strong style="color: #d4af37;">「下一代终极未来社区」</strong>
+                </p>
+            </div>
+            <div class="scroll-hint">
+                <span></span>
+            </div>
+        </section>
+
+        <!-- Core Concept -->
+        <section id="core">
+            <div class="section-title">一、核心设计理念</div>
+            <p class="section-subtitle">一句话定调</p>
+
+            <div class="core-concept">
+                <h2>🏠 终极定位</h2>
+                <p>
+                    保留阿那亚的「精神质感、美学空间、社群温度、长期运营」，<br>
+                    剔除阿那亚的「圈层贵、度假空、淡旺季、游客乱、生活不便」，打造：<br><br>
+                    <strong style="color: #d4af37; font-size: 1.5rem;">
+                        人人住得起、天天住得舒服、既有烟火生活、又有精神高地的城市常住型未来社区。
+                    </strong>
+                </p>
+            </div>
+        </section>
+
+        <!-- Four Inheritances -->
+        <section id="inherit">
+            <div class="section-title">二、四大继承</div>
+            <p class="section-subtitle">全盘吸收阿那亚顶级优点</p>
+
+            <div class="inherit-container">
+                <div class="inherit-item">
+                    <div class="content-wrapper">
+                        <div class="text-content">
+                            <h3><span class="number">1</span>继承【社区精神地标】，告别千篇一律小区</h3>
+                            <p class="description">不再只有大门、草坪、商铺。每个社区标配小型人文地标：社区美术馆、悬浮书吧、邻里礼堂、下沉庭院，光影步道。</p>
+                            <ul>
+                                <li><span class="highlight">让社区有记忆点</span>、高级感、氛围感</li>
+                                <li>居民不再是住在楼盘里，是住在<span class="highlight">有审美、有文化的生活场</span></li>
+                            </ul>
+                        </div>
+                        <div class="image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80" alt="现代社区建筑">
+                            <div class="overlay">
+                                <span>📍 社区精神地标</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inherit-item">
+                    <div class="content-wrapper">
+                        <div class="text-content">
+                            <h3><span class="number">2</span>继承【强社群体系】，重建邻里关系</h3>
+                            <p class="description">复刻阿那亚成熟社群运营：几十类兴趣社团，常态化免费活动。</p>
+                            <ul>
+                                <li>兴趣社团：阅读、徒步、戏剧、手工、亲子、运动、摄影</li>
+                                <li>活动：周末市集、露天电影、小型艺术展、节日仪式</li>
+                            </ul>
+                            <p class="highlight" style="margin-top: 1rem;">让社区不再是陌生邻居，而是熟人社会、生活共同体。</p>
+                        </div>
+                        <div class="image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80" alt="社区社交活动">
+                            <div class="overlay">
+                                <span>🤝 强社群体系</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inherit-item">
+                    <div class="content-wrapper">
+                        <div class="text-content">
+                            <h3><span class="number">3</span>继承【精细化长期运营】，杜绝交房即摆烂</h3>
+                            <p class="description">引入社区专属运营团队（社区DO生活组织者）：</p>
+                            <ul>
+                                <li>统一管理公共空间</li>
+                                <li>策划全年活动</li>
+                                <li>维护社区审美秩序</li>
+                                <li>收集居民需求、迭代社区服务</li>
+                            </ul>
+                            <p class="highlight" style="margin-top: 1rem;">做到：房子交付，生活持续升级。</p>
+                        </div>
+                        <div class="image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80" alt="社区运营中心">
+                            <div class="overlay">
+                                <span>⚙️ 精细化运营</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inherit-item">
+                    <div class="content-wrapper">
+                        <div class="text-content">
+                            <h3><span class="number">4</span>继承【高品质商业审美】</h3>
+                            <p class="description">社区底商不脏乱、不廉价，统一设计、统一招商。</p>
+                            <p class="highlight">轻咖啡、书店、花店、轻餐饮、便民小店，无扰民低端业态。</p>
+                        </div>
+                        <div class="image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80" alt="高品质商业街区">
+                            <div class="overlay">
+                                <span>☕ 高品质商业</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Four Innovations -->
+        <section id="innovate">
+            <div class="section-title">三、四大革新</div>
+            <p class="section-subtitle">彻底解决阿那亚所有致命缺点</p>
+
+            <div class="innovation-grid">
+                <div class="innovation-card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=80" alt="城市宜居社区">
+                    </div>
+                    <h3>🔧 革新一：解决「小众度假、不适合常住」问题</h3>
+                    <div class="problem">
+                        <strong>阿那亚问题：</strong>只有风景，没有刚需生活。
+                    </div>
+                    <div class="solution">
+                        <strong style="color: #2ed573;">未来社区方案：</strong>风景+刚需双满分
+                        <p>标配15分钟完整民生体系：</p>
+                    </div>
+                    <ul>
+                        <li>社区食堂（平价惠民）</li>
+                        <li>托育、课后托管</li>
+                        <li>养老日间照料</li>
+                        <li>社区医疗驿站</li>
+                    </ul>
+                </div>
+
+                <div class="innovation-card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1520681279154-51b5ff1a89ca?w=800&q=80" alt="普惠平等社区">
+                    </div>
+                    <h3>🌍 革新二：解决「圈层昂贵、门槛高」问题</h3>
+                    <div class="problem">
+                        <strong>阿那亚现状：</strong>是富人第二居所。
+                    </div>
+                    <div class="solution">
+                        <strong style="color: #2ed573;">未来社区方案：</strong>普惠平等、全龄包容
+                    </div>
+                    <ul>
+                        <li>所有公共文化空间全部免费</li>
+                        <li>社群活动公益化</li>
+                        <li>不做高端圈层壁垒</li>
+                    </ul>
+                </div>
+
+                <div class="innovation-card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&q=80" alt="全年活力社区">
+                    </div>
+                    <h3>📅 革新三：解决「淡旺季空置、冷热不均」问题</h3>
+                    <div class="problem">
+                        <strong>阿那亚痛点：</strong>冬天冷清、节假日拥挤。
+                    </div>
+                    <div class="solution">
+                        <strong style="color: #2ed573;">未来社区方案：</strong>常住人口持续激活，全年恒温活力
+                    </div>
+                    <ul>
+                        <li>固定居民稳定基础</li>
+                        <li>家庭日常、亲子活动</li>
+                        <li>老年活动、日常社群</li>
+                    </ul>
+                </div>
+
+                <div class="innovation-card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&q=80" alt="三区分离规划">
+                    </div>
+                    <h3>🏘️ 革新四：解决「游客混居、私密被破坏」问题</h3>
+                    <div class="problem">
+                        <strong>阿那亚最大痛点：</strong>民宿、游客、业主混居，混乱嘈杂。
+                    </div>
+                    <div class="solution">
+                        <strong style="color: #2ed573;">未来社区方案：</strong>严格分区（核心创新）
+                    </div>
+                </div>
+            </div>
+
+            <div class="zone-section">
+                <div class="zone-image">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80" alt="社区规划鸟瞰">
+                </div>
+                <h3 style="text-align: center; color: #667eea; font-family: 'Noto Serif SC', serif; font-size: 1.5rem; margin-bottom: 2rem;">
+                    🔑 三区分离创新模型
+                </h3>
+                <div class="zone-grid">
+                    <div class="zone-item zone-1">
+                        <h4>私密居住区</h4>
+                        <p><strong>纯业主封闭</strong></p>
+                        <p>住宅楼栋、内部庭院</p>
+                        <p>访客准入管理</p>
+                    </div>
+                    <div class="zone-item zone-2">
+                        <h4>公共文化区</h4>
+                        <p><strong>半开放</strong></p>
+                        <p>书吧、展厅、草坪</p>
+                        <p>有限对外开放</p>
+                    </div>
+                    <div class="zone-item zone-3">
+                        <h4>商业配套区</h4>
+                        <p><strong>全开放</strong></p>
+                        <p>沿街商业、市集</p>
+                        <p>街道空间</p>
+                    </div>
+                </div>
+                <p style="text-align: center; margin-top: 2rem; color: #667eea; font-weight: 500;">
+                    ✨ 动静分离、内外分区、居住绝对安静，公共空间足够活力。
+                </p>
+            </div>
+        </section>
+
+        <!-- Final Form -->
+        <section id="final">
+            <div class="section-title">四、最终成型</div>
+            <p class="section-subtitle">全新「终极未来社区」完整形态</p>
+
+            <div class="form-grid">
+                <div class="form-card">
+                    <div class="form-image">
+                        <img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=800&q=80" alt="空间形态">
+                    </div>
+                    <h3>空间形态</h3>
+                    <p><strong>一半烟火日常，一半诗与美学</strong></p>
+                    <ul>
+                        <li><strong>内部：</strong>宜居、安静、全龄友好、民生完善</li>
+                        <li><strong>外部：</strong>审美高级、有地标、有艺术</li>
+                        <li>用景观、连廊、绿植做柔性边界</li>
+                    </ul>
+                </div>
+
+                <div class="form-card">
+                    <div class="form-image">
+                        <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&q=80" alt="生活形态">
+                    </div>
+                    <h3>生活形态</h3>
+                    <p><strong>普通人也拥有「阿那亚式精神生活」</strong></p>
+                    <ul>
+                        <li><strong>日常：</strong>养老、带娃、买菜、看病、上班通勤</li>
+                        <li><strong>周末：</strong>看展、读书、市集、社交</li>
+                    </ul>
+                </div>
+
+                <div class="form-card">
+                    <div class="form-image">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="治理形态">
+                    </div>
+                    <h3>治理形态</h3>
+                    <p><strong>智慧数字化 + 人文自治双驱动</strong></p>
+                    <ul>
+                        <li><strong>智慧平台：</strong>管安全、物业、报修、安防</li>
+                        <li><strong>社群运营：</strong>管温度、邻里、文化</li>
+                        <li><strong>居民议事会：</strong>共建共治</li>
+                    </ul>
+                </div>
+
+                <div class="form-card">
+                    <div class="form-image">
+                        <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=800&q=80" alt="生态形态">
+                    </div>
+                    <h3>生态形态</h3>
+                    <p><strong>低碳、海绵城市、立体绿化</strong></p>
+                    <ul>
+                        <li>四季有景、常年常绿</li>
+                        <li>微气候舒适</li>
+                        <li>绿色宜居不浮夸</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="summary">
+                <div class="summary-image">
+                    <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200&q=80" alt="终极理想社区">
+                </div>
+                <div class="summary-content">
+                    <h2>五、一句话总结最终完美模型</h2>
+                    <p>
+                        <span class="highlight-text">外有阿那亚的审美、艺术、社群、仪式感；</span>
+                    </p>
+                    <p>
+                        <span class="highlight-text">内有城市成熟社区的烟火气、便利性、安全感、公平普惠。</span>
+                    </p>
+                    <br>
+                    <p style="color: #888;">
+                        既不土俗传统小区，也不悬浮网红社区，
+                    </p>
+                    <p style="color: #888;">
+                        是真正适合中国人一辈子居住的
+                    </p>
+                    <p style="font-size: 1.8rem; color: #d4af37; font-family: 'Noto Serif SC', serif; margin-top: 1rem;">
+                        「终极理想未来社区」
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>取阿那亚之长、补城市社区之短——终极未来理想社区完整设计方案</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">© 2024 未来社区设计方案 | 可直接用于汇报/PPT/参赛</p>
+        </footer>
+    </div>
+</body>
+</html>
