@@ -40,7 +40,14 @@ export default function Gallery() {
   };
 
   return (
-    <div className="min-h-screen pt-16 bg-slate-900">
+    <div
+      className="min-h-screen pt-16"
+      style={{
+        backgroundImage: "url('/gallery-backgrounds/1.jpg')",
+        backgroundRepeat: 'repeat',
+        backgroundAttachment: 'fixed',
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4"><span>作品库</span><br /><span className="text-xs text-slate-500">Gallery</span></h1>
