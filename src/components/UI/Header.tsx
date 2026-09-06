@@ -104,7 +104,7 @@ export default function Header() {
                 placeholder="搜索作品..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                className="login-input w-64 pl-10 pr-4 py-2 rounded-lg text-sm text-white placeholder-white/50 focus:outline-none"
+                className="glass-input w-64 pl-10 pr-4 py-2 text-sm placeholder-white/50"
               />
             </form>
 
@@ -137,8 +137,10 @@ export default function Header() {
                 )}
 
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-gradient-accent flex items-center justify-center">
-                    <span className="text-xs font-medium text-white">{user.username.charAt(0).toUpperCase()}</span>
+                  <div className="glass-avatar">
+                    <span className="text-xs font-medium text-white">
+                      {user.username.charAt(0).toUpperCase()}
+                    </span>
                   </div>
                   <span className="text-sm text-slate-300">{user.username}</span>
                 </div>
@@ -201,7 +203,7 @@ export default function Header() {
                 <>
                   <Link
                     to="/upload"
-                    className="px-4 py-2 bg-gradient-accent rounded-lg text-white font-medium"
+                    className="glass-btn w-full"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Upload Work
@@ -210,7 +212,7 @@ export default function Header() {
                   {user.role === 'admin' && (
                     <Link
                       to="/admin"
-                      className="px-4 py-2 bg-purple-600 rounded-lg text-white font-medium"
+                      className="glass-btn w-full"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Admin Panel
@@ -235,7 +237,7 @@ export default function Header() {
               ) : (
                 <Link
                   to="/login"
-                  className="px-4 py-2 bg-gradient-accent rounded-lg text-white font-medium"
+                  className="glass-btn w-full"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Login

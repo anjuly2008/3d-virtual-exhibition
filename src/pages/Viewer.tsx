@@ -57,7 +57,7 @@ export default function Viewer() {
       <div
         className="min-h-screen pt-16 relative flex items-center justify-center"
         style={{
-          backgroundImage: "url('/home-backgrounds/4.gif')",
+          backgroundImage: "url('/backgrounds/4.gif')",
           backgroundRepeat: 'repeat',
           backgroundAttachment: 'fixed',
         }}
@@ -68,7 +68,7 @@ export default function Viewer() {
           <div className="w-16 h-16 border-4 border-accent-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
 
           <p className="text-white">
-            加载作品中...
+            加载作品�?..
             <br />
             <span className="text-xs text-slate-300">
               Loading artworks...
@@ -84,7 +84,7 @@ export default function Viewer() {
       <div
         className="min-h-screen pt-16 relative flex items-center justify-center"
         style={{
-          backgroundImage: "url('/home-backgrounds/4.gif')",
+          backgroundImage: "url('/backgrounds/4.gif')",
           backgroundRepeat: 'repeat',
           backgroundAttachment: 'fixed',
         }}
@@ -97,16 +97,14 @@ export default function Viewer() {
           </div>
 
           <h2 className="text-2xl font-bold text-white mb-2">
-            作品未找到
-            <br />
+            作品未找�?            <br />
             <span className="text-xs text-slate-300">
               Work Not Found
             </span>
           </h2>
 
           <p className="text-slate-200 mb-6">
-            该作品不存在或已被移除
-            <br />
+            该作品不存在或已被移�?            <br />
             <span className="text-xs text-slate-300">
               This work does not exist or has been removed
             </span>
@@ -114,13 +112,12 @@ export default function Viewer() {
 
           <Link
             to="/gallery"
-            className="gallery-filter-btn inline-flex items-center gap-2"
+            className="glass-btn inline-flex items-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" />
 
             <span>
-              返回作品库
-              <br />
+              返回作品�?              <br />
               <span className="text-xs">Back to Gallery</span>
             </span>
           </Link>
@@ -133,7 +130,7 @@ export default function Viewer() {
     <div
       className="min-h-screen pt-16 relative"
       style={{
-        backgroundImage: "url('/home-backgrounds/4.gif')",
+        backgroundImage: "url('/backgrounds/4.gif')",
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
@@ -146,7 +143,7 @@ export default function Viewer() {
             <div className="absolute top-4 left-4 z-20">
               <Link
                 to="/gallery"
-                className="gallery-filter-btn inline-flex items-center gap-2"
+                className="glass-btn inline-flex items-center gap-2"
               >
                 <ArrowLeft className="w-4 h-4" />
 
@@ -160,21 +157,21 @@ export default function Viewer() {
 
             <div className="absolute top-4 right-4 z-20 flex gap-2">
               <button
-                className="gallery-filter-btn p-2"
+                className="glass-btn p-2"
                 type="button"
               >
                 <ZoomIn className="w-5 h-5" />
               </button>
 
               <button
-                className="gallery-filter-btn p-2"
+                className="glass-btn p-2"
                 type="button"
               >
                 <ZoomOut className="w-5 h-5" />
               </button>
 
               <button
-                className="gallery-filter-btn p-2"
+                className="glass-btn p-2"
                 type="button"
               >
                 <RotateCcw className="w-5 h-5" />
@@ -196,14 +193,13 @@ export default function Viewer() {
             }}
           >
             <div className="flex items-center gap-2 mb-4">
-              <span className="gallery-filter-btn px-3 py-1 text-xs">
+              <span className="glass-badge px-3 py-1 text-xs">
                 {exhibit.category}
               </span>
 
               {exhibit.status === 'pending' && (
-                <span className="gallery-filter-btn px-3 py-1 text-xs">
-                  审核中
-                  <br />
+                <span className="glass-badge px-3 py-1 text-xs">
+                  审核�?                  <br />
                   <span className="text-xs">Under Review</span>
                 </span>
               )}
@@ -240,7 +236,7 @@ export default function Viewer() {
             <div className="flex items-center gap-3 mb-6 flex-wrap">
               <button
                 onClick={handleLike}
-                className={`gallery-filter-btn flex items-center gap-2 px-4 py-2 ${
+                className={`glass-btn flex items-center gap-2 px-4 py-2 ${
                   liked ? 'is-active' : ''
                 }`}
               >
@@ -253,7 +249,7 @@ export default function Viewer() {
 
               <button
                 type="button"
-                className="gallery-filter-btn flex items-center gap-2 px-4 py-2"
+                className="glass-btn flex items-center gap-2 px-4 py-2"
               >
                 <Download className="w-5 h-5" />
 
@@ -266,7 +262,7 @@ export default function Viewer() {
 
               <button
                 type="button"
-                className="gallery-filter-btn p-2"
+                className="glass-btn p-2"
               >
                 <Share2 className="w-5 h-5" />
               </button>

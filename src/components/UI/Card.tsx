@@ -14,10 +14,13 @@ export default function Card({ exhibit }: CardProps) {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(exhibit.likes);
 
-  const thumbUrl = exhibit.thumbnail_url || `https://picsum.photos/seed/${exhibit.id}/800/450`;
+  const thumbUrl =
+    exhibit.thumbnail_url ||
+    `https://picsum.photos/seed/${exhibit.id}/800/450`;
 
   useEffect(() => {
-    api.exhibits.getLike(String(exhibit.id))
+    api.exhibits
+      .getLike(String(exhibit.id))
       .then((data) => {
         setLiked(data.liked);
         setLikeCount(data.likes);
@@ -46,10 +49,16 @@ export default function Card({ exhibit }: CardProps) {
           className="w-full h-full object-cover transition-all duration-500 card-thumbnail"
         />
 
-        <Card3DPreview modelUrl={exhibit.model_url} isHovered={isHovered} />
+        <Card3DPreview
+          modelUrl={exhibit.model_url}
+          isHovered={isHovered}
+        />
 
         <div className="absolute top-3 right-3 flex gap-2 z-20">
-          <button onClick={handleLike} className="glass-card-icon-btn">
+          <button
+            onClick={handleLike}
+            className="glass-icon-btn"
+          >
             <Heart
               className={`w-4 h-4 transition-all ${
                 liked ? 'text-red-500 fill-red-500' : 'text-white'
@@ -59,13 +68,17 @@ export default function Card({ exhibit }: CardProps) {
         </div>
 
         <div className="absolute bottom-3 left-3 z-20">
-          <span className="glass-card-tag">{exhibit.category}</span>
+          <span className="glass-badge">
+            {exhibit.category}
+          </span>
 
           {exhibit.status === 'pending' && (
-            <span className="glass-card-tag glass-card-tag-pending">
+            <span className="glass-badge is-pending">
               <span>审核中</span>
               <br />
-              <span className="text-xs text-slate-500">Pending Review</span>
+              <span className="text-xs text-slate-500">
+                Pending Review
+              </span>
             </span>
           )}
         </div>
@@ -82,7 +95,7 @@ export default function Card({ exhibit }: CardProps) {
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="glass-card-avatar">
+            <div className="glass-avatar">
               <span className="text-xs font-medium text-white">
                 {exhibit.creator_name?.charAt(0) || 'U'}
               </span>
@@ -101,13 +114,18 @@ export default function Card({ exhibit }: CardProps) {
           </div>
         </div>
 
-        <Link to={`/viewer/${exhibit.id}`} className="glass-card-view-btn">
+        <Link
+          to={`/viewer/${exhibit.id}`}
+          className="glass-btn w-full mt-4"
+        >
           <Eye className="w-4 h-4" />
 
           <span>
             <span>查看3D模型</span>
             <br />
-            <span className="text-xs text-slate-500">View 3D Model</span>
+            <span className="text-xs text-slate-500">
+              View 3D Model
+            </span>
           </span>
         </Link>
       </div>

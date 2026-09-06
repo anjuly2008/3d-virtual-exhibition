@@ -8,14 +8,36 @@ import type { Exhibit } from '@/types';
 import Card from '@/components/UI/Card';
 import HeroDecorModel from '@/components/3D/HeroDecorModel';
 
-const categories = ['Character', 'Architecture', 'Vehicle', 'Prop', 'Environment'];
+const categories = [
+  {
+    name: 'Character',
+    icon: '/category-gifs/6.gif',
+  },
+  {
+    name: 'Architecture',
+    icon: '/category-gifs/7.gif',
+  },
+  {
+    name: 'Vehicle',
+    icon: '/category-gifs/8.gif',
+  },
+  {
+    name: 'Prop',
+    icon: '/category-gifs/9.gif',
+  },
+  {
+    name: 'Environment',
+    icon: '/category-gifs/10.gif',
+  },
+];
 
 export default function Home() {
   const { selectCategory } = useAppStore();
   const [exhibits, setExhibits] = useState<Exhibit[]>([]);
 
   useEffect(() => {
-    api.exhibits.list({ limit: '6' })
+    api.exhibits
+      .list({ limit: '6' })
       .then((data) => setExhibits(data.exhibits))
       .catch(() => {});
   }, []);
@@ -26,12 +48,15 @@ export default function Home() {
     <div
       className="min-h-screen pt-15"
       style={{
-        backgroundImage: "url('/home-backgrounds/4.gif')",
+        backgroundImage: "url('/backgrounds/4.gif')",
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
     >
-      <section className="relative overflow-visible" style={{ minHeight: '99vh' }}>
+      <section
+        className="relative overflow-visible"
+        style={{ minHeight: '99vh' }}
+      >
         <div className="absolute inset-0 z-10 bg-black/20 pointer-events-none" />
 
         <div className="absolute inset-0 z-20 pointer-events-none">
@@ -55,18 +80,51 @@ export default function Home() {
                 rel="noreferrer"
                 className="flex items-center"
               >
-                <img src="https://text.glitter-graphics.net/blush_noise/v.gif" alt="v" />
-                <img src="https://text.glitter-graphics.net/blush_noise/i.gif" alt="i" />
-                <img src="https://text.glitter-graphics.net/blush_noise/r.gif" alt="r" />
-                <img src="https://text.glitter-graphics.net/blush_noise/t.gif" alt="t" />
-                <img src="https://text.glitter-graphics.net/blush_noise/u.gif" alt="u" />
-                <img src="https://text.glitter-graphics.net/blush_noise/a.gif" alt="a" />
-                <img src="https://text.glitter-graphics.net/blush_noise/l.gif" alt="l" />
+                <img
+                  src="https://text.glitter-graphics.net/blush_noise/v.gif"
+                  alt="v"
+                />
+                <img
+                  src="https://text.glitter-graphics.net/blush_noise/i.gif"
+                  alt="i"
+                />
+                <img
+                  src="https://text.glitter-graphics.net/blush_noise/r.gif"
+                  alt="r"
+                />
+                <img
+                  src="https://text.glitter-graphics.net/blush_noise/t.gif"
+                  alt="t"
+                />
+                <img
+                  src="https://text.glitter-graphics.net/blush_noise/u.gif"
+                  alt="u"
+                />
+                <img
+                  src="https://text.glitter-graphics.net/blush_noise/a.gif"
+                  alt="a"
+                />
+                <img
+                  src="https://text.glitter-graphics.net/blush_noise/l.gif"
+                  alt="l"
+                />
                 <span className="inline-block w-5" />
-                <img src="https://text.glitter-graphics.net/blush_noise/w.gif" alt="w" />
-                <img src="https://text.glitter-graphics.net/blush_noise/o.gif" alt="o" />
-                <img src="https://text.glitter-graphics.net/blush_noise/r.gif" alt="r" />
-                <img src="https://text.glitter-graphics.net/blush_noise/d.gif" alt="d" />
+                <img
+                  src="https://text.glitter-graphics.net/blush_noise/w.gif"
+                  alt="w"
+                />
+                <img
+                  src="https://text.glitter-graphics.net/blush_noise/o.gif"
+                  alt="o"
+                />
+                <img
+                  src="https://text.glitter-graphics.net/blush_noise/r.gif"
+                  alt="r"
+                />
+                <img
+                  src="https://text.glitter-graphics.net/blush_noise/d.gif"
+                  alt="d"
+                />
               </a>
 
               <span className="mt-4 text-2xl sm:text-3xl font-bold text-white">
@@ -75,18 +133,22 @@ export default function Home() {
             </h1>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/gallery" className="home-btn">
+              <Link to="/gallery" className="glass-btn">
                 <span>
                   浏览作品库
-                  <span className="text-xs text-slate-500">/ Browse Gallery</span>
+                  <span className="text-xs text-slate-500">
+                    / Browse Gallery
+                  </span>
                 </span>
                 <ArrowRight className="w-5 h-5" />
               </Link>
 
-              <Link to="/upload" className="home-btn">
+              <Link to="/upload" className="glass-btn">
                 <span>
                   上传作品
-                  <span className="text-xs text-slate-500">/ Upload Work</span>
+                  <span className="text-xs text-slate-500">
+                    / Upload Work
+                  </span>
                 </span>
                 <Upload className="w-5 h-5" />
               </Link>
@@ -116,7 +178,9 @@ export default function Home() {
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
               精选作品
               <br />
-              <span className="text-sm text-slate-400">Featured Works</span>
+              <span className="text-sm text-slate-400">
+                Featured Works
+              </span>
             </h2>
           </div>
 
@@ -127,10 +191,12 @@ export default function Home() {
           </div>
 
           <div className="text-center mt-12">
-            <Link to="/gallery" className="home-btn">
+            <Link to="/gallery" className="glass-btn">
               <span>
                 查看更多作品
-                <span className="text-xs text-slate-500">/ View More Works</span>
+                <span className="text-xs text-slate-500">
+                  / View More Works
+                </span>
               </span>
               <ArrowRight className="w-4 h-4" />
             </Link>
@@ -163,20 +229,21 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            {categories.map((category, index) => (
+            {categories.map((category) => (
               <Link
-                key={category}
+                key={category.name}
                 to="/gallery"
                 className="group p-6"
-                onClick={() => selectCategory(category)}
+                onClick={() => selectCategory(category.name)}
               >
                 <img
-                  src={`/category-gifs/${index + 6}.gif`}
-                  alt={category}
+                  src={category.icon}
+                  alt={category.name}
                   className="w-20 h-20 object-contain mx-auto mb-4 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]"
                 />
+
                 <h3 className="text-white font-medium text-center group-hover:text-accent-400 transition-colors">
-                  {category}
+                  {category.name}
                 </h3>
               </Link>
             ))}
@@ -205,7 +272,8 @@ export default function Home() {
               © 2024 3D展示系统 - 虚拟仿真作品展示平台
               <br />
               <span className="text-xs text-slate-500">
-                © 2024 3D Exhibition System - Virtual Simulation Showcase Platform
+                © 2024 3D Exhibition System - Virtual Simulation Showcase
+                Platform
               </span>
             </p>
           </div>

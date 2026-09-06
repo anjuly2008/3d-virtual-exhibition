@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 全局基础样式 */
 * {
   margin: 0;
   padding: 0;
@@ -14,11 +15,17 @@ html {
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  background: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #1e293b 50%,
+    #0f172a 100%
+  );
   min-height: 100vh;
   color: #f1f5f9;
 }
 
+/* 浏览器滚动条 */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -36,524 +43,19 @@ body {
   background: #64748b;
 }
 
-@layer utilities {
-  .text-gradient {
-    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .bg-gradient-primary {
-    background: linear-gradient(135deg, #1a365d 0%, #1e40af 50%, #1a365d 100%);
-  }
-
-  .bg-gradient-accent {
-    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
-  }
-
-  .glow-effect {
-    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3),
-                0 0 40px rgba(59, 130, 246, 0.2);
-  }
-
-  .card-hover {
-    transition: all 0.3s ease;
-  }
-
-  .card-hover:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  }
-}
-
-
-/* =========================================================
-   Gallery 筛选按钮
-   ---------------------------------------------------------
-   功能：
-   1. 半透明玻璃质感
-   2. 星光细闪
-   3. 鼠标悬停 Jelly 果冻动画
-   4. 选中状态颜色加深
-   ========================================================= */
-
-
-/* =========================================================
-   01. 按钮正常状态
-   ---------------------------------------------------------
-   控制：
-   - 按钮大小
-   - 圆角
-   - 半透明背景
-   - 文字颜色
-   - 毛玻璃
-   - 基础光晕
-   ========================================================= */
-
-.gallery-filter-btn {
-  /* ---------- 基础定位 ---------- */
-  position: relative;
-  isolation: isolate;
-
-  /* ---------- 按钮尺寸 ---------- */
-  display: inline-block;
-  padding: 13px 28px;
-
-  /* ---------- 按钮形状 ---------- */
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  border-radius: 12px;
-
-  /* ---------- 半透明玻璃背景 ---------- */
-  background: rgba(210, 230, 248, 0.16);
-
-  /* ---------- 文字 ---------- */
-  color: #436082;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 600;
-
-  /* ---------- 毛玻璃 ---------- */
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-
-  /* ---------- 基础光晕 ---------- */
-  box-shadow:
-    0 0 10px rgba(255, 255, 255, 0.16),
-    inset 0 0 6px rgba(255, 255, 255, 0.08);
-
-  /* ---------- 交互 ---------- */
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-
-/* =========================================================
-   02. 星光细闪
-   ---------------------------------------------------------
-   控制：
-   - 按钮内部的小星星
-   - 星光位置
-   - 星光大小
-   - 星光亮度
-   ========================================================= */
-
-.gallery-filter-btn::after {
-  content: "";
-
-  position: absolute;
-  inset: 0;
-
-  border-radius: inherit;
-
-  pointer-events: none;
-  z-index: -1;
-
-  background:
-
-    /* 星光 1 */
-    radial-gradient(
-      1.6px 1.6px at 12% 28%,
-      rgba(255, 255, 255, 0.95),
-      transparent
-    ),
-
-    /* 星光 2 */
-    radial-gradient(
-      1.2px 1.2px at 25% 72%,
-      rgba(255, 255, 255, 0.75),
-      transparent
-    ),
-
-    /* 星光 3 */
-    radial-gradient(
-      1px 1px at 38% 35%,
-      rgba(255, 255, 255, 0.85),
-      transparent
-    ),
-
-    /* 星光 4 */
-    radial-gradient(
-      1.5px 1.5px at 52% 18%,
-      rgba(255, 255, 255, 0.9),
-      transparent
-    ),
-
-    /* 星光 5 */
-    radial-gradient(
-      1.1px 1.1px at 63% 68%,
-      rgba(255, 255, 255, 0.8),
-      transparent
-    ),
-
-    /* 星光 6 */
-    radial-gradient(
-      1.5px 1.5px at 76% 32%,
-      rgba(255, 255, 255, 0.9),
-      transparent
-    ),
-
-    /* 星光 7 */
-    radial-gradient(
-      1px 1px at 88% 72%,
-      rgba(255, 255, 255, 0.7),
-      transparent
-    ),
-
-    /* 星光 8 */
-    radial-gradient(
-      1.2px 1.2px at 92% 20%,
-      rgba(255, 255, 255, 0.85),
-      transparent
-    );
-}
-
-
-/* =========================================================
-   03. 鼠标悬停状态
-   ---------------------------------------------------------
-   鼠标放到按钮上时：
-   - 边框变亮
-   - 背景稍微变亮
-   - 光晕增强
-   - 启动 Jelly 果冻动画
-   ========================================================= */
-
-.gallery-filter-btn:hover {
-  border-color: rgba(255, 255, 255, 0.75);
-
-  background: rgba(220, 238, 255, 0.23);
-
-  box-shadow:
-    0 0 18px rgba(255, 255, 255, 0.3),
-    inset 0 0 8px rgba(255, 255, 255, 0.12);
-
-  animation: gallery-btn-jelly 0.6s ease;
-}
-
-
-/* =========================================================
-   04. 鼠标按下瞬间
-   ---------------------------------------------------------
-   鼠标真正按住按钮的瞬间：
-   - 光晕稍微减弱
-   - 给用户一个“按下去了”的感觉
-   ========================================================= */
-
-.gallery-filter-btn:active {
-  box-shadow:
-    0 0 10px rgba(255, 255, 255, 0.2),
-    inset 0 0 6px rgba(255, 255, 255, 0.08);
-}
-
-
-/* =========================================================
-   05. 选中状态
-   ---------------------------------------------------------
-   当前筛选条件被选中时：
-   - 背景颜色比普通状态更深
-   - 边框更加明显
-   - 文字颜色变成更深的蓝色
-   - 蓝色光晕增强
-   ========================================================= */
-
-.gallery-filter-btn.is-active {
-  background: rgba(90, 155, 220, 0.32);
-
-  border-color: rgba(255, 255, 255, 0.75);
-
-  color: #1557a5;
-
-  box-shadow:
-    0 0 18px rgba(70, 150, 255, 0.3),
-    inset 0 0 8px rgba(255, 255, 255, 0.12);
-}
-
-
-/* =========================================================
-   06. 选中状态 + 鼠标悬停
-   ---------------------------------------------------------
-   已经选中的按钮再次被鼠标放上去：
-   - 蓝色更明显
-   - 光晕进一步增强
-   ========================================================= */
-
-.gallery-filter-btn.is-active:hover {
-  background: rgba(90, 155, 220, 0.4);
-
-  border-color: rgba(255, 255, 255, 0.9);
-
-  box-shadow:
-    0 0 22px rgba(70, 150, 255, 0.4),
-    inset 0 0 10px rgba(255, 255, 255, 0.15);
-
-  animation: gallery-btn-jelly 0.6s ease;
-}
-
-
-/* =========================================================
-   07. 键盘聚焦状态
-   ---------------------------------------------------------
-   用户使用 Tab 键选中按钮时显示外轮廓
-   ========================================================= */
-
-.gallery-filter-btn:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.55);
-  outline-offset: 3px;
-}
-
-
-/* =========================================================
-   08. Jelly 果冻动画
-   ---------------------------------------------------------
-   鼠标悬停时：
-   1. 变扁
-   2. 变高
-   3. 回弹
-   4. 恢复正常
-   ========================================================= */
-
-@keyframes gallery-btn-jelly {
-
-  /* 初始状态 / 最终状态 */
-  0%,
-  100% {
-    transform: scale(1, 1);
-  }
-
-  /* 横向变大，纵向变扁 */
-  30% {
-    transform: scale(1.15, 0.85);
-  }
-
-  /* 横向缩小，纵向变高 */
-  50% {
-    transform: scale(0.9, 1.1);
-  }
-
-  /* 开始恢复 */
-  70% {
-    transform: scale(1.05, 0.95);
-  }
-}
-
-/* =========================================================
-   Home 首页按钮
-   ---------------------------------------------------------
-   功能：
-   1. 半透明玻璃
-   2. 星光细闪
-   3. 鼠标悬停时进入 Glass 玻璃效果
-   4. 选中状态暂时不使用
-   ========================================================= */
-
-
-/* =========================================================
-   01. 按钮正常状态
-   ========================================================= */
-
-.home-btn {
-  /* ---------- 基础定位 ---------- */
-  position: relative;
-  isolation: isolate;
-
-  /* ---------- 布局 ---------- */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-
-  /* ---------- 尺寸 ---------- */
-  padding: 13px 28px;
-
-  /* ---------- 形状 ---------- */
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  border-radius: 12px;
-
-  /* ---------- 半透明背景 ---------- */
-  background: rgba(210, 230, 248, 0.16);
-
-  /* ---------- 文字 ---------- */
-  color: #e8f2ff;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 600;
-
-  /* ---------- 玻璃模糊 ---------- */
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-
-  /* ---------- 基础光晕 ---------- */
-  box-shadow:
-    0 0 10px rgba(255, 255, 255, 0.14),
-    inset 0 0 6px rgba(255, 255, 255, 0.08);
-
-  /* ---------- 交互 ---------- */
-  cursor: pointer;
-  white-space: nowrap;
-
-  /* ---------- 动画过渡 ---------- */
-  transition:
-    background 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    color 0.4s ease;
-}
-
-
-/* =========================================================
-   02. 星光细闪
-   ========================================================= */
-
-.home-btn::after {
-  content: "";
-
-  position: absolute;
-  inset: 0;
-
-  border-radius: inherit;
-
-  pointer-events: none;
-  z-index: -1;
-
-  background:
-
-    /* 星光 1 */
-    radial-gradient(
-      1.6px 1.6px at 10% 30%,
-      rgba(255, 255, 255, 0.9),
-      transparent
-    ),
-
-    /* 星光 2 */
-    radial-gradient(
-      1.2px 1.2px at 22% 70%,
-      rgba(255, 255, 255, 0.7),
-      transparent
-    ),
-
-    /* 星光 3 */
-    radial-gradient(
-      1px 1px at 35% 25%,
-      rgba(255, 255, 255, 0.8),
-      transparent
-    ),
-
-    /* 星光 4 */
-    radial-gradient(
-      1.5px 1.5px at 48% 75%,
-      rgba(255, 255, 255, 0.85),
-      transparent
-    ),
-
-    /* 星光 5 */
-    radial-gradient(
-      1.2px 1.2px at 62% 30%,
-      rgba(255, 255, 255, 0.7),
-      transparent
-    ),
-
-    /* 星光 6 */
-    radial-gradient(
-      1.5px 1.5px at 74% 65%,
-      rgba(255, 255, 255, 0.9),
-      transparent
-    ),
-
-    /* 星光 7 */
-    radial-gradient(
-      1px 1px at 86% 20%,
-      rgba(255, 255, 255, 0.75),
-      transparent
-    ),
-
-    /* 星光 8 */
-    radial-gradient(
-      1.2px 1.2px at 92% 78%,
-      rgba(255, 255, 255, 0.8),
-      transparent
-    );
-}
-
-
-/* =========================================================
-   03. 鼠标悬停状态
-   ---------------------------------------------------------
-   参考你找到的 Glass / fx-95：
-   - 背景变亮
-   - 毛玻璃加强
-   - 边框变亮
-   - 出现柔和阴影
-   ========================================================= */
-
-.home-btn:hover {
-  background: rgba(210, 230, 248, 0.24);
-
-  border-color: rgba(255, 255, 255, 0.7);
-
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.65),
-    0 8px 18px -8px rgba(70, 110, 160, 0.45);
-}
-
-
-/* =========================================================
-   04. 鼠标按下状态
-   ========================================================= */
-
-.home-btn:active {
-  background: rgba(210, 230, 248, 0.18);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    0 4px 10px -6px rgba(70, 110, 160, 0.3);
-}
-
-
-/* =========================================================
-   05. 键盘聚焦状态
-   ========================================================= */
-
-.home-btn:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.6);
-  outline-offset: 3px;
-}
-
-/* =========================================================
-   Card 卡片
-   ---------------------------------------------------------
-   透明玻璃 + 星光 + 细边 + Hover 光晕
-   ========================================================= */
-
-
-/* =========================================================
-   01. 卡片正常状态
-   ========================================================= */
-
+/* 通用玻璃卡片 */
 .glass-card {
   position: relative;
   isolation: isolate;
-
   overflow: hidden;
-
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 20px;
-
-  /* 半透明玻璃 */
   background: rgba(210, 230, 248, 0.14);
-
-  /* 毛玻璃 */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-
-  /* 基础光 */
   box-shadow:
-    0 0 12px rgba(255, 255, 255, 0.10),
+    0 0 12px rgba(255, 255, 255, 0.1),
     inset 0 0 8px rgba(255, 255, 255, 0.06);
-
   transition:
     transform 0.4s ease,
     border-color 0.4s ease,
@@ -561,67 +63,50 @@ body {
     box-shadow 0.4s ease;
 }
 
-
-/* =========================================================
-   02. 卡片星光
-   ========================================================= */
-
+/* 卡片内部星光 */
 .glass-card::after {
   content: "";
-
   position: absolute;
   inset: 0;
-
-  pointer-events: none;
-
-  border-radius: inherit;
-
   z-index: 10;
-
+  pointer-events: none;
+  border-radius: inherit;
   background:
-
     radial-gradient(
       1.6px 1.6px at 8% 15%,
       rgba(255, 255, 255, 0.9),
       transparent
     ),
-
     radial-gradient(
       1.2px 1.2px at 18% 70%,
       rgba(255, 255, 255, 0.7),
       transparent
     ),
-
     radial-gradient(
       1px 1px at 30% 30%,
       rgba(255, 255, 255, 0.8),
       transparent
     ),
-
     radial-gradient(
       1.5px 1.5px at 42% 82%,
       rgba(255, 255, 255, 0.75),
       transparent
     ),
-
     radial-gradient(
       1.2px 1.2px at 56% 20%,
       rgba(255, 255, 255, 0.9),
       transparent
     ),
-
     radial-gradient(
       1px 1px at 68% 60%,
       rgba(255, 255, 255, 0.75),
       transparent
     ),
-
     radial-gradient(
       1.5px 1.5px at 80% 25%,
       rgba(255, 255, 255, 0.85),
       transparent
     ),
-
     radial-gradient(
       1.1px 1.1px at 92% 72%,
       rgba(255, 255, 255, 0.7),
@@ -629,439 +114,356 @@ body {
     );
 }
 
-
-/* =========================================================
-   03. 鼠标悬停卡片
-   ========================================================= */
-
+/* 卡片悬停 */
 .glass-card:hover {
   transform: translateY(-4px);
-
   border-color: rgba(255, 255, 255, 0.48);
-
   background: rgba(210, 230, 248, 0.19);
-
   box-shadow:
-    0 0 22px rgba(255, 255, 255, 0.20),
-    0 14px 28px rgba(60, 100, 150, 0.20),
+    0 0 22px rgba(255, 255, 255, 0.2),
+    0 14px 28px rgba(60, 100, 150, 0.2),
     inset 0 0 10px rgba(255, 255, 255, 0.08);
 }
 
-
-/* =========================================================
-   04. 卡片顶部缩略图
-   ========================================================= */
-
+/* 卡片缩略�?*/
 .card-thumbnail {
   transition:
     transform 0.5s ease,
     opacity 0.5s ease;
 }
 
-
-/* 鼠标进入卡片后：
-   缩略图放大并变透明，
-   让真实 GLB 3D模型显示出来 */
 .glass-card:hover .card-thumbnail {
   transform: scale(1.08);
   opacity: 0;
 }
 
-
-/* =========================================================
-   05. 右上角点赞按钮
-   ========================================================= */
-
-.glass-card-icon-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 38px;
-  height: 38px;
-
-  border: 1px solid rgba(255, 255, 255, 0.30);
-  border-radius: 50%;
-
-  background: rgba(255, 255, 255, 0.10);
-
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-
-  box-shadow:
-    0 0 8px rgba(255, 255, 255, 0.10);
-
-  transition:
-    background 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease,
-    transform 0.3s ease;
-
-  cursor: pointer;
-}
-
-
-.glass-card-icon-btn:hover {
-  background: rgba(255, 90, 120, 0.22);
-
-  border-color: rgba(255, 255, 255, 0.60);
-
-  box-shadow:
-    0 0 14px rgba(255, 120, 150, 0.35);
-
-  transform: scale(1.08);
-}
-
-
-/* =========================================================
-   06. 分类标签
-   ========================================================= */
-
-.glass-card-tag {
-  display: inline-block;
-
-  padding: 5px 12px;
-
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 999px;
-
-  background: rgba(80, 170, 220, 0.38);
-
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-
-  color: white;
-
-  font-size: 12px;
-  font-weight: 600;
-
-  box-shadow:
-    0 0 8px rgba(255, 255, 255, 0.12);
-}
-
-
-/* 审核中标签 */
-
-.glass-card-tag-pending {
-  margin-left: 8px;
-
-  background: rgba(230, 180, 60, 0.34);
-}
-
-
-/* =========================================================
-   07. 作者头像
-   ========================================================= */
-
-.glass-card-avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 32px;
-  height: 32px;
-
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 50%;
-
-  background: rgba(80, 170, 220, 0.40);
-
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-
-  box-shadow:
-    0 0 8px rgba(255, 255, 255, 0.10);
-}
-
-
-/* =========================================================
-   08. 标题 Hover
-   ========================================================= */
-
+/* 卡片标题悬停 */
 .glass-card:hover .card-title {
   color: #4da9ff;
 }
 
-
-/* =========================================================
-   09. 查看 3D 模型按钮
-   ---------------------------------------------------------
-   单独使用玻璃按钮效果
-   ========================================================= */
-
-.glass-card-view-btn {
+/* 玻璃头像 */
+.glass-avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-
-  width: 100%;
-
-  margin-top: 16px;
-
-  padding: 10px 16px;
-
+  width: 32px;
+  height: 32px;
   border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 10px;
-
-  background: rgba(100, 170, 230, 0.24);
-
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-
-  color: white;
-  font-weight: 600;
-
-  box-shadow:
-    0 0 10px rgba(255, 255, 255, 0.12),
-    inset 0 0 6px rgba(255, 255, 255, 0.06);
-
-  transition:
-    background 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease,
-    transform 0.3s ease;
+  border-radius: 50%;
+  background: rgba(80, 170, 220, 0.4);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
 }
 
-
-.glass-card-view-btn:hover {
-  background: rgba(100, 180, 245, 0.36);
-
-  border-color: rgba(255, 255, 255, 0.65);
-
-  box-shadow:
-    0 0 18px rgba(100, 180, 255, 0.30),
-    inset 0 0 8px rgba(255, 255, 255, 0.10);
-
-  transform: translateY(-1px);
-}
-
-
-/* =========================================================
-   10. 鼠标按下
-   ========================================================= */
-
-.glass-card-view-btn:active {
-  transform: translateY(1px);
-
-  box-shadow:
-    0 0 8px rgba(100, 180, 255, 0.20);
-}
-
-
-/* =========================================================
-   11. 键盘聚焦
-   ========================================================= */
-
-.glass-card-view-btn:focus-visible,
-.glass-card-icon-btn:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.55);
-  outline-offset: 3px;
-}
-
-/* =========================
-   Upload 输入框
-   ========================= */
-
-.upload-input {
-  background: rgba(210, 230, 248, 0.16);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-
-  border: 1px solid rgba(255, 255, 255, 0.45);
-
-  box-shadow:
-    inset 0 0 18px rgba(255, 255, 255, 0.05),
-    0 4px 20px rgba(0, 0, 0, 0.08);
-
-  transition:
-    background 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.upload-input:hover {
-  background: rgba(210, 230, 248, 0.22);
-  border-color: rgba(255, 255, 255, 0.65);
-}
-
-.upload-input:focus {
-  background: rgba(210, 230, 248, 0.24);
-  border-color: rgba(255, 255, 255, 0.8);
-
-  box-shadow:
-    0 0 18px rgba(180, 220, 255, 0.22),
-    inset 0 0 18px rgba(255, 255, 255, 0.06);
-}
-
-
-/* =========================
-   Upload 下拉框
-   ========================= */
-
-.upload-select {
-  appearance: none;
-}
-
-
-/* =========================
-   Upload 下一步按钮
-   ========================= */
-
-.upload-next-btn {
-  width: 100%;
-}
-
-.admin-glass-chip {
-  display: inline-flex;
-  align-items: center;
-
-  padding: 4px 10px;
-
-  border-radius: 999px;
-
-  background: rgba(210, 230, 248, 0.16);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-
-  border: 1px solid rgba(255, 255, 255, 0.4);
-
-  color: rgba(255, 255, 255, 0.8);
-
-  box-shadow:
-    inset 0 0 12px rgba(255, 255, 255, 0.04),
-    0 2px 10px rgba(0, 0, 0, 0.08);
-}
-
-/* =========================================
-   Login 页面背景玻璃遮罩
-   ========================================= */
-
-.login-page-overlay {
+/* 页面遮罩 */
+.page-overlay {
   position: absolute;
   inset: 0;
-
-  /* 基本透明，只稍微压暗背景 */
   background: rgba(0, 0, 0, 0.12);
-
   pointer-events: none;
 }
 
-/* =========================================
-   Login 输入框
-   ========================================= */
-
-.login-input {
-  background: rgba(210, 230, 248, 0.16);
-
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-
-  border: 1px solid rgba(255, 255, 255, 0.45);
-
-  box-shadow:
-    inset 0 0 18px rgba(255, 255, 255, 0.05),
-    0 4px 18px rgba(0, 0, 0, 0.06);
-
-  transition:
-    background 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-
-.login-input:hover {
-  background: rgba(210, 230, 248, 0.22);
-  border-color: rgba(255, 255, 255, 0.65);
-}
-
-
-.login-input:focus {
-  background: rgba(210, 230, 248, 0.24);
-
-  border-color: rgba(255, 255, 255, 0.85);
-
-  box-shadow:
-    0 0 18px rgba(180, 220, 255, 0.25),
-    inset 0 0 18px rgba(255, 255, 255, 0.07);
-}
-
-
-/* =========================================
-   密码显示按钮
-   ========================================= */
-
+/* 登录密码显示按钮 */
 .login-eye-btn {
   position: absolute;
-
-  right: 10px;
   top: 50%;
-
+  right: 10px;
   transform: translateY(-50%);
-
-  width: 34px;
-  height: 34px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
-
-  color: rgba(255, 255, 255, 0.65);
-
   background: rgba(255, 255, 255, 0.08);
-
-  border: 1px solid rgba(255, 255, 255, 0.20);
-
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-
+  color: rgba(255, 255, 255, 0.65);
   transition:
     background 0.2s ease,
     color 0.2s ease;
 }
 
-
+/* 登录密码按钮悬停 */
 .login-eye-btn:hover {
   background: rgba(255, 255, 255, 0.16);
   color: white;
 }
 
-
-/* =========================================
-   登录页面 Logo
-   ========================================= */
-
+/* 登录页面 Logo */
 .login-logo {
-  width: 64px;
-  height: 64px;
-
-  border-radius: 18px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
+  width: 64px;
+  height: 64px;
   margin: 0 auto 16px;
+  border-radius: 18px;
 }
 
-
-/* =========================================
-   错误提示
-   ========================================= */
-
-.login-error {
+/* 错误提示 */
+.error-message {
   padding: 12px;
-
-  border-radius: 10px;
-
-  color: #fecaca;
-
-  background: rgba(239, 68, 68, 0.16);
-
   border: 1px solid rgba(248, 113, 113, 0.55);
-
+  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.16);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  color: #fecaca;
 }
+
+/* 玻璃按钮 */
+.glass-btn {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 28px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 12px;
+  background: rgba(210, 230, 248, 0.16);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow:
+    0 0 10px rgba(255, 255, 255, 0.14),
+    inset 0 0 6px rgba(255, 255, 255, 0.08);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: #e8f2ff;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.4s ease;
+}
+
+/* 按钮内部星光 */
+.glass-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      1.6px 1.6px at 10% 30%,
+      rgba(255, 255, 255, 0.9),
+      transparent
+    ),
+    radial-gradient(
+      1.2px 1.2px at 22% 70%,
+      rgba(255, 255, 255, 0.7),
+      transparent
+    ),
+    radial-gradient(
+      1px 1px at 35% 25%,
+      rgba(255, 255, 255, 0.8),
+      transparent
+    ),
+    radial-gradient(
+      1.5px 1.5px at 48% 75%,
+      rgba(255, 255, 255, 0.85),
+      transparent
+    ),
+    radial-gradient(
+      1.2px 1.2px at 62% 30%,
+      rgba(255, 255, 255, 0.7),
+      transparent
+    ),
+    radial-gradient(
+      1.5px 1.5px at 74% 65%,
+      rgba(255, 255, 255, 0.9),
+      transparent
+    ),
+    radial-gradient(
+      1px 1px at 86% 20%,
+      rgba(255, 255, 255, 0.75),
+      transparent
+    ),
+    radial-gradient(
+      1.2px 1.2px at 92% 78%,
+      rgba(255, 255, 255, 0.8),
+      transparent
+    );
+}
+
+/* 按钮悬停 */
+.glass-btn:hover {
+  border-color: rgba(255, 255, 255, 0.75);
+  background: rgba(220, 238, 255, 0.23);
+  box-shadow:
+    0 0 18px rgba(255, 255, 255, 0.3),
+    inset 0 0 8px rgba(255, 255, 255, 0.12);
+  animation: glass-btn-jelly 0.6s ease;
+}
+
+/* 按钮按下 */
+.glass-btn:active {
+  box-shadow:
+    0 0 10px rgba(255, 255, 255, 0.2),
+    inset 0 0 6px rgba(255, 255, 255, 0.08);
+}
+
+/* 按钮键盘焦点 */
+.glass-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.55);
+  outline-offset: 3px;
+}
+
+/* 选中按钮 */
+.glass-btn.is-active {
+  background: rgba(90, 155, 220, 0.32);
+  border-color: rgba(255, 255, 255, 0.75);
+  color: #1557a5;
+  box-shadow:
+    0 0 18px rgba(70, 150, 255, 0.3),
+    inset 0 0 8px rgba(255, 255, 255, 0.12);
+}
+
+/* 选中按钮悬停 */
+.glass-btn.is-active:hover {
+  background: rgba(90, 155, 220, 0.4);
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 0 22px rgba(70, 150, 255, 0.4),
+    inset 0 0 10px rgba(255, 255, 255, 0.15);
+  animation: glass-btn-jelly 0.6s ease;
+}
+
+/* 按钮果冻动画 */
+@keyframes glass-btn-jelly {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+
+  30% {
+    transform: scale(1.15, 0.85);
+  }
+
+  50% {
+    transform: scale(0.9, 1.1);
+  }
+
+  70% {
+    transform: scale(1.05, 0.95);
+  }
+}
+
+/* 玻璃输入�?*/
+.glass-input {
+  background: rgba(210, 230, 248, 0.16);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 18px rgba(255, 255, 255, 0.05),
+    0 4px 18px rgba(0, 0, 0, 0.06);
+  color: white;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* 输入框悬�?*/
+.glass-input:hover {
+  background: rgba(210, 230, 248, 0.22);
+  border-color: rgba(255, 255, 255, 0.65);
+}
+
+/* 输入框聚�?*/
+.glass-input:focus {
+  outline: none;
+  background: rgba(210, 230, 248, 0.24);
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 0 18px rgba(180, 220, 255, 0.24),
+    inset 0 0 18px rgba(255, 255, 255, 0.06);
+}
+
+/* 玻璃标签 */
+.glass-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(80, 170, 220, 0.38);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.12);
+}
+
+/* 审核状态标�?*/
+.glass-badge.is-pending {
+  margin-left: 8px;
+  background: rgba(230, 180, 60, 0.34);
+}
+
+/* 玻璃图标按钮 */
+.glass-icon-btn {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 10px;
+  background: rgba(210, 230, 248, 0.14);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow:
+    0 0 10px rgba(255, 255, 255, 0.12),
+    inset 0 0 6px rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+/* 图标按钮悬停 */
+.glass-icon-btn:hover {
+  background: rgba(220, 238, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 0 16px rgba(255, 255, 255, 0.22),
+    inset 0 0 8px rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* 图标按钮按下 */
+.glass-icon-btn:active {
+  transform: scale(0.94);
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.16),
+    inset 0 0 6px rgba(255, 255, 255, 0.06);
+}
+
+/* 图标按钮键盘焦点 */
+.glass-icon-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.55);
+  outline-offset: 3px;
+}
+
+

@@ -33,12 +33,12 @@ export default function Login() {
       <div
         className="min-h-screen pt-16 relative flex items-center justify-center"
         style={{
-          backgroundImage: "url('/home-backgrounds/4.gif')",
+          backgroundImage: "url('/backgrounds/4.gif')",
           backgroundRepeat: 'repeat',
           backgroundAttachment: 'fixed',
         }}
       >
-        <div className="login-page-overlay" />
+        <div className="page-overlay" />
 
         <div className="relative z-10 text-center p-8">
           <div className="glass-card p-8 rounded-2xl">
@@ -62,7 +62,7 @@ export default function Login() {
 
             <button
               onClick={() => navigate('/')}
-              className="gallery-filter-btn"
+              className="glass-btn"
             >
               返回首页
               <br />
@@ -78,12 +78,12 @@ export default function Login() {
     <div
       className="min-h-screen pt-16 relative"
       style={{
-        backgroundImage: "url('/home-backgrounds/4.gif')",
+        backgroundImage: "url('/backgrounds/4.gif')",
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
     >
-      <div className="login-page-overlay" />
+      <div className="page-overlay" />
 
       <div className="relative z-10 max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-8">
@@ -107,9 +107,9 @@ export default function Login() {
         </div>
 
         {error && (
-          <div className="login-error mb-4 flex items-center gap-3">
+          <div className="error-message mb-4 flex items-center gap-3">
             <img
-              src="/gallery-icons/26.gif"
+              src="/icons/26.gif"
               alt=""
               className="w-10 h-10 object-contain flex-shrink-0"
             />
@@ -147,7 +147,7 @@ export default function Login() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="login-input w-full pl-12 pr-4 py-3 rounded-lg text-white placeholder-white/50 focus:outline-none"
+                className="glass-input pl-12 pr-4 placeholder-white/50"
                 placeholder="输入邮箱地址"
                 required
               />
@@ -168,7 +168,7 @@ export default function Login() {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="login-input w-full pl-12 pr-14 py-3 rounded-lg text-white placeholder-white/50 focus:outline-none"
+                className="glass-input pl-12 pr-14 placeholder-white/50"
                 placeholder="输入密码"
                 required
               />
@@ -190,7 +190,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="gallery-filter-btn w-full disabled:opacity-50 disabled:cursor-not-allowed"
+            className="glass-btn w-full disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <>

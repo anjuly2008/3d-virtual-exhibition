@@ -5,7 +5,7 @@ import * as THREE from 'three';
 
 export default function HeroDecorModel() {
   const groupRef = useRef<THREE.Group>(null);
-  const { scene } = useGLTF('/models/1.glb');
+  const { scene } = useGLTF('/models/hero-decor.glb');
 
   const model = useMemo(() => {
     const clone = scene.clone(true);
@@ -34,4 +34,4 @@ export default function HeroDecorModel() {
   );
 }
 
-useGLTF.preload('/models/1.glb');
+useGLTF.preload('/models/hero-decor.glb');

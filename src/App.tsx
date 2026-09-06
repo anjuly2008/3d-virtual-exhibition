@@ -1,5 +1,4 @@
-// App.tsx：负责决定用户访问哪个网址时显示哪个页面
-
+// App.tsx：负责决定用户访问哪个网址时显示哪个页�?
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from '@/context/AuthContext';
 
@@ -14,8 +13,7 @@ import Admin from '@/pages/Admin';
 
 
 // ============================================================
-// 页面分隔线
-// 根据当前页面显示不同的 GIF
+// 页面分隔�?// 根据当前页面显示不同�?GIF
 // ============================================================
 
 function PageDivider() {
@@ -44,20 +42,18 @@ function PageDivider() {
 }
 
 // ============================================================
-// App 主组件
-// ============================================================
+// App 主组�?// ============================================================
 
 export default function App() {
   return (
     <AuthProvider>
 
-      {/* 给整个 React 应用提供用户身份 / 登录状态 */}
+      {/* 给整�?React 应用提供用户身份 / 登录状�?*/}
 
       <div className="min-h-screen bg-slate-900">
 
         {/* ----------------------------------------------------
-            顶部导航栏
-            ---------------------------------------------------- */}
+            顶部导航�?            ---------------------------------------------------- */}
 
         <Header />
 
@@ -81,13 +77,13 @@ export default function App() {
             element={<Home />}
           />
 
-          {/* 作品库 */}
+          {/* 作品�?*/}
           <Route
             path="/gallery"
             element={<Gallery />}
           />
 
-          {/* 3D 模型查看器 */}
+          {/* 3D 模型查看�?*/}
           <Route
             path="/viewer/:id"
             element={<Viewer />}
@@ -111,7 +107,7 @@ export default function App() {
             element={<Register />}
           />
 
-          {/* 管理员页面 */}
+          {/* 管理员页�?*/}
           <Route
             path="/admin"
             element={<Admin />}

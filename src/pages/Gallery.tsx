@@ -5,7 +5,15 @@ import type { Exhibit } from '@/types';
 import Card from '@/components/UI/Card';
 
 const categories = ['Character', 'Architecture', 'Vehicle', 'Prop', 'Environment'];
-const availableTags = ['Low Poly', 'Sci-Fi', 'Fantasy', 'Cartoon', 'Realistic', 'Animated', 'Game Ready'];
+const availableTags = [
+  'Low Poly',
+  'Sci-Fi',
+  'Fantasy',
+  'Cartoon',
+  'Realistic',
+  'Animated',
+  'Game Ready',
+];
 const usages = ['Game', 'Education', 'Exhibition', 'Design'];
 
 export default function Gallery() {
@@ -31,13 +39,18 @@ export default function Gallery() {
       params.search = searchQuery;
     } else {
       if (selectedCategory) params.category = selectedCategory;
-      if (selectedTags.length > 0) params.tags = JSON.stringify(selectedTags);
-      if (selectedUsages.length > 0) params.usage = JSON.stringify(selectedUsages);
+      if (selectedTags.length > 0) {
+        params.tags = JSON.stringify(selectedTags);
+      }
+      if (selectedUsages.length > 0) {
+        params.usage = JSON.stringify(selectedUsages);
+      }
     }
 
     setLoading(true);
 
-    api.exhibits.list(params)
+    api.exhibits
+      .list(params)
       .then((data) => setExhibits(data.exhibits))
       .catch(() => setExhibits([]))
       .finally(() => setLoading(false));
@@ -58,7 +71,7 @@ export default function Gallery() {
     <div
       className="min-h-screen pt-16 relative"
       style={{
-        backgroundImage: "url('/gallery-backgrounds/1.jpg')",
+        backgroundImage: "url('/backgrounds/1.jpg')",
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
@@ -74,12 +87,16 @@ export default function Gallery() {
           </h1>
         </div>
 
-        <p className="text-sm text-white/80 font-medium mb-2">作品种类 / Category</p>
+        <p className="text-sm text-white/80 font-medium mb-2">
+          作品种类 / Category
+        </p>
 
         <div className="flex flex-wrap gap-2 mb-8">
           <button
             onClick={() => handleCategoryClick('all')}
-            className={`gallery-filter-btn relative ${!selectedCategory ? 'is-active' : ''}`}
+            className={`glass-btn relative ${
+              !selectedCategory ? 'is-active' : ''
+            }`}
           >
             {!selectedCategory && (
               <img
@@ -95,7 +112,9 @@ export default function Gallery() {
             <button
               key={category}
               onClick={() => handleCategoryClick(category)}
-              className={`gallery-filter-btn relative ${selectedCategory === category ? 'is-active' : ''}`}
+              className={`glass-btn relative ${
+                selectedCategory === category ? 'is-active' : ''
+              }`}
             >
               {selectedCategory === category && (
                 <img
@@ -110,7 +129,9 @@ export default function Gallery() {
         </div>
 
         <div className="mb-8">
-          <p className="text-sm text-white/80 font-medium mb-2">标签 / Tags</p>
+          <p className="text-sm text-white/80 font-medium mb-2">
+            标签 / Tags
+          </p>
 
           <div className="flex flex-wrap gap-2">
             {availableTags.map((tag) => {
@@ -126,7 +147,9 @@ export default function Gallery() {
                         : [...selectedTags, tag]
                     )
                   }
-                  className={`gallery-filter-btn relative ${selected ? 'is-active' : ''}`}
+                  className={`glass-btn relative ${
+                    selected ? 'is-active' : ''
+                  }`}
                 >
                   {selected && (
                     <img
@@ -143,7 +166,9 @@ export default function Gallery() {
         </div>
 
         <div className="mb-8">
-          <p className="text-sm text-white/80 font-medium mb-2">用途 / Usage</p>
+          <p className="text-sm text-white/80 font-medium mb-2">
+            用途 / Usage
+          </p>
 
           <div className="flex flex-wrap gap-2">
             {usages.map((usage) => {
@@ -159,7 +184,9 @@ export default function Gallery() {
                         : [...selectedUsages, usage]
                     )
                   }
-                  className={`gallery-filter-btn relative ${selected ? 'is-active' : ''}`}
+                  className={`glass-btn relative ${
+                    selected ? 'is-active' : ''
+                  }`}
                 >
                   {selected && (
                     <img
@@ -178,6 +205,7 @@ export default function Gallery() {
         {loading ? (
           <div className="text-center py-16">
             <div className="w-16 h-16 border-4 border-accent-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+
             <p className="text-slate-300">
               <span>加载中...</span>
               <br />
@@ -193,19 +221,27 @@ export default function Gallery() {
         ) : (
           <div className="text-center py-16">
             <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <img src="/gallery-icons/26.gif" alt="No works found" className="w-12 h-12 object-contain" />
+              <img
+                src="/icons/26.gif"
+                alt="No works found"
+                className="w-12 h-12 object-contain"
+              />
             </div>
 
             <h3 className="text-xl font-semibold text-white mb-2">
               <span>没有找到作品</span>
               <br />
-              <span className="text-xs text-slate-500">No works found</span>
+              <span className="text-xs text-slate-500">
+                No works found
+              </span>
             </h3>
 
             <p className="text-slate-400">
               <span>尝试更换筛选条件或搜索关键词</span>
               <br />
-              <span className="text-xs text-slate-500">Try changing filter conditions or search keywords</span>
+              <span className="text-xs text-slate-500">
+                Try changing filter conditions or search keywords
+              </span>
             </p>
           </div>
         )}

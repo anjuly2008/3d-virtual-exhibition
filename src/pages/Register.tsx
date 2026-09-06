@@ -31,12 +31,12 @@ export default function Register() {
     <div
       className="min-h-[calc(100vh-80px)] relative flex items-center justify-center px-4"
       style={{
-        backgroundImage: "url('/home-backgrounds/4.gif')",
+        backgroundImage: "url('/backgrounds/4.gif')",
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
     >
-      <div className="login-page-overlay" />
+      <div className="page-overlay" />
 
       <div className="relative z-10 w-full max-w-md pt-24 pb-12">
         <div className="glass-card rounded-2xl p-6 md:p-8">
@@ -51,9 +51,9 @@ export default function Register() {
           </div>
 
           {error && (
-            <div className="login-error mb-4 flex items-center gap-3">
+            <div className="error-message mb-4 flex items-center gap-3">
               <img
-                src="/gallery-icons/26.gif"
+                src="/icons/26.gif"
                 alt=""
                 className="w-10 h-10 object-contain flex-shrink-0"
               />
@@ -73,7 +73,7 @@ export default function Register() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="login-input w-full px-4 py-3 rounded-lg text-white placeholder-white/50 focus:outline-none"
+                className="glass-input px-4 py-3 placeholder-white/50"
                 placeholder="请输入用户名"
                 required
               />
@@ -90,7 +90,7 @@ export default function Register() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="login-input w-full px-4 py-3 rounded-lg text-white placeholder-white/50 focus:outline-none"
+                className="glass-input px-4 py-3 placeholder-white/50"
                 placeholder="请输入邮箱"
                 required
               />
@@ -107,7 +107,7 @@ export default function Register() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="login-input w-full px-4 py-3 rounded-lg text-white placeholder-white/50 focus:outline-none"
+                className="glass-input px-4 py-3 placeholder-white/50"
                 placeholder="至少6位密码"
                 required
                 minLength={6}
@@ -124,7 +124,7 @@ export default function Register() {
               <button
                 type="submit"
                 disabled={loading}
-                className="gallery-filter-btn w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                className="glass-btn w-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>

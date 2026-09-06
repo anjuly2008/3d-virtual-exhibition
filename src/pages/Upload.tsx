@@ -56,11 +56,13 @@ export default function Upload() {
     }
 
     if (!formData.description.trim()) {
-      newErrors.description = '请输入作品描述';
+      newErrors.description =
+        '请输入作品描述 / Please enter work description';
     }
 
     if (!formData.modelFile) {
-      newErrors.modelFile = '请上传3D模型文件 / Please upload 3D model file';
+      newErrors.modelFile =
+        '请上传3D模型文件 / Please upload 3D model file';
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -93,7 +95,11 @@ export default function Upload() {
       setStep(3);
       setTimeout(() => navigate('/gallery'), 2000);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : '上传失败 / Upload failed');
+      setError(
+        err instanceof Error
+          ? err.message
+          : '上传失败 / Upload failed'
+      );
     } finally {
       setLoading(false);
     }
@@ -101,23 +107,36 @@ export default function Upload() {
 
   if (!user) {
     return (
-      <div className="min-h-screen pt-16 bg-slate-900 flex items-center justify-center">
-        <div className="text-center p-8">
-          <div className="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-4">
-            <UploadIcon className="w-8 h-8 text-slate-400" />
+      <div
+        className="min-h-screen pt-16 relative flex items-center justify-center"
+        style={{
+          backgroundImage: "url('/backgrounds/1.jpg')",
+          backgroundRepeat: 'repeat',
+          backgroundAttachment: 'fixed',
+        }}
+      >
+        <div className="absolute inset-0 bg-black/25 pointer-events-none" />
+
+        <div className="relative z-10 glass-card p-8 text-center max-w-md mx-4">
+          <div className="flex items-center justify-center mx-auto mb-4">
+            <img
+              src="/icons/26.gif"
+              alt=""
+              className="w-12 h-12 object-contain"
+            />
           </div>
 
           <h2 className="text-xl font-semibold text-white mb-2">
             需要登录 / Login Required
           </h2>
 
-          <p className="text-slate-400 mb-6">
+          <p className="text-slate-300 mb-6">
             请先登录账号后再上传作品 / Please login first to upload
           </p>
 
           <button
             onClick={() => navigate('/login')}
-            className="px-6 py-3 bg-gradient-accent rounded-lg text-white font-medium hover:opacity-90 transition-opacity"
+            className="glass-btn"
           >
             前往登录 / Go to Login
           </button>
@@ -130,7 +149,7 @@ export default function Upload() {
     <div
       className="min-h-screen pt-16 relative"
       style={{
-        backgroundImage: "url('/gallery-backgrounds/1.jpg')",
+        backgroundImage: "url('/backgrounds/1.jpg')",
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
@@ -184,7 +203,9 @@ export default function Upload() {
               <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
                 <span>基本信息</span>
                 <br />
-                <span className="text-xs text-slate-500">Basic Info</span>
+                <span className="text-xs text-slate-500">
+                  Basic Info
+                </span>
               </h2>
             </div>
 
@@ -207,7 +228,7 @@ export default function Upload() {
                     delete next.title;
                     setErrors(next);
                   }}
-                  className={`upload-input w-full px-4 py-3 rounded-lg text-white placeholder-slate-400 focus:outline-none border ${
+                  className={`glass-input px-4 py-3 placeholder-slate-400 ${
                     errors.title ? 'border-red-500' : ''
                   }`}
                   placeholder="输入作品标题 / Enter work title"
@@ -228,7 +249,7 @@ export default function Upload() {
                 <button
                   type="button"
                   onClick={() => setCategoryOpen(!categoryOpen)}
-                  className="upload-input w-full px-4 py-3 rounded-lg text-white text-left flex items-center justify-between focus:outline-none"
+                  className="glass-input px-4 py-3 text-left flex items-center justify-between"
                 >
                   <span>{formData.category}</span>
 
@@ -308,7 +329,7 @@ export default function Upload() {
                               : [...prev.tags, tag],
                           }));
                         }}
-                        className={`gallery-filter-btn ${
+                        className={`glass-btn ${
                           selected ? 'is-active' : ''
                         }`}
                       >
@@ -336,11 +357,13 @@ export default function Upload() {
                           setFormData((prev) => ({
                             ...prev,
                             usage: selected
-                              ? prev.usage.filter((value) => value !== item)
+                              ? prev.usage.filter(
+                                  (value) => value !== item
+                                )
                               : [...prev.usage, item],
                           }));
                         }}
-                        className={`gallery-filter-btn ${
+                        className={`glass-btn ${
                           selected ? 'is-active' : ''
                         }`}
                       >
@@ -369,7 +392,7 @@ export default function Upload() {
                     setErrors(next);
                   }}
                   rows={4}
-                  className={`upload-input w-full px-4 py-3 rounded-lg text-white placeholder-slate-400 focus:outline-none border resize-none ${
+                  className={`glass-input px-4 py-3 placeholder-slate-400 resize-none ${
                     errors.description ? 'border-red-500' : ''
                   }`}
                   placeholder="描述你的作品... / Describe your work..."
@@ -385,7 +408,7 @@ export default function Upload() {
 
             <button
               type="submit"
-              className="gallery-filter-btn upload-next-btn mt-8 w-full py-3 text-white font-medium"
+              className="glass-btn mt-8 w-full py-3 text-white font-medium"
             >
               下一步 / Next
             </button>
@@ -452,6 +475,7 @@ export default function Upload() {
                 {formData.modelFile ? (
                   <div className="flex items-center justify-center gap-3">
                     <FileText className="w-8 h-8 text-accent-400" />
+
                     <span className="text-white">
                       {formData.modelFile.name}
                     </span>
@@ -460,6 +484,7 @@ export default function Upload() {
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
+
                         setFormData({
                           ...formData,
                           modelFile: null,
@@ -473,11 +498,14 @@ export default function Upload() {
                 ) : (
                   <div>
                     <UploadIcon className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+
                     <p className="text-slate-300 mb-1">
                       点击或拖拽上传3D模型文件
                     </p>
+
                     <p className="text-sm text-slate-500">
-                      支持 .glb, .gltf, .obj, .fbx, .stl 格式 / Supports .glb, .gltf, .obj, .fbx, .stl formats
+                      支持 .glb, .gltf, .obj, .fbx, .stl 格式 /
+                      Supports .glb, .gltf, .obj, .fbx, .stl formats
                     </p>
                   </div>
                 )}
@@ -525,6 +553,7 @@ export default function Upload() {
                 {formData.thumbnailFile ? (
                   <div className="flex items-center justify-center gap-3">
                     <Image className="w-8 h-8 text-accent-400" />
+
                     <span className="text-white">
                       {formData.thumbnailFile.name}
                     </span>
@@ -533,6 +562,7 @@ export default function Upload() {
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
+
                         setFormData({
                           ...formData,
                           thumbnailFile: null,
@@ -546,9 +576,11 @@ export default function Upload() {
                 ) : (
                   <div>
                     <Image className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+
                     <p className="text-slate-300 mb-1">
                       点击或拖拽上传缩略图
                     </p>
+
                     <p className="text-sm text-slate-500">
                       支持 JPG, PNG, GIF 格式 / Supports JPG, PNG, GIF formats
                     </p>
@@ -561,7 +593,7 @@ export default function Upload() {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="gallery-filter-btn flex-1 py-3 text-white font-medium"
+                className="glass-btn flex-1 py-3 text-white font-medium"
               >
                 上一步 / Previous
               </button>
@@ -569,9 +601,11 @@ export default function Upload() {
               <button
                 type="submit"
                 disabled={loading}
-                className="gallery-filter-btn flex-1 py-3 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="glass-btn flex-1 py-3 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? '上传中... / Submitting...' : '提交作品 / Submit Work'}
+                {loading
+                  ? '上传中... / Submitting...'
+                  : '提交作品 / Submit Work'}
               </button>
             </div>
           </form>
@@ -584,11 +618,13 @@ export default function Upload() {
             </div>
 
             <h2 className="text-2xl font-bold text-white mb-2">
-              提交成功！/ Submitted Successfully!
+              提交成功 / Submitted Successfully!
             </h2>
 
             <p className="text-slate-400">
-              您的作品已提交审核，审核通过后将在作品库中展示 / Your work has been submitted for review and will be displayed in the gallery upon approval
+              您的作品已提交审核，审核通过后将在作品库中展示 /
+              Your work has been submitted for review and will be displayed
+              in the gallery upon approval
             </p>
           </div>
         )}

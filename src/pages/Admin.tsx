@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {Users,Image,CheckCircle,Clock,XCircle,Trash2,} from 'lucide-react';
+import {
+  Users,
+  Image,
+  CheckCircle,
+  Clock,
+  XCircle,
+  Trash2,
+} from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/api/client';
 
@@ -46,19 +53,22 @@ export default function Admin() {
       params.status = exhibitFilter;
     }
 
-    api.admin.exhibits(params)
+    api.admin
+      .exhibits(params)
       .then((data) => setExhibits(data.exhibits))
       .catch(() => {});
   };
 
   const loadUsers = () => {
-    api.admin.users()
+    api.admin
+      .users()
       .then((data) => setUsers(data.users))
       .catch(() => {});
   };
 
   const loadStats = () => {
-    api.admin.stats()
+    api.admin
+      .stats()
       .then((data) => setStats(data))
       .catch(() => {});
   };
@@ -117,7 +127,7 @@ export default function Admin() {
       <div
         className="min-h-screen pt-16 relative flex items-center justify-center"
         style={{
-          backgroundImage: "url('/home-backgrounds/4.gif')",
+          backgroundImage: "url('/backgrounds/4.gif')",
           backgroundRepeat: 'repeat',
           backgroundAttachment: 'fixed',
         }}
@@ -135,7 +145,7 @@ export default function Admin() {
     <div
       className="min-h-screen pt-16 relative"
       style={{
-        backgroundImage: "url('/home-backgrounds/4.gif')",
+        backgroundImage: "url('/backgrounds/4.gif')",
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
@@ -162,9 +172,7 @@ export default function Admin() {
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`gallery-filter-btn relative ${
-                tab === t ? 'is-active' : ''
-              }`}
+              className={`glass-btn relative ${tab === t ? 'is-active' : ''}`}
             >
               {tab === t && (
                 <img
@@ -211,7 +219,7 @@ export default function Admin() {
                 <button
                   key={s}
                   onClick={() => setExhibitFilter(s)}
-                  className={`gallery-filter-btn relative ${
+                  className={`glass-btn relative ${
                     exhibitFilter === s ? 'is-active' : ''
                   }`}
                 >
@@ -297,9 +305,11 @@ export default function Admin() {
                     >
                       <td className="p-4 text-white font-medium">{e.title}</td>
                       <td className="p-4 text-slate-200">{e.creator_name}</td>
+
                       <td className="p-4">
-                        <span className="admin-glass-chip">{e.category}</span>
+                        <span className="glass-badge">{e.category}</span>
                       </td>
+
                       <td className="p-4">
                         {e.status === 'pending' && (
                           <span className="flex items-center gap-1 text-yellow-300">
@@ -345,7 +355,7 @@ export default function Admin() {
                             <>
                               <button
                                 onClick={() => handleApprove(e.id)}
-                                className="gallery-filter-btn px-3 py-1"
+                                className="glass-btn px-3 py-1"
                               >
                                 通过
                                 <br />
@@ -354,7 +364,7 @@ export default function Admin() {
 
                               <button
                                 onClick={() => handleReject(e.id)}
-                                className="gallery-filter-btn px-3 py-1"
+                                className="glass-btn px-3 py-1"
                               >
                                 拒绝
                                 <br />
@@ -365,7 +375,7 @@ export default function Admin() {
 
                           <button
                             onClick={() => handleDeleteExhibit(e.id)}
-                            className="gallery-filter-btn p-1.5"
+                            className="glass-btn p-1.5"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -435,8 +445,9 @@ export default function Admin() {
                   >
                     <td className="p-4 text-white font-medium">{u.username}</td>
                     <td className="p-4 text-slate-200">{u.email}</td>
+
                     <td className="p-4">
-                      <span className="admin-glass-chip">
+                      <span className="glass-badge">
                         {u.role === 'admin' ? (
                           <>
                             管理员
@@ -460,7 +471,7 @@ export default function Admin() {
                     <td className="p-4 text-right">
                       <button
                         onClick={() => handleToggleRole(u.id, u.role)}
-                        className="gallery-filter-btn px-3 py-1"
+                        className="glass-btn px-3 py-1"
                       >
                         {u.role === 'admin' ? (
                           <>
@@ -509,9 +520,11 @@ export default function Admin() {
                 alt=""
                 className="w-10 h-10 object-contain mx-auto mb-3"
               />
+
               <div className="text-3xl font-bold text-white">
                 {stats.totalUsers}
               </div>
+
               <div className="text-sm text-slate-200 mt-1">
                 注册用户
                 <br />
@@ -527,9 +540,11 @@ export default function Admin() {
                 alt=""
                 className="w-10 h-10 object-contain mx-auto mb-3"
               />
+
               <div className="text-3xl font-bold text-white">
                 {stats.totalExhibits}
               </div>
+
               <div className="text-sm text-slate-200 mt-1">
                 作品总数
                 <br />
@@ -543,9 +558,11 @@ export default function Admin() {
                 alt=""
                 className="w-10 h-10 object-contain mx-auto mb-3"
               />
+
               <div className="text-3xl font-bold text-white">
                 {stats.approvedExhibits}
               </div>
+
               <div className="text-sm text-slate-200 mt-1">
                 已通过作品
                 <br />
@@ -561,9 +578,11 @@ export default function Admin() {
                 alt=""
                 className="w-10 h-10 object-contain mx-auto mb-3"
               />
+
               <div className="text-3xl font-bold text-white">
                 {stats.pendingExhibits}
               </div>
+
               <div className="text-sm text-slate-200 mt-1">
                 待审核作品
                 <br />
