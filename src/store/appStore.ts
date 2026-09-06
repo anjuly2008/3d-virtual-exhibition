@@ -7,15 +7,18 @@ interface AppStore {
   exhibits: Exhibit[];
   categories: Category[];
   selectedCategory: string | null;
+  selectedTags: string[];
+  selectedUsages: string[];
   searchQuery: string;
-  loading: boolean;//就是修改全局的 loading
-  //这就是这个仓库的初始状态
-  
+  loading: boolean;
+
   setExhibits: (exhibits: Exhibit[]) => void;
   setCategories: (categories: Category[]) => void;
   selectCategory: (category: string | null) => void;
-  //把全局的 selectedCategory 改成传进来的 category
+  setSelectedTags: (tags: string[]) => void;
+  setSelectedUsages: (usages: string[]) => void;
   setSearchQuery: (query: string) => void;
+  clearFilters: () => void;
   setLoading: (loading: boolean) => void;
   likeExhibit: (id: number) => void;
 }
@@ -25,13 +28,24 @@ export const useAppStore = create<AppStore>((set) => ({
   exhibits: [],
   categories: [],
   selectedCategory: null,
+  selectedTags: [],
+  selectedUsages: [],
   searchQuery: '',
   loading: false,
 
   setExhibits: (exhibits) => set({ exhibits }),
   setCategories: (categories) => set({ categories }),
   selectCategory: (category) => set({ selectedCategory: category }),
+  setSelectedTags: (tags) => set({ selectedTags: tags }),
+  setSelectedUsages: (usages) => set({ selectedUsages: usages }),
   setSearchQuery: (query) => set({ searchQuery: query }),
+  clearFilters: () =>
+    set({
+      selectedCategory: null,
+      selectedTags: [],
+      selectedUsages: [],
+      searchQuery: '',
+    }),
   setLoading: (loading) => set({ loading }),
   likeExhibit: (id) => set((state) => ({
     //set()修改 Zustand 里面保存的状态  set((state)当前 Zustand 里面原来的整个状态

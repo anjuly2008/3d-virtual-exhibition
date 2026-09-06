@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+//Express 是帮助 Node.js 创建 Web 服务器的一套工具
 import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
@@ -20,9 +21,11 @@ app.use(express.urlencoded({ extended: true }));
 const uploadsPath = path.join(__dirname, '..', 'uploads');
 if (!fs.existsSync(uploadsPath)) fs.mkdirSync(uploadsPath, { recursive: true });
 app.use('/uploads', express.static(uploadsPath));
+//给这个 Express 应用 app 增加一条路由规则
 //注册接口
 app.use('/api/auth', authRoutes);
 app.use('/api/exhibits', exhibitRoutes);
+//如果请求的地址是 /api/exhibits 这一组，就交给 exhibitRoutes
 app.use('/api/admin', adminRoutes);
 
 app.get('/api/health', (req, res) => {

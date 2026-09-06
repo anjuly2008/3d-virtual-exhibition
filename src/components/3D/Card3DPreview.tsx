@@ -8,56 +8,108 @@ interface Card3DPreviewProps {
   isHovered: boolean;
 }
 
-
 function PreviewModel({ modelUrl }: { modelUrl: string }) {
   const { scene } = useGLTF(modelUrl);
-
   const model = useMemo(() => {
     const cloned = scene.clone(true);
-
     const box = new THREE.Box3().setFromObject(cloned);
     const size = box.getSize(new THREE.Vector3());
-
     const maxSize = Math.max(size.x, size.y, size.z);
-
-    // 控制模型整体大小
     const targetSize = 1.4;
-
     if (maxSize > 0) {
       const scale = targetSize / maxSize;
       cloned.scale.setScalar(scale);
     }
-
     const scaledBox = new THREE.Box3().setFromObject(cloned);
     const center = scaledBox.getCenter(new THREE.Vector3());
-
-    // 模型整体居中
     cloned.position.x -= center.x;
     cloned.position.y -= center.y;
     cloned.position.z -= center.z;
-
     return cloned;
   }, [scene]);
-
   useFrame((_, delta) => {
-    model.rotation.y += delta * 0.5;
+    model.rotation.y += delta * 0.35;
   });
-
   return <primitive object={model} />;
 }
+
+function DisplayStand() {
+  return (
+    <mesh position={[0, -0.78, 0]}>
+      <cylinderGeometry args={[0.85, 0.85, 0.06, 64]} />
+      <meshPhysicalMaterial
+        color="#c9e7f7"
+        transparent
+        opacity={0.22}
+        roughness={0.2}
+        metalness={0.1}
+        transmission={0.2}
+      />
+    </mesh>
+  );
+}
+
 export default function Card3DPreview({
   modelUrl,
   isHovered,
 }: Card3DPreviewProps) {
-   console.log('当前Card的模型地址:', modelUrl);
+  console.log('当前Card的模型地址:', modelUrl);
+
   if (!isHovered || !modelUrl) {
     return null;
   }
 
   return (
-    <div className="absolute inset-0 z-10 overflow-hidden">
-      {/* 3D预览背景 */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900" />
+    <div className="absolute inset-0 z-10 overflow-hidden rounded-[inherit]">
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(circle at 50% 42%, rgba(220,245,255,0.20) 0%, transparent 28%),
+            radial-gradient(circle at 18% 20%, rgba(255,255,255,0.12) 0%, transparent 8%),
+            radial-gradient(circle at 82% 24%, rgba(190,230,255,0.12) 0%, transparent 7%),
+            radial-gradient(circle at 30% 78%, rgba(255,255,255,0.10) 0%, transparent 6%),
+            rgba(180,220,245,0.16)
+          `,
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          border: '1px solid rgba(255,255,255,0.38)',
+          boxShadow: `
+            inset 0 0 30px rgba(255,255,255,0.08),
+            inset 0 0 60px rgba(170,220,255,0.08)
+          `,
+        }}
+      />
+
+      <div className="absolute inset-0 pointer-events-none">
+        <span
+          className="absolute top-[18%] left-[18%] w-1 h-1 rounded-full bg-white opacity-80"
+          style={{
+            boxShadow: '0 0 8px rgba(220,245,255,0.9)',
+          }}
+        />
+
+        <span
+          className="absolute top-[30%] right-[20%] w-1 h-1 rounded-full bg-white opacity-70"
+          style={{
+            boxShadow: '0 0 8px rgba(220,245,255,0.9)',
+          }}
+        />
+
+        <span
+          className="absolute bottom-[28%] left-[30%] w-0.5 h-0.5 rounded-full bg-white opacity-70"
+          style={{
+            boxShadow: '0 0 6px rgba(220,245,255,0.9)',
+          }}
+        />
+
+        <span
+          className="absolute bottom-[20%] right-[26%] w-1 h-1 rounded-full bg-white opacity-60"
+          style={{
+            boxShadow: '0 0 7px rgba(220,245,255,0.9)',
+          }}
+        />
+      </div>
 
       <Canvas
         camera={{
@@ -66,30 +118,26 @@ export default function Card3DPreview({
         }}
         dpr={[1, 1.5]}
       >
-        {/* 环境光 */}
-        <ambientLight intensity={1.2} />
+        <ambientLight intensity={1.4} />
 
-        {/* 主光源 */}
         <directionalLight
           position={[4, 6, 4]}
-          intensity={2}
+          intensity={1.8}
         />
 
-        {/* 补光 */}
         <directionalLight
-          position={[-4, 2, -4]}
+          position={[-4, 3, 2]}
           intensity={0.8}
         />
 
-        {/* 地面网格 */}
-        <gridHelper
-          args={[5, 5, '#334155', '#1e293b']}
+        <pointLight
+          position={[0, 4, 2]}
+          intensity={1.2}
         />
 
-        {/* 真实GLB模型 */}
+        <DisplayStand />
         <PreviewModel modelUrl={modelUrl} />
 
-        {/* 用户不能缩放和平移，只允许观看 */}
         <OrbitControls
           enableZoom={false}
           enablePan={false}
@@ -98,8 +146,15 @@ export default function Card3DPreview({
         />
       </Canvas>
 
-      {/* 3D Preview 标签 */}
-      <div className="absolute top-3 left-3 px-2 py-1 rounded-md bg-black/40 backdrop-blur-sm text-xs text-white">
+      <div
+        className="absolute top-3 left-3 px-3 py-1.5 rounded-lg text-xs text-white bg-[rgba(185,220,245,0.20)] backdrop-blur-md border border-white/35"
+        style={{
+          boxShadow: `
+            inset 0 0 12px rgba(255,255,255,0.06),
+            0 0 12px rgba(180,220,255,0.12)
+          `,
+        }}
+      >
         3D Preview
       </div>
     </div>

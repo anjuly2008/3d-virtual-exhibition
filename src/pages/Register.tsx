@@ -8,6 +8,7 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -15,6 +16,7 @@ export default function Register() {
     e.preventDefault();
     setError('');
     setLoading(true);
+
     try {
       await register(username, email, password);
       navigate('/');
@@ -26,65 +28,141 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-80px)] flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-slate-800 rounded-2xl p-8 shadow-xl">
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">注册账号<br /><span className="text-xs text-slate-500">Create New Account</span></h2>
-        
-        {error && (
-          <div className="bg-red-500/20 border border-red-500 text-red-300 rounded-lg p-3 mb-4 text-sm">
-            {error}
-          </div>
-        )}
+    <div
+      className="min-h-[calc(100vh-80px)] relative flex items-center justify-center px-4"
+      style={{
+        backgroundImage: "url('/home-backgrounds/4.gif')",
+        backgroundRepeat: 'repeat',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      <div className="login-page-overlay" />
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm text-slate-300 mb-1">用户名<br /><span className="text-xs text-slate-500">Username</span></label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full bg-slate-700 text-white rounded-lg px-4 py-3 border border-slate-600 focus:border-cyan-500 focus:outline-none"
-              placeholder="请输入用户名"
-              required
-            />
+      <div className="relative z-10 w-full max-w-md pt-24 pb-12">
+        <div className="glass-card rounded-2xl p-6 md:p-8">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-white mb-2">
+              注册账号
+              <br />
+              <span className="text-xs text-slate-200">
+                Create New Account
+              </span>
+            </h2>
           </div>
-          <div>
-            <label className="block text-sm text-slate-300 mb-1">邮箱<br /><span className="text-xs text-slate-500">Email</span></label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-slate-700 text-white rounded-lg px-4 py-3 border border-slate-600 focus:border-cyan-500 focus:outline-none"
-              placeholder="请输入邮箱"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm text-slate-300 mb-1">密码<br /><span className="text-xs text-slate-500">Password</span></label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-slate-700 text-white rounded-lg px-4 py-3 border border-slate-600 focus:border-cyan-500 focus:outline-none"
-              placeholder="至少6位密码"
-              required
-              minLength={6}
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50"
-          >
-            {loading ? <>注册中...<br /><span className="text-xs text-slate-500">Registering...</span></> : <>注册<br /><span className="text-xs text-slate-500">Register</span></>}
-          </button>
-        </form>
 
-        <p className="text-slate-400 text-sm text-center mt-4">
-          已有账号？<br /><span className="text-xs text-slate-500">Already have an account?</span>
-          {' '}
-          <Link to="/login" className="text-cyan-400 hover:underline">立即登录<br /><span className="text-xs text-slate-500">Go to Login</span></Link>
-        </p>
+          {error && (
+            <div className="login-error mb-4 flex items-center gap-3">
+              <img
+                src="/gallery-icons/26.gif"
+                alt=""
+                className="w-10 h-10 object-contain flex-shrink-0"
+              />
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-white/90 mb-2">
+                用户名
+                <br />
+                <span className="text-xs text-slate-300">Username</span>
+              </label>
+
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="login-input w-full px-4 py-3 rounded-lg text-white placeholder-white/50 focus:outline-none"
+                placeholder="请输入用户名"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-white/90 mb-2">
+                邮箱
+                <br />
+                <span className="text-xs text-slate-300">Email</span>
+              </label>
+
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="login-input w-full px-4 py-3 rounded-lg text-white placeholder-white/50 focus:outline-none"
+                placeholder="请输入邮箱"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-white/90 mb-2">
+                密码
+                <br />
+                <span className="text-xs text-slate-300">Password</span>
+              </label>
+
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="login-input w-full px-4 py-3 rounded-lg text-white placeholder-white/50 focus:outline-none"
+                placeholder="至少6位密码"
+                required
+                minLength={6}
+              />
+            </div>
+
+            <div className="relative">
+              <img
+                src="/register-icons/41.gif"
+                alt=""
+                className="absolute -top-6 -left-3 w-16 z-20 pointer-events-none"
+              />
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="gallery-filter-btn w-full disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <>
+                    注册中...
+                    <br />
+                    <span className="text-xs">Registering...</span>
+                  </>
+                ) : (
+                  <>
+                    注册
+                    <br />
+                    <span className="text-xs">Register</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-white/80">
+              已有账号？
+              <br />
+              <span className="text-xs text-slate-300">
+                Already have an account?
+              </span>
+              <br />
+
+              <Link
+                to="/login"
+                className="inline-block mt-2 text-white hover:text-blue-100 font-medium transition-colors"
+              >
+                立即登录
+                <br />
+                <span className="text-xs text-slate-300">Go to Login</span>
+              </Link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

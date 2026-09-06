@@ -52,20 +52,40 @@ export const api = {
     me: () => request('/auth/me'),
   },
   exhibits: {
-    list: (params: Record<string, string> = {}) => {//parametic参数  这个函数接收一个参数
-      //TypeScript类型
-      const qs = new URLSearchParams(params).toString();//把对象转换成 URL 参数 toString变成字符串
+    list: (params: Record<string, string> = {}) => {
+      const qs = new URLSearchParams(params).toString();
       return request('/exhibits' + (qs ? '?' + qs : ''));
     },
-    get: (id: string) => request('/exhibits/' + id),
+
+    get: (id: string) =>
+      request('/exhibits/' + id),
+
     create: (formData: FormData) =>
-      request('/exhibits', { method: 'POST', body: formData }),
+      request('/exhibits', {
+        method: 'POST',
+        body: formData
+      }),
+
     update: (id: string, data: Record<string, string>) =>
-      request('/exhibits/' + id, { method: 'PUT', body: JSON.stringify(data) }),
+      request('/exhibits/' + id, {
+        method: 'PUT',
+        body: JSON.stringify(data)
+      }),
+
     delete: (id: string) =>
-      request('/exhibits/' + id, { method: 'DELETE' }),
+      request('/exhibits/' + id, {
+        method: 'DELETE'
+      }),
+
+    // 查询当前用户是否点赞，以及当前点赞数量
+    getLike: (id: string) =>
+      request('/exhibits/' + id + '/like'),
+
+    // 点赞 / 取消点赞
     like: (id: string) =>
-      request('/exhibits/' + id + '/like', { method: 'POST' }),
+      request('/exhibits/' + id + '/like', {
+        method: 'POST'
+      }),
   },
   admin: {
     exhibits: (params: Record<string, string> = {}) => {
