@@ -61,14 +61,14 @@ export default function Gallery() {
 
   return (
     <div
-      className="relative min-h-screen pt-16"
+      className="relative min-h-screen pt-[72px]"
       style={{
         backgroundImage: "url('/backgrounds/1.jpg')",
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
     >
-      <div className="absolute inset-0 bg-black/25 pointer-events-none" />
+      <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
       <PageContainer className="max-w-7xl py-12">
         <div className="mb-8">

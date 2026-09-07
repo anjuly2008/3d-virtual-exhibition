@@ -125,7 +125,7 @@ export default function Admin() {
           backgroundAttachment: 'fixed',
         }}
       >
-        <div className="page-overlay" />
+        <div className="absolute inset-0 z-0 bg-black/20 pointer-events-none" />
 
         <div className="relative z-10 glass-card w-16 h-16 flex items-center justify-center">
           <div className="w-10 h-10 border-4 border-accent-500 border-t-transparent rounded-full animate-spin" />

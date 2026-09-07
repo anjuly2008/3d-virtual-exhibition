@@ -82,10 +82,12 @@ export default function Card({ exhibit }: CardProps) {
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="glass-avatar">
-              <span className="text-xs font-medium text-white">
-                {exhibit.creator_name?.charAt(0) || 'U'}
-              </span>
+            <div className="glass-avatar overflow-hidden">
+              <img
+                src={exhibit.creator_avatar || '/icons/26.gif'}
+                alt=""
+                className="w-full h-full object-cover"
+              />
             </div>
 
             <span className="text-sm text-slate-200">{exhibit.creator_name || '未知'}</span>

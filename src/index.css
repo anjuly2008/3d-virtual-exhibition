@@ -125,7 +125,7 @@ body {
     inset 0 0 10px rgba(255, 255, 255, 0.08);
 }
 
-/* 卡片缩略�?*/
+/* 卡片缩略�?*/
 .card-thumbnail {
   transition:
     transform 0.5s ease,
@@ -169,17 +169,19 @@ body {
 .login-eye-btn {
   position: absolute;
   top: 50%;
-  right: 10px;
+  right: 13px;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
   width: 34px;
   height: 34px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(4px);
+  /* 🎯外观相关 */
+  border: none;                     
+  border-radius: 8px;             
+  background: transparent;        
+  backdrop-filter: none;           
+  -webkit-backdrop-filter: none;    
   -webkit-backdrop-filter: blur(4px);
   color: rgba(255, 255, 255, 0.65);
   transition:
@@ -189,7 +191,7 @@ body {
 
 /* 登录密码按钮悬停 */
 .login-eye-btn:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: transparent; 
   color: white;
 }
 
@@ -359,7 +361,7 @@ body {
   }
 }
 
-/* 玻璃输入�?*/
+/* 玻璃输入�?*/
 .glass-input {
   background: rgba(210, 230, 248, 0.16);
   backdrop-filter: blur(6px);
@@ -376,13 +378,13 @@ body {
     box-shadow 0.25s ease;
 }
 
-/* 输入框悬�?*/
+/* 输入框悬�?*/
 .glass-input:hover {
   background: rgba(210, 230, 248, 0.22);
   border-color: rgba(255, 255, 255, 0.65);
 }
 
-/* 输入框聚�?*/
+/* 输入框聚�?*/
 .glass-input:focus {
   outline: none;
   background: rgba(210, 230, 248, 0.24);
@@ -407,7 +409,7 @@ body {
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.12);
 }
 
-/* 审核状态标�?*/
+/* 审核状态标�?*/
 .glass-badge.is-pending {
   margin-left: 8px;
   background: rgba(230, 180, 60, 0.34);

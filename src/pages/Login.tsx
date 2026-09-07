@@ -30,14 +30,14 @@ export default function Login() {
 
   return (
     <div
-      className="relative min-h-screen pt-16"
+      className="relative min-h-screen pt-[72px]"
       style={{
         backgroundImage: "url('/backgrounds/4.gif')",
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
     >
-      <div className="page-overlay" />
+      <div className="absolute inset-0 z-0 bg-black/20 pointer-events-none" />
 
       {user ? (
         <div className="relative z-10 min-h-screen flex items-center justify-center">
@@ -66,7 +66,7 @@ export default function Login() {
           </div>
         </div>
       ) : (
-        <div className="relative z-10 max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="relative z-10 max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="text-center mb-8">
             <div className="login-logo glass-card">
               <LogIn className="w-8 h-8 text-white" />

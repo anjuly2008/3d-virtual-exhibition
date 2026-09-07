@@ -25,6 +25,7 @@ interface AuthContextType {
     email: string,
     password: string
   ) => Promise<void>;
+  updateAvatar: (file: File) => Promise<void>;
   logout: () => void;
 }
 
@@ -74,6 +75,14 @@ export function AuthProvider({
     []
   );
 
+  const updateAvatar = useCallback(
+  async (file: File) => {
+    const data = await api.auth.updateAvatar(file);
+    setUser(data.user);
+  },
+  []
+);
+
   const logout = useCallback(() => {
     setToken(null);
     setUser(null);
@@ -81,7 +90,7 @@ export function AuthProvider({
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, login, register, logout }}
+      value={{ user, loading, login, register, updateAvatar, logout }}
     >
       {children}
     </AuthContext.Provider>

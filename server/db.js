@@ -261,6 +261,32 @@ const db = {
     },
 
 
+    // 修改用户头像
+    updateAvatar(id, avatar_url) {
+
+      const u =
+        data.users.find(
+          u => u.id === id
+        );
+
+      if (!u) {
+        return null;
+      }
+
+      u.avatar_url = avatar_url;
+
+      save();
+
+      const {
+        password_hash: _,
+        ...safe
+      } = u;
+
+      return safe;
+
+    },
+
+
     // 获取所有用户
     all() {
 
@@ -272,7 +298,6 @@ const db = {
       );
 
     },
-
 
     // 修改用户权限
     updateRole(id, role) {
@@ -599,6 +624,14 @@ const db = {
 
     },
 
+    findByCreatorId(id) {
+      return data.exhibits
+        .filter(e => e.creator_id === id)
+        .map(e => ({
+          ...e,
+          creator_avatar: db.users.findById(e.creator_id)?.avatar_url || null
+        }));
+    },
 
     // --------------------------------------------------------
     // 获取单个作品
@@ -630,7 +663,8 @@ const db = {
 
     },
 
-
+    
+    
     // --------------------------------------------------------
     // 修改作品
     // --------------------------------------------------------
@@ -691,16 +725,35 @@ const db = {
       return true;
 
     },
-   // 查询当前用户是否已经点赞
-    hasLiked(userId, exhibitId) {
 
-        return data.likeRecords.some(
-            record =>
-                record.user_id === userId &&
-                record.exhibit_id === exhibitId
-        );
+    findLikedByUserId(userId) {
+      return data.likeRecords
+        .filter(record => record.user_id === userId)
+        .map(record => {
+          const exhibit = data.exhibits.find(e => e.id === record.exhibit_id);
 
+          if (!exhibit) {
+            return null;
+          }
+
+          return {
+            ...exhibit,
+            creator_avatar: db.users.findById(exhibit.creator_id)?.avatar_url || null
+          };
+        })
+        .filter(Boolean);
     },
+
+      // 查询当前用户是否已经点赞
+        hasLiked(userId, exhibitId) {
+
+            return data.likeRecords.some(
+                record =>
+                    record.user_id === userId &&
+                    record.exhibit_id === exhibitId
+            );
+
+        },
 
    // --------------------------------------------------------
    // 点赞 / 取消点赞

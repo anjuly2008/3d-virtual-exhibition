@@ -128,7 +128,7 @@ export default function Upload() {
   };
 
   return (
-    <div className="relative min-h-screen pt-16">
+    <div className="relative min-h-screen pt-[72px]">
       <div
         className="absolute inset-0"
         style={{
@@ -138,7 +138,7 @@ export default function Upload() {
         }}
       />
 
-      <div className="absolute inset-0 bg-black/25 pointer-events-none" />
+      <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
       {!user ? (
         <div className="relative z-10 min-h-screen flex items-center justify-center">

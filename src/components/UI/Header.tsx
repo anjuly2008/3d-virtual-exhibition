@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, type ReactNode, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, Search } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { useAuth } from '@/context/AuthContext';
 
-function PageContainer({ children }: { children: React.ReactNode }) {
-  return <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">{children}</div>;
+function PageContainer({ children }: { children: ReactNode }) {
+  return (
+    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {children}
+    </div>
+  );
 }
 
 export default function Header() {
@@ -22,22 +26,33 @@ export default function Header() {
   ];
 
   const [headerBackground] = useState(
-    () => headerBackgrounds[Math.floor(Math.random() * headerBackgrounds.length)],
+    () =>
+      headerBackgrounds[
+        Math.floor(Math.random() * headerBackgrounds.length)
+      ],
   );
 
-  const homeIcons = ['/header-icons/11.gif', '/header-icons/12.gif', '/header-icons/13.gif'];
+  const homeIcons = [
+    '/header-icons/11.gif',
+    '/header-icons/12.gif',
+    '/header-icons/13.gif',
+  ];
 
   const [homeIcon] = useState(
     () => homeIcons[Math.floor(Math.random() * homeIcons.length)],
   );
 
-  const galleryIcons = ['/header-icons/14.gif', '/header-icons/15.gif', '/header-icons/16.gif'];
+  const galleryIcons = [
+    '/header-icons/14.gif',
+    '/header-icons/15.gif',
+    '/header-icons/16.gif',
+  ];
 
   const [galleryIcon] = useState(
     () => galleryIcons[Math.floor(Math.random() * galleryIcons.length)],
   );
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = (e: FormEvent) => {
     e.preventDefault();
     setSearchQuery(searchInput);
     navigate('/gallery');
@@ -50,7 +65,7 @@ export default function Header() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-30 overflow-hidden bg-[rgba(180,220,255,0.18)] backdrop-blur-md /30"
+      className="fixed top-0 left-0 right-0 z-30 overflow-hidden bg-[rgba(180,220,255,0.18)] backdrop-blur-md"
       style={{
         backgroundImage: `url(${headerBackground})`,
         backgroundRepeat: 'repeat',
@@ -59,9 +74,15 @@ export default function Header() {
     >
       <PageContainer>
         <div className="flex items-center justify-between min-h-12 py-3">
+
+          {/* 左侧 Logo */}
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 flex items-center justify-center">
-              <img src="/header-icons/5.gif" alt="3D Showcase System" className="w-10 h-10 object-contain" />
+              <img
+                src="/header-icons/5.gif"
+                alt="3D Showcase System"
+                className="w-10 h-10 object-contain"
+              />
             </div>
 
             <Link
@@ -72,27 +93,46 @@ export default function Header() {
             </Link>
           </div>
 
+          {/* 桌面端导航 */}
           <nav className="hidden md:flex items-center gap-8">
-            <Link to="/" className="group flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
+
+            {/* Home */}
+            <Link
+              to="/"
+              className="group flex items-center gap-2 text-slate-300 hover:text-white transition-colors"
+            >
               <img
                 src={homeIcon}
                 alt="Home"
                 className="w-6 h-6 object-contain transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]"
               />
-              <span className="group-hover:text-accent-400 transition-colors">Home</span>
+
+              <span className="group-hover:text-accent-400 transition-colors">
+                Home
+              </span>
             </Link>
 
-            <Link to="/gallery" className="group flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
+            {/* Gallery */}
+            <Link
+              to="/gallery"
+              className="group flex items-center gap-2 text-slate-300 hover:text-white transition-colors"
+            >
               <img
                 src={galleryIcon}
                 alt="Gallery"
                 className="w-6 h-6 object-contain transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]"
               />
-              <span className="group-hover:text-accent-400 transition-colors">Gallery</span>
+
+              <span className="group-hover:text-accent-400 transition-colors">
+                Gallery
+              </span>
             </Link>
           </nav>
 
+          {/* 桌面端右侧 */}
           <div className="hidden md:flex items-center gap-2">
+
+            {/* 搜索 */}
             <form onSubmit={handleSearch} className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/70" />
 
@@ -107,6 +147,7 @@ export default function Header() {
 
             {user ? (
               <>
+                {/* Upload */}
                 <Link
                   to="/upload"
                   className="group flex items-center gap-2 px-2 py-2 text-slate-300 hover:text-white transition-colors"
@@ -116,9 +157,13 @@ export default function Header() {
                     alt="Upload Work"
                     className="w-6 h-6 object-contain transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]"
                   />
-                  <span className="group-hover:text-accent-400 transition-colors whitespace-nowrap">Upload Work</span>
+
+                  <span className="group-hover:text-accent-400 transition-colors whitespace-nowrap">
+                    Upload Work
+                  </span>
                 </Link>
 
+                {/* Admin */}
                 {user.role === 'admin' && (
                   <Link
                     to="/admin"
@@ -129,20 +174,35 @@ export default function Header() {
                       alt="Admin"
                       className="w-6 h-6 object-contain transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]"
                     />
-                    <span className="group-hover:text-accent-400 transition-colors whitespace-nowrap">Admin</span>
+
+                    <span className="group-hover:text-accent-400 transition-colors whitespace-nowrap">
+                      Admin
+                    </span>
                   </Link>
                 )}
 
-                <div className="flex items-center gap-2">
-                  <div className="glass-avatar">
-                    <span className="text-xs font-medium text-white">
-                      {user.username.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                  <span className="text-sm text-slate-300">{user.username}</span>
-                </div>
-
+                {/* 用户头像 + 用户名 */}
                 <button
+                  type="button"
+                  onClick={() => navigate('/profile')}
+                  className="group flex items-center gap-2"
+                >
+                  <div className="glass-avatar overflow-hidden">
+                    <img
+                      src={user.avatar_url || '/icons/26.gif'}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  <span className="text-sm text-slate-300 group-hover:text-white transition-colors">
+                    {user.username}
+                  </span>
+                </button>
+
+                {/* Logout */}
+                <button
+                  type="button"
                   onClick={handleLogout}
                   className="group flex items-center gap-2 px-2 py-2 text-slate-300 hover:text-white transition-colors"
                 >
@@ -151,35 +211,47 @@ export default function Header() {
                     alt="Logout"
                     className="w-6 h-6 object-contain transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]"
                   />
-                  <span className="group-hover:text-accent-400 transition-colors whitespace-nowrap">Logout</span>
+
+                  <span className="group-hover:text-accent-400 transition-colors whitespace-nowrap">
+                    Logout
+                  </span>
                 </button>
               </>
             ) : (
+              /* 未登录：空白头像 + 未登录 */
               <Link
                 to="/login"
-                className="group flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-all duration-300 hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(180,220,255,0.9)]"
+                className="group flex items-center gap-2 px-2 py-2"
               >
-                <img
-                  src="/header-icons/42.gif"
-                  alt=""
-                  className="w-5 h-5 object-contain transition-all duration-300 group-hover:scale-125 group-hover:drop-shadow-[0_0_8px_rgba(180,220,255,0.9)]"
-                />
-                <span>Login</span>
+                <div className="glass-avatar" />
+
+                <span className="text-sm text-slate-300 group-hover:text-white transition-colors">
+                  未登录
+                </span>
               </Link>
             )}
           </div>
 
+          {/* 移动端菜单按钮 */}
           <button
+            type="button"
             className="md:hidden p-2 text-slate-300 hover:text-white"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
 
+        {/* 移动端菜单 */}
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-slate-700">
             <nav className="flex flex-col gap-2">
+
+              {/* Home */}
               <Link
                 to="/"
                 className="px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
@@ -188,6 +260,7 @@ export default function Header() {
                 Home
               </Link>
 
+              {/* Gallery */}
               <Link
                 to="/gallery"
                 className="px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
@@ -198,6 +271,7 @@ export default function Header() {
 
               {user ? (
                 <>
+                  {/* Upload */}
                   <Link
                     to="/upload"
                     className="glass-btn w-full"
@@ -206,6 +280,7 @@ export default function Header() {
                     Upload Work
                   </Link>
 
+                  {/* Admin */}
                   {user.role === 'admin' && (
                     <Link
                       to="/admin"
@@ -216,7 +291,27 @@ export default function Header() {
                     </Link>
                   )}
 
+                  {/* 用户个人中心 */}
                   <button
+                    type="button"
+                    onClick={() => {
+                      navigate('/profile');
+                      setIsMenuOpen(false);
+                    }}
+                    className="group flex items-center gap-2 px-4 py-2 text-left text-slate-300 hover:text-white transition-colors"
+                  >
+                    <div className="glass-avatar overflow-hidden">
+                      <img src={user.avatar_url || '/icons/26.gif'} alt="" className="w-full h-full object-cover" />
+                    </div>
+
+                    <span className="group-hover:text-accent-400 transition-colors">
+                      {user.username}
+                    </span>
+                  </button>
+
+                  {/* Logout */}
+                  <button
+                    type="button"
                     onClick={() => {
                       handleLogout();
                       setIsMenuOpen(false);
@@ -228,16 +323,24 @@ export default function Header() {
                       alt="Logout"
                       className="w-6 h-6 object-contain transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]"
                     />
-                    <span className="group-hover:text-accent-400 transition-colors">Logout</span>
+
+                    <span className="group-hover:text-accent-400 transition-colors">
+                      Logout
+                    </span>
                   </button>
                 </>
               ) : (
+                /* 移动端未登录：空白头像 + 未登录 */
                 <Link
                   to="/login"
-                  className="glass-btn w-full"
+                  className="group flex items-center gap-3 px-4 py-2 text-slate-300 hover:text-white transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Login
+                  <div className="glass-avatar" />
+
+                  <span className="group-hover:text-accent-400 transition-colors">
+                    未登录
+                  </span>
                 </Link>
               )}
             </nav>

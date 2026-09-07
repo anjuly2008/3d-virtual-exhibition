@@ -33,14 +33,14 @@ export default function Register() {
 
   return (
     <div
-      className="relative min-h-[calc(100vh-80px)] flex items-center justify-center"
+      className="relative min-h-screen pt-[72px] flex items-center justify-center"
       style={{
         backgroundImage: "url('/backgrounds/4.gif')",
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
     >
-      <div className="page-overlay" />
+      <div className="absolute inset-0 z-0 bg-black/20 pointer-events-none" />
 
       <PageContainer className="w-full max-w-md pt-24 pb-12">
         <div className="glass-card rounded-2xl p-6 md:p-8">

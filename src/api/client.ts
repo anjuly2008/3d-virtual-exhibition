@@ -65,6 +65,15 @@ export const api = {
       }),
 
     me: () => request('/auth/me'),
+    updateAvatar: (file: File) => {
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      return request('/auth/avatar', {
+        method: 'PUT',
+        body: formData,
+      });
+    },
   },
 
   exhibits: {
@@ -72,6 +81,10 @@ export const api = {
       const qs = new URLSearchParams(params).toString();
       return request('/exhibits' + (qs ? '?' + qs : ''));
     },
+
+    mine: () => request('/exhibits/mine'),
+
+    likes: () => request('/exhibits/likes/mine'),
 
     get: (id: string) =>
       request('/exhibits/' + id),

@@ -83,7 +83,7 @@ export default function Home() {
   const featuredExhibits = exhibits.slice(0, 3);
 
   return (
-    <div className="relative min-h-screen mt-15">
+    <div className="relative min-h-screen pt-[72px]">
       <div
         className="absolute inset-0"
         style={{
@@ -95,8 +95,8 @@ export default function Home() {
 
       <div className="absolute inset-0 z-0 bg-black/20 pointer-events-none" />
 
-      <section className="relative z-10 py-20 overflow-hidden"style={{ minHeight: 'calc(100vh - 60px)' }}>
-        <div className="absolute inset-0 z-20 pointer-events-none">
+      <section className="relative z-10 overflow-hidden" style={{ height: 'calc(100vh - 72px)' }} >
+        <div className="absolute inset-0 z-20">
           <Canvas
             camera={{ position: [0, 0, 8], fov: 45 }}
             gl={{ alpha: true, antialias: true }}
@@ -109,7 +109,7 @@ export default function Home() {
         </div>
 
         <PageContainer>
-          <div className="py-20 text-center">
+          <div className="absolute inset-0 py-18 text-center">
             <h1 className="pt-10 mb-40 flex flex-col items-center">
               <a
                 href="https://www.glitter-graphics.com/myspace/text_generator.php"
