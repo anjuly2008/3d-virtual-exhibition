@@ -4,6 +4,10 @@ import { Menu, X, Search } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { useAuth } from '@/context/AuthContext';
 
+function PageContainer({ children }: { children: React.ReactNode }) {
+  return <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">{children}</div>;
+}
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchInput, setSearchInput] = useState('');
@@ -18,27 +22,19 @@ export default function Header() {
   ];
 
   const [headerBackground] = useState(
-    () => headerBackgrounds[Math.floor(Math.random() * headerBackgrounds.length)]
+    () => headerBackgrounds[Math.floor(Math.random() * headerBackgrounds.length)],
   );
 
-  const homeIcons = [
-    '/header-icons/11.gif',
-    '/header-icons/12.gif',
-    '/header-icons/13.gif',
-  ];
+  const homeIcons = ['/header-icons/11.gif', '/header-icons/12.gif', '/header-icons/13.gif'];
 
   const [homeIcon] = useState(
-    () => homeIcons[Math.floor(Math.random() * homeIcons.length)]
+    () => homeIcons[Math.floor(Math.random() * homeIcons.length)],
   );
 
-  const galleryIcons = [
-    '/header-icons/14.gif',
-    '/header-icons/15.gif',
-    '/header-icons/16.gif',
-  ];
+  const galleryIcons = ['/header-icons/14.gif', '/header-icons/15.gif', '/header-icons/16.gif'];
 
   const [galleryIcon] = useState(
-    () => galleryIcons[Math.floor(Math.random() * galleryIcons.length)]
+    () => galleryIcons[Math.floor(Math.random() * galleryIcons.length)],
   );
 
   const handleSearch = (e: React.FormEvent) => {
@@ -54,14 +50,14 @@ export default function Header() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 overflow-hidden bg-[rgba(180,220,255,0.18)] backdrop-blur-md border-b border-white/30"
+      className="fixed top-0 left-0 right-0 z-30 overflow-hidden bg-[rgba(180,220,255,0.18)] backdrop-blur-md /30"
       style={{
         backgroundImage: `url(${headerBackground})`,
         backgroundRepeat: 'repeat',
         backgroundSize: '50px auto',
       }}
     >
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <PageContainer>
         <div className="flex items-center justify-between min-h-12 py-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 flex items-center justify-center">
@@ -99,6 +95,7 @@ export default function Header() {
           <div className="hidden md:flex items-center gap-2">
             <form onSubmit={handleSearch} className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/70" />
+
               <input
                 type="text"
                 placeholder="搜索作品..."
@@ -246,7 +243,7 @@ export default function Header() {
             </nav>
           </div>
         )}
-      </div>
+      </PageContainer>
     </header>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Upload } from 'lucide-react';
 import { Canvas } from '@react-three/fiber';
@@ -31,6 +31,44 @@ const categories = [
   },
 ];
 
+function PageContainer({ children }: { children: ReactNode }) {
+  return (
+    <div className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {children}
+    </div>
+  );
+}
+
+function Section({ children }: { children: ReactNode }) {
+  return (
+    <section className="relative z-10 py-20">
+      {children}
+    </section>
+  );
+}
+
+function Divider({
+  image,
+  backgroundSize,
+}: {
+  image: string;
+  backgroundSize?: string;
+}) {
+  return (
+    <div className="relative z-10 w-full py-4">
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `url('${image}')`,
+          backgroundRepeat: 'repeat-x',
+          backgroundPosition: 'center',
+          ...(backgroundSize ? { backgroundSize } : {}),
+        }}
+      />
+    </div>
+  );
+}
+
 export default function Home() {
   const { selectCategory } = useAppStore();
   const [exhibits, setExhibits] = useState<Exhibit[]>([]);
@@ -45,20 +83,19 @@ export default function Home() {
   const featuredExhibits = exhibits.slice(0, 3);
 
   return (
-    <div
-      className="min-h-screen pt-15"
-      style={{
-        backgroundImage: "url('/backgrounds/4.gif')",
-        backgroundRepeat: 'repeat',
-        backgroundAttachment: 'fixed',
-      }}
-    >
-      <section
-        className="relative overflow-visible"
-        style={{ minHeight: '99vh' }}
-      >
-        <div className="absolute inset-0 z-10 bg-black/20 pointer-events-none" />
+    <div className="relative min-h-screen mt-15">
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: "url('/backgrounds/4.gif')",
+          backgroundRepeat: 'repeat',
+          backgroundAttachment: 'fixed',
+        }}
+      />
 
+      <div className="absolute inset-0 z-0 bg-black/20 pointer-events-none" />
+
+      <section className="relative z-10 py-20 overflow-hidden"style={{ minHeight: 'calc(100vh - 60px)' }}>
         <div className="absolute inset-0 z-20 pointer-events-none">
           <Canvas
             camera={{ position: [0, 0, 8], fov: 45 }}
@@ -71,8 +108,8 @@ export default function Home() {
           </Canvas>
         </div>
 
-        <div className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="text-center">
+        <PageContainer>
+          <div className="py-20 text-center">
             <h1 className="pt-10 mb-40 flex flex-col items-center">
               <a
                 href="https://www.glitter-graphics.com/myspace/text_generator.php"
@@ -154,26 +191,16 @@ export default function Home() {
               </Link>
             </div>
           </div>
-        </div>
+        </PageContainer>
       </section>
 
-      <div className="relative w-full py-4">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: "url('/dividers/48.gif')",
-            backgroundRepeat: 'repeat-x',
-            backgroundPosition: 'center',
-            backgroundSize: '5% auto',
-          }}
-        />
-        <div className="absolute inset-0 bg-black/20 pointer-events-none" />
-      </div>
+      <Divider
+        image="/dividers/48.gif"
+        backgroundSize="5% auto"
+      />
 
-      <section className="relative py-20">
-        <div className="absolute inset-0 bg-black/20 pointer-events-none" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Section>
+        <PageContainer>
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
               精选作品
@@ -201,25 +228,13 @@ export default function Home() {
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-        </div>
-      </section>
+        </PageContainer>
+      </Section>
 
-      <div className="relative w-full py-4">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: "url('/dividers/49.gif')",
-            backgroundRepeat: 'repeat-x',
-            backgroundPosition: 'center',
-          }}
-        />
-        <div className="absolute inset-0 bg-black/20 pointer-events-none" />
-      </div>
+      <Divider image="/dividers/49.gif" />
 
-      <section className="relative py-20">
-        <div className="absolute inset-0 bg-black/20 pointer-events-none" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Section>
+        <PageContainer>
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
               作品分类
@@ -248,25 +263,13 @@ export default function Home() {
               </Link>
             ))}
           </div>
-        </div>
-      </section>
+        </PageContainer>
+      </Section>
 
-      <div className="relative w-full py-4">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: "url('/dividers/51.gif')",
-            backgroundRepeat: 'repeat-x',
-            backgroundPosition: 'center',
-          }}
-        />
-        <div className="absolute inset-0 bg-black/20 pointer-events-none" />
-      </div>
+      <Divider image="/dividers/51.gif" />
 
-      <footer className="relative py-12">
-        <div className="absolute inset-0 bg-black/20 pointer-events-none" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <footer className="relative z-10 py-12">
+        <PageContainer>
           <div className="text-center">
             <p className="text-slate-400">
               © 2024 3D展示系统 - 虚拟仿真作品展示平台
@@ -277,7 +280,7 @@ export default function Home() {
               </span>
             </p>
           </div>
-        </div>
+        </PageContainer>
       </footer>
     </div>
   );

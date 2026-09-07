@@ -1,6 +1,10 @@
-import { useState } from 'react';
+import { useState, type FormEvent, type ReactNode } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+
+function PageContainer({ children, className = '' }: { children: ReactNode; className?: string }) {
+  return <div className={`relative z-10 mx-auto px-4 sm:px-6 lg:px-8 ${className}`}>{children}</div>;
+}
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -12,7 +16,7 @@ export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -29,7 +33,7 @@ export default function Register() {
 
   return (
     <div
-      className="min-h-[calc(100vh-80px)] relative flex items-center justify-center px-4"
+      className="relative min-h-[calc(100vh-80px)] flex items-center justify-center"
       style={{
         backgroundImage: "url('/backgrounds/4.gif')",
         backgroundRepeat: 'repeat',
@@ -38,25 +42,19 @@ export default function Register() {
     >
       <div className="page-overlay" />
 
-      <div className="relative z-10 w-full max-w-md pt-24 pb-12">
+      <PageContainer className="w-full max-w-md pt-24 pb-12">
         <div className="glass-card rounded-2xl p-6 md:p-8">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-white mb-2">
               注册账号
               <br />
-              <span className="text-xs text-slate-200">
-                Create New Account
-              </span>
+              <span className="text-xs text-slate-200">Create New Account</span>
             </h2>
           </div>
 
           {error && (
             <div className="error-message mb-4 flex items-center gap-3">
-              <img
-                src="/icons/26.gif"
-                alt=""
-                className="w-10 h-10 object-contain flex-shrink-0"
-              />
+              <img src="/icons/26.gif" alt="" className="w-10 h-10 object-contain flex-shrink-0" />
               <span>{error}</span>
             </div>
           )}
@@ -69,14 +67,7 @@ export default function Register() {
                 <span className="text-xs text-slate-300">Username</span>
               </label>
 
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="glass-input px-4 py-3 placeholder-white/50"
-                placeholder="请输入用户名"
-                required
-              />
+              <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="glass-input px-4 py-3 placeholder-white/50" placeholder="请输入用户名" required />
             </div>
 
             <div>
@@ -86,14 +77,7 @@ export default function Register() {
                 <span className="text-xs text-slate-300">Email</span>
               </label>
 
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="glass-input px-4 py-3 placeholder-white/50"
-                placeholder="请输入邮箱"
-                required
-              />
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="glass-input px-4 py-3 placeholder-white/50" placeholder="请输入邮箱" required />
             </div>
 
             <div>
@@ -103,29 +87,13 @@ export default function Register() {
                 <span className="text-xs text-slate-300">Password</span>
               </label>
 
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="glass-input px-4 py-3 placeholder-white/50"
-                placeholder="至少6位密码"
-                required
-                minLength={6}
-              />
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="glass-input px-4 py-3 placeholder-white/50" placeholder="至少6位密码" required minLength={6} />
             </div>
 
             <div className="relative">
-              <img
-                src="/register-icons/41.gif"
-                alt=""
-                className="absolute -top-6 -left-3 w-16 z-20 pointer-events-none"
-              />
+              <img src="/register-icons/41.gif" alt="" className="absolute -top-6 -left-3 w-16 z-20 pointer-events-none" />
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="glass-btn w-full disabled:opacity-50 disabled:cursor-not-allowed"
-              >
+              <button type="submit" disabled={loading} className="glass-btn w-full disabled:opacity-50 disabled:cursor-not-allowed">
                 {loading ? (
                   <>
                     注册中...
@@ -147,15 +115,10 @@ export default function Register() {
             <p className="text-white/80">
               已有账号？
               <br />
-              <span className="text-xs text-slate-300">
-                Already have an account?
-              </span>
+              <span className="text-xs text-slate-300">Already have an account?</span>
               <br />
 
-              <Link
-                to="/login"
-                className="inline-block mt-2 text-white hover:text-blue-100 font-medium transition-colors"
-              >
+              <Link to="/login" className="inline-block mt-2 text-white hover:text-blue-100 font-medium transition-colors">
                 立即登录
                 <br />
                 <span className="text-xs text-slate-300">Go to Login</span>
@@ -163,7 +126,7 @@ export default function Register() {
             </p>
           </div>
         </div>
-      </div>
+      </PageContainer>
     </div>
   );
 }

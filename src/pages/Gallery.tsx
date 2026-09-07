@@ -1,20 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useAppStore } from '@/store/appStore';
 import { api } from '@/api/client';
 import type { Exhibit } from '@/types';
 import Card from '@/components/UI/Card';
 
 const categories = ['Character', 'Architecture', 'Vehicle', 'Prop', 'Environment'];
-const availableTags = [
-  'Low Poly',
-  'Sci-Fi',
-  'Fantasy',
-  'Cartoon',
-  'Realistic',
-  'Animated',
-  'Game Ready',
-];
+const availableTags = ['Low Poly', 'Sci-Fi', 'Fantasy', 'Cartoon', 'Realistic', 'Animated', 'Game Ready'];
 const usages = ['Game', 'Education', 'Exhibition', 'Design'];
+
+function PageContainer({ children, className = '' }: { children: ReactNode; className?: string }) {
+  return <div className={`relative z-10 mx-auto px-4 sm:px-6 lg:px-8 ${className}`}>{children}</div>;
+}
 
 export default function Gallery() {
   const {
@@ -39,12 +35,8 @@ export default function Gallery() {
       params.search = searchQuery;
     } else {
       if (selectedCategory) params.category = selectedCategory;
-      if (selectedTags.length > 0) {
-        params.tags = JSON.stringify(selectedTags);
-      }
-      if (selectedUsages.length > 0) {
-        params.usage = JSON.stringify(selectedUsages);
-      }
+      if (selectedTags.length > 0) params.tags = JSON.stringify(selectedTags);
+      if (selectedUsages.length > 0) params.usage = JSON.stringify(selectedUsages);
     }
 
     setLoading(true);
@@ -69,7 +61,7 @@ export default function Gallery() {
 
   return (
     <div
-      className="min-h-screen pt-16 relative"
+      className="relative min-h-screen pt-16"
       style={{
         backgroundImage: "url('/backgrounds/1.jpg')",
         backgroundRepeat: 'repeat',
@@ -78,7 +70,7 @@ export default function Gallery() {
     >
       <div className="absolute inset-0 bg-black/25 pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <PageContainer className="max-w-7xl py-12">
         <div className="mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             <span>作品库</span>
@@ -87,17 +79,10 @@ export default function Gallery() {
           </h1>
         </div>
 
-        <p className="text-sm text-white/80 font-medium mb-2">
-          作品种类 / Category
-        </p>
+        <p className="text-sm text-white/80 font-medium mb-2">作品种类 / Category</p>
 
         <div className="flex flex-wrap gap-2 mb-8">
-          <button
-            onClick={() => handleCategoryClick('all')}
-            className={`glass-btn relative ${
-              !selectedCategory ? 'is-active' : ''
-            }`}
-          >
+          <button onClick={() => handleCategoryClick('all')} className={`glass-btn relative ${!selectedCategory ? 'is-active' : ''}`}>
             {!selectedCategory && (
               <img
                 src="/gallery-icons/28.gif"
@@ -112,9 +97,7 @@ export default function Gallery() {
             <button
               key={category}
               onClick={() => handleCategoryClick(category)}
-              className={`glass-btn relative ${
-                selectedCategory === category ? 'is-active' : ''
-              }`}
+              className={`glass-btn relative ${selectedCategory === category ? 'is-active' : ''}`}
             >
               {selectedCategory === category && (
                 <img
@@ -129,9 +112,7 @@ export default function Gallery() {
         </div>
 
         <div className="mb-8">
-          <p className="text-sm text-white/80 font-medium mb-2">
-            标签 / Tags
-          </p>
+          <p className="text-sm text-white/80 font-medium mb-2">标签 / Tags</p>
 
           <div className="flex flex-wrap gap-2">
             {availableTags.map((tag) => {
@@ -144,12 +125,10 @@ export default function Gallery() {
                     setSelectedTags(
                       selected
                         ? selectedTags.filter((item) => item !== tag)
-                        : [...selectedTags, tag]
+                        : [...selectedTags, tag],
                     )
                   }
-                  className={`glass-btn relative ${
-                    selected ? 'is-active' : ''
-                  }`}
+                  className={`glass-btn relative ${selected ? 'is-active' : ''}`}
                 >
                   {selected && (
                     <img
@@ -166,9 +145,7 @@ export default function Gallery() {
         </div>
 
         <div className="mb-8">
-          <p className="text-sm text-white/80 font-medium mb-2">
-            用途 / Usage
-          </p>
+          <p className="text-sm text-white/80 font-medium mb-2">用途 / Usage</p>
 
           <div className="flex flex-wrap gap-2">
             {usages.map((usage) => {
@@ -181,12 +158,10 @@ export default function Gallery() {
                     setSelectedUsages(
                       selected
                         ? selectedUsages.filter((item) => item !== usage)
-                        : [...selectedUsages, usage]
+                        : [...selectedUsages, usage],
                     )
                   }
-                  className={`glass-btn relative ${
-                    selected ? 'is-active' : ''
-                  }`}
+                  className={`glass-btn relative ${selected ? 'is-active' : ''}`}
                 >
                   {selected && (
                     <img
@@ -221,19 +196,13 @@ export default function Gallery() {
         ) : (
           <div className="text-center py-16">
             <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <img
-                src="/icons/26.gif"
-                alt="No works found"
-                className="w-12 h-12 object-contain"
-              />
+              <img src="/icons/26.gif" alt="No works found" className="w-12 h-12 object-contain" />
             </div>
 
             <h3 className="text-xl font-semibold text-white mb-2">
               <span>没有找到作品</span>
               <br />
-              <span className="text-xs text-slate-500">
-                No works found
-              </span>
+              <span className="text-xs text-slate-500">No works found</span>
             </h3>
 
             <p className="text-slate-400">
@@ -245,7 +214,7 @@ export default function Gallery() {
             </p>
           </div>
         )}
-      </div>
+      </PageContainer>
     </div>
   );
 }
