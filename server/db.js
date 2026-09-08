@@ -744,6 +744,14 @@ const db = {
         .filter(Boolean);
     },
 
+      getLikers(exhibitId) {
+        const records = data.likeRecords.filter(record => record.exhibit_id === exhibitId);
+
+        return records
+          .map(record => db.users.findById(record.user_id))
+          .filter(Boolean);
+      },
+
       // 查询当前用户是否已经点赞
         hasLiked(userId, exhibitId) {
 

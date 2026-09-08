@@ -30,7 +30,6 @@ async function request(path: string, options: RequestInit = {}) {
   if (!isFormData) {
     headers['Content-Type'] = 'application/json';
   }
-
   const res = await fetch(API_BASE + path, {
     ...options,
     headers,
@@ -84,6 +83,9 @@ export const api = {
 
     mine: () => request('/exhibits/mine'),
 
+    getLikers: (id: string) =>
+     request('/exhibits/' + id + '/likers'),
+
     likes: () => request('/exhibits/likes/mine'),
 
     get: (id: string) =>
@@ -120,6 +122,8 @@ export const api = {
       const qs = new URLSearchParams(params).toString();
       return request('/admin/exhibits' + (qs ? '?' + qs : ''));
     },
+
+    preview: (id: string) =>request('/admin/exhibits/' + id + '/preview'),
 
     updateExhibitStatus: (id: string, status: string) =>
       request('/admin/exhibits/' + id + '/status', {

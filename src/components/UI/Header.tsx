@@ -65,7 +65,7 @@ export default function Header() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-30 overflow-hidden bg-[rgba(180,220,255,0.18)] backdrop-blur-md"
+      className="fixed top-0 left-0 right-0 z-30 bg-blue-500/25 overflow-hidden bg-[rgba(180,220,255,0.18)] backdrop-blur-md"
       style={{
         backgroundImage: `url(${headerBackground})`,
         backgroundRepeat: 'repeat',
@@ -76,22 +76,22 @@ export default function Header() {
         <div className="flex items-center justify-between min-h-12 py-3">
 
           {/* 左侧 Logo */}
-          <div className="flex items-center gap-3">
+          <Link
+            to="/"
+            className="group flex items-center gap-3 text-xl font-bold text-[rgba(210,230,248,0.95)] transition-all duration-300"
+          >
             <div className="w-10 h-10 flex items-center justify-center">
               <img
                 src="/header-icons/5.gif"
                 alt="3D Showcase System"
-                className="w-10 h-10 object-contain"
+                className="w-10 h-10 object-contain transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_10px_rgba(180,220,255,0.6)]"
               />
             </div>
 
-            <Link
-              to="/"
-              className="text-xl font-bold text-[rgba(210,230,248,0.95)] drop-shadow-[0_0_8px_rgba(180,220,255,0.45)] transition-all duration-300 hover:text-white hover:drop-shadow-[0_0_12px_rgba(180,220,255,0.9)]"
-            >
+            <span className="group-hover:text-white group-hover:drop-shadow-[0_0_12px_rgba(180,220,255,0.9)] transition-all duration-300">
               3D Showcase System
-            </Link>
-          </div>
+            </span>
+          </Link>
 
           {/* 桌面端导航 */}
           <nav className="hidden md:flex items-center gap-8">

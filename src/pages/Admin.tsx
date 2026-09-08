@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Image, CheckCircle, Clock, XCircle, Trash2 } from 'lucide-react';
+import { Users, Image, CheckCircle, Clock, XCircle, Trash2, Eye } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/api/client';
 
@@ -136,14 +136,14 @@ export default function Admin() {
 
   return (
     <div
-      className="relative min-h-screen pt-16"
+      className="relative min-h-screen pt-[72px]"
       style={{
         backgroundImage: "url('/backgrounds/4.gif')",
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
     >
-      <div className="page-overlay" />
+      <div className="absolute inset-0 z-0 bg-black/20 pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center gap-3 mb-8">
@@ -258,6 +258,11 @@ export default function Admin() {
                       <br />
                       <span className="text-xs text-slate-300">Category</span>
                     </th>
+                    <th className="text-center p-4 text-white/80 font-medium">
+                      预览
+                      <br />
+                      <span className="text-xs text-slate-300">Preview</span>
+                    </th>
                     <th className="text-left p-4 text-white/80 font-medium">
                       状态
                       <br />
@@ -284,6 +289,19 @@ export default function Admin() {
 
                       <td className="p-4">
                         <span className="glass-badge">{e.category}</span>
+                      </td>
+
+                      <td className="p-4 text-center">
+                        <button
+                          type="button"
+                          className="glass-btn px-3 py-1"
+                          onClick={() => window.open(`/admin-preview/${e.id}`, '_blank')}
+                        >
+                          <Eye className="w-4 h-4 inline mr-1" />
+                          预览
+                          <br />
+                          <span className="text-xs">Preview</span>
+                        </button>
                       </td>
 
                       <td className="p-4">
@@ -347,7 +365,7 @@ export default function Admin() {
 
                   {exhibits.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-slate-200">
+                      <td colSpan={7} className="p-8 text-center text-slate-200">
                         暂无作品数据
                         <br />
                         <span className="text-xs text-slate-300">No works yet</span>

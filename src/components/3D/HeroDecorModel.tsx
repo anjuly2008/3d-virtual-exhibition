@@ -5,11 +5,17 @@ import * as THREE from 'three';
 
 export default function HeroDecorModel() {
   const groupRef = useRef<THREE.Group>(null);
-  const dragRef = useRef({ active: false, x: 0, y: 0 });
+  const dragRef = useRef({
+    active: false,
+    x: 0,
+    y: 0,
+  });
+
   const { scene } = useGLTF('/models/hero-decor.glb');
 
   const model = useMemo(() => {
     const clone = scene.clone(true);
+
     const box = new THREE.Box3().setFromObject(clone);
     const center = box.getCenter(new THREE.Vector3());
 
@@ -19,47 +25,67 @@ export default function HeroDecorModel() {
   }, [scene]);
 
   useFrame((_, delta) => {
-    if (!groupRef.current || dragRef.current.active) return;
+    if (!groupRef.current) return;
 
-    groupRef.current.rotation.y += delta * 0.15;
+    if (!dragRef.current.active) {
+      groupRef.current.rotation.y += delta * 0.15;
+    }
   });
+
+  const handlePointerDown = (e: THREE.Event & { clientX?: number; clientY?: number }) => {
+    const event = e as unknown as PointerEvent;
+
+    dragRef.current.active = true;
+    dragRef.current.x = event.clientX;
+    dragRef.current.y = event.clientY;
+
+    const target = e.target as unknown as {
+      setPointerCapture?: (pointerId: number) => void;
+    };
+
+    if (target.setPointerCapture && 'pointerId' in event) {
+      target.setPointerCapture(event.pointerId);
+    }
+  };
+
+  const handlePointerMove = (e: THREE.Event & { clientX?: number; clientY?: number }) => {
+    if (!dragRef.current.active || !groupRef.current) return;
+
+    const event = e as unknown as PointerEvent;
+
+    const dx = event.clientX - dragRef.current.x;
+    const dy = event.clientY - dragRef.current.y;
+
+    groupRef.current.rotation.y += dx * 0.01;
+    groupRef.current.rotation.x += dy * 0.005;
+
+    dragRef.current.x = event.clientX;
+    dragRef.current.y = event.clientY;
+  };
+
+  const handlePointerUp = (e: THREE.Event & { clientX?: number; clientY?: number }) => {
+    const event = e as unknown as PointerEvent;
+
+    dragRef.current.active = false;
+
+    const target = e.target as unknown as {
+      releasePointerCapture?: (pointerId: number) => void;
+    };
+
+    if (target.releasePointerCapture && 'pointerId' in event) {
+      target.releasePointerCapture(event.pointerId);
+    }
+  };
 
   return (
     <group
       ref={groupRef}
       position={[0, 0.5, -1]}
       scale={[0.18, 0.18, 0.18]}
-      onPointerDown={(e) => {
-        e.stopPropagation();
-        dragRef.current.active = true;
-        dragRef.current.x = e.clientX;
-        dragRef.current.y = e.clientY;
-      }}
-      onPointerMove={(e) => {
-        if (!dragRef.current.active || !groupRef.current) return;
-
-        const dx = e.clientX - dragRef.current.x;
-        const dy = e.clientY - dragRef.current.y;
-
-        groupRef.current.rotation.y += dx * 0.01;
-        groupRef.current.rotation.x = THREE.MathUtils.clamp(
-          groupRef.current.rotation.x + dy * 0.01,
-          -0.6,
-          0.6,
-        );
-
-        dragRef.current.x = e.clientX;
-        dragRef.current.y = e.clientY;
-      }}
-      onPointerUp={() => {
-        dragRef.current.active = false;
-      }}
-      onPointerOut={() => {
-        dragRef.current.active = false;
-      }}
-      onPointerCancel={() => {
-        dragRef.current.active = false;
-      }}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
     >
       <primitive object={model} />
     </group>

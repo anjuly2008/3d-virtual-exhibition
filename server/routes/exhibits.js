@@ -118,6 +118,13 @@ router.get('/:id', (req, res) => {
       });
     }
 
+    if (exhibit.status !== 'approved') {
+      return res.status(404).json({
+        error: '作品不存在'
+      });
+    }
+
+    
     res.json({
       exhibit
     });
@@ -253,6 +260,30 @@ router.delete('/:id', authMiddleware, (req, res) => {
   } catch (err) {
     res.status(500).json({
       error: '删除失败：' + err.message
+    });
+  }
+});
+
+router.get('/:id/likers', authMiddleware, (req, res) => {
+  try {
+    const exhibitId = parseInt(req.params.id);
+    const exhibit = db.exhibits.findById(exhibitId);
+
+    if (!exhibit) {
+      return res.status(404).json({
+        error: '作品不存在'
+      });
+    }
+
+    const users = db.exhibits.getLikers(exhibitId);
+
+    res.json({
+      users,
+      total: users.length
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: '获取点赞用户失败：' + err.message
     });
   }
 });

@@ -1,0 +1,24 @@
+[33mcommit aa280d4ca004e2f225ec09e63804691e53518532[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: andy Djxbx <xnhfhddskfxxdjxbx@gmail.com>
+Date:   Mon Sep 7 18:01:16 2026 +0800
+
+    完善个人中心、头像与作品点赞功能
+
+ server/db.js                         |  71 [32m+++++[m[31m-[m
+ server/routes/auth.js                |  91 [32m++++++[m[31m--[m
+ server/routes/exhibits.js            | 411 [32m+++++++[m[31m----------------------------[m
+ src/App.tsx                          |  55 [32m++[m[31m---[m
+ src/api/client.ts                    |  13 [32m++[m
+ src/components/3D/HeroDecorModel.tsx |  38 [32m+++[m[31m-[m
+ src/components/UI/Card.tsx           |  10 [32m+[m[31m-[m
+ src/components/UI/Header.tsx         | 171 [32m++++++++++++[m[31m---[m
+ src/context/AuthContext.tsx          |  11 [32m+[m[31m-[m
+ src/index.css                        |  24 [32m+[m[31m-[m
+ src/pages/Admin.tsx                  |   2 [32m+[m[31m-[m
+ src/pages/Gallery.tsx                |   4 [32m+[m[31m-[m
+ src/pages/Home.tsx                   |   8 [32m+[m[31m-[m
+ src/pages/Login.tsx                  |   6 [32m+[m[31m-[m
+ src/pages/Profile.tsx                | 231 [32m++++++++++++++++++++[m
+ src/pages/Register.tsx               |   4 [32m+[m[31m-[m
+ src/pages/Upload.tsx                 |   4 [32m+[m[31m-[m
+ 17 files changed, 688 insertions(+), 466 deletions(-)

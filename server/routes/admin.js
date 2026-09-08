@@ -22,6 +22,27 @@ router.get('/exhibits', (req, res) => {//router.get，router.put，router.delete
   }
 });
 
+router.get('/exhibits/:id/preview', (req, res) => {
+  try {
+    const exhibitId = parseInt(req.params.id);
+    const exhibit = db.exhibits.findById(exhibitId);
+
+    if (!exhibit) {
+      return res.status(404).json({
+        error: '作品不存在',
+      });
+    }
+
+    res.json({
+      exhibit,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: '获取作品预览失败：' + err.message,
+    });
+  }
+});
+
 router.put('/exhibits/:id/status', (req, res) => {
   try {
     const id = parseInt(req.params.id);

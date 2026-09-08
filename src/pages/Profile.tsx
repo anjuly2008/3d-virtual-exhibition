@@ -14,6 +14,15 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState<'works' | 'likes'>('works');
   const [myLikes, setMyLikes] = useState<Exhibit[]>([]);
   const [likesLoading, setLikesLoading] = useState(false);
+  interface Liker {
+  id: number;
+  username: string;
+  avatar_url: string | null;
+}
+
+const [likers, setLikers] = useState<Record<number, Liker[]>>({});
+const [likersLoading, setLikersLoading] = useState<number | null>(null);
+const [likersOpen, setLikersOpen] = useState<number | null>(null);
   useEffect(() => {
   api.exhibits
     .mine()
@@ -34,6 +43,35 @@ const loadMyLikes = async () => {
     setLikesLoading(false);
   }
 };
+
+const loadLikers = async (exhibitId: number) => {
+  if (likersOpen === exhibitId) {
+    setLikersOpen(null);
+    return;
+  }
+
+  setLikersOpen(exhibitId);
+
+  if (likers[exhibitId]) return;
+
+  setLikersLoading(exhibitId);
+
+  try {
+    const data = await api.exhibits.getLikers(String(exhibitId));
+    setLikers((prev) => ({
+      ...prev,
+      [exhibitId]: data.users,
+    }));
+  } catch {
+    setLikers((prev) => ({
+      ...prev,
+      [exhibitId]: [],
+    }));
+  } finally {
+    setLikersLoading(null);
+  }
+};
+
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const file = e.target.files?.[0];
 
@@ -192,7 +230,42 @@ const loadMyLikes = async () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {myWorks.map((exhibit) => (
-                <Card key={exhibit.id} exhibit={exhibit} />
+                <div key={exhibit.id}>
+                  <Card exhibit={exhibit} />
+
+                  <button
+                    type="button"
+                    className="glass-btn mt-2 w-full justify-center"
+                    onClick={() => loadLikers(exhibit.id)}
+                  >
+                    查看点赞用户 ({exhibit.likes || 0})
+                  </button>
+
+                  {likersOpen === exhibit.id && (
+                    <div className="glass-card mt-2 rounded-xl p-4">
+                      {likersLoading === exhibit.id ? (
+                        <p className="text-sm text-slate-400 text-center">加载中...</p>
+                      ) : likers[exhibit.id]?.length === 0 ? (
+                        <p className="text-sm text-slate-400 text-center">还没有人点赞</p>
+                      ) : (
+                        <div className="space-y-3">
+                          {likers[exhibit.id].map((liker) => (
+                            <div key={liker.id} className="flex items-center gap-3">
+                              <div className="glass-avatar w-8 h-8 overflow-hidden">
+                                <img
+                                  src={liker.avatar_url || '/icons/26.gif'}
+                                  alt=""
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                              <span className="text-sm text-white">{liker.username}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           )

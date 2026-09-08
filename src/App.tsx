@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/context/AuthContext';
-
 import Header from '@/components/UI/Header';
 import Home from '@/pages/Home';
 import Gallery from '@/pages/Gallery';
@@ -10,6 +9,8 @@ import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import Admin from '@/pages/Admin';
 import Profile from '@/pages/Profile';
+import AdminPreview from '@/pages/AdminPreview';
+import AIExhibitionAssistant from '@/components/AI/AIExhibitionAssistant';
 
 function PageDivider() {
   const divider = '/dividers/21.gif';
@@ -33,6 +34,7 @@ export default function App() {
       <div className="min-h-screen bg-slate-900">
         <Header />
         <PageDivider />
+        <AIExhibitionAssistant />
 
         <Routes>
           <Route path="/" element={<Home />} />
@@ -42,6 +44,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/admin-preview/:id" element={<AdminPreview />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
