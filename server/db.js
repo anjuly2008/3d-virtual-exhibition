@@ -1,349 +1,309 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import bcrypt from 'bcryptjs';
+import 'dotenv/config';
+import mysql from 'mysql2/promise';
 
-
-// ============================================================
-// 数据库文件路径
-// ============================================================
-
-const __dirname =
-  path.dirname(fileURLToPath(import.meta.url));
-
-const dbFile =
-  path.join(__dirname, '..', 'data.json');
-
-
-// 当前内存中的数据
-let data = {
-  users: [],
-  exhibits: [],
-  likeRecords: []
-};
-
-
-// ============================================================
-// 读取 data.json
-// ============================================================
-
-function load() {
-
-  try {
-
-    if (fs.existsSync(dbFile)) {
-
-      data = JSON.parse(
-        fs.readFileSync(
-          dbFile,
-          'utf-8'
-        )
-      );
-
-    }
-
-  } catch {
-
-    data = {
-      users: [],
-      exhibits: []
-    };
-
-  }
-}
-
-
-// ============================================================
-// 保存 data.json
-// ============================================================
-
-function save() {
-
-  fs.writeFileSync(
-    dbFile,
-    JSON.stringify(data, null, 2)
-  );
-
-}
-
-
-// ============================================================
-// 初始化数据库
-// ============================================================
-
-load();
-if (!Array.isArray(data.likeRecords)) {
-  data.likeRecords = [];
-}
-
-
-// 确保 tags 和 usage 一定是数组
-data.exhibits.forEach(exhibit => {
-
-  if (!Array.isArray(exhibit.tags)) {
-    exhibit.tags = [];
-  }
-
-  if (!Array.isArray(exhibit.usage)) {
-    exhibit.usage = [];
-  }
-
+const pool = mysql.createPool({
+  host: process.env.MYSQL_HOST || '127.0.0.1',
+  port: Number(process.env.MYSQL_PORT || 3306),
+  user: process.env.MYSQL_USER || 'root',
+  password: process.env.MYSQL_PASSWORD || '',
+  database: process.env.MYSQL_DATABASE || 'mart_community_3d',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  dateStrings: true,
+  charset: 'utf8mb4'
 });
 
-save();
+function parseJsonField(value, fallback = []) {
+  if (Array.isArray(value)) return value;
 
+  if (typeof value === 'string') {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : fallback;
+    } catch {
+      return fallback;
+    }
+  }
 
-// ============================================================
-// 创建管理员账号
-// ============================================================
-
-const existing =
-  data.users.find(
-    u => u.role === 'admin'
-  );
-
-
-if (!existing) {
-
-  const hash =
-    bcrypt.hashSync(
-      'admin123',
-      10
-    );
-
-
-  data.users.push({
-
-    id: 1,
-
-    username: 'admin',
-
-    email: 'admin@3dshow.com',
-
-    password_hash: hash,
-
-    role: 'admin',
-
-    avatar_url: null,
-
-    created_at:
-      new Date().toISOString(),
-
-  });
-
-
-  save();
-
-  console.log(
-    '[DB] Admin account created: admin / admin123'
-  );
-
+  return value ?? fallback;
 }
 
+function toIsoDateTime(value) {
+  if (!value) return new Date().toISOString();
 
-// ============================================================
-// 自动生成 ID
-// ============================================================
+  if (value instanceof Date) {
+    return value.toISOString();
+  }
 
-let nextUserId =
-  data.users.length > 0
-    ? Math.max(...data.users.map(u => u.id)) + 1
-    : 1;
+  const text = String(value);
 
+  if (text.includes('T')) {
+    return text.endsWith('Z') ? text : `${text}Z`;
+  }
 
-let nextExhibitId =
-  data.exhibits.length > 0
-    ? Math.max(...data.exhibits.map(e => e.id)) + 1
-    : 1;
+  return `${text.replace(' ', 'T')}Z`;
+}
 
+function toMySqlDateTime(value = new Date()) {
+  const date = value instanceof Date ? value : new Date(value);
 
-// ============================================================
-// 数据库对象
-// ============================================================
+  const pad = number =>
+    String(number).padStart(2, '0');
+
+  return `${date.getUTCFullYear()}-${pad(
+    date.getUTCMonth() + 1
+  )}-${pad(
+    date.getUTCDate()
+  )} ${pad(
+    date.getUTCHours()
+  )}:${pad(
+    date.getUTCMinutes()
+  )}:${pad(
+    date.getUTCSeconds()
+  )}.${String(
+    date.getUTCMilliseconds()
+  ).padStart(3, '0')}`;
+}
+
+function normalizeUser(row) {
+  if (!row) return null;
+
+  return {
+    id: Number(row.id),
+    username: row.username,
+    email: row.email,
+    password_hash: row.password_hash,
+    role: row.role,
+    avatar_url: row.avatar_url ?? null,
+    created_at: toIsoDateTime(row.created_at)
+  };
+}
+
+function safeUser(row) {
+  const user = normalizeUser(row);
+
+  if (!user) return null;
+
+  const {
+    password_hash: _,
+    ...safe
+  } = user;
+
+  return safe;
+}
+
+function normalizeExhibit(row) {
+  if (!row) return null;
+
+  const exhibit = {
+    id: Number(row.id),
+    title: row.title,
+    description: row.description ?? '',
+    creator_id: Number(row.creator_id),
+    creator_name: row.creator_name,
+    category: row.category,
+    tags: parseJsonField(row.tags),
+    usage: parseJsonField(row.usage),
+    model_url: row.model_url ?? '',
+    thumbnail_url: row.thumbnail_url ?? '',
+    status: row.status,
+    likes: Number(row.likes ?? 0),
+    created_at: toIsoDateTime(row.created_at)
+  };
+
+  if (
+    Object.prototype.hasOwnProperty.call(
+      row,
+      'creator_avatar'
+    )
+  ) {
+    exhibit.creator_avatar =
+      row.creator_avatar ?? null;
+  }
+
+  return exhibit;
+}
+
+function jsonParam(value) {
+  return JSON.stringify(
+    Array.isArray(value) ? value : []
+  );
+}
 
 const db = {
-
-  // ==========================================================
-  // 用户模块
-  // ==========================================================
-
   users: {
-
-    // 创建用户
-    create({
+    async create({
       username,
       email,
       password_hash,
       role = 'user'
     }) {
-
-      const user = {
-
-        id: nextUserId++,
-
-        username,
-
-        email,
-
-        password_hash,
-
-        role,
-
-        avatar_url: null,
-
-        created_at:
-          new Date().toISOString(),
-
-      };
-
-
-      data.users.push(user);
-
-      save();
-
-
-      // 不把密码返回给前端
-      const {
-        password_hash: _,
-        ...safe
-      } = user;
-
-
-      return safe;
-    },
-
-
-    // 根据邮箱查找用户
-    findByEmail(email) {
-
-      return (
-        data.users.find(
-          u => u.email === email
-        ) || null
-      );
-
-    },
-
-
-    // 根据 ID 查找用户
-    findById(id) {
-
-      const u =
-        data.users.find(
-          u => u.id === id
+      const [result] =
+        await pool.execute(
+          `
+          INSERT INTO users (
+            username,
+            email,
+            password_hash,
+            role,
+            avatar_url,
+            created_at
+          )
+          VALUES (?, ?, ?, ?, NULL, ?)
+          `,
+          [
+            username,
+            email,
+            password_hash,
+            role,
+            toMySqlDateTime()
+          ]
         );
 
+      return safeUser(
+        await this.findByIdRaw(
+          Number(result.insertId)
+        )
+      );
+    },
 
-      if (!u) {
+    async findByEmail(email) {
+      const [rows] =
+        await pool.execute(
+          `
+          SELECT
+            id,
+            username,
+            email,
+            password_hash,
+            role,
+            avatar_url,
+            created_at
+          FROM users
+          WHERE email = ?
+          LIMIT 1
+          `,
+          [email]
+        );
+
+      return normalizeUser(
+        rows[0] || null
+      );
+    },
+
+    async findById(id) {
+      return safeUser(
+        await this.findByIdRaw(id)
+      );
+    },
+
+    async findByIdRaw(id) {
+      const [rows] =
+        await pool.execute(
+          `
+          SELECT
+            id,
+            username,
+            email,
+            password_hash,
+            role,
+            avatar_url,
+            created_at
+          FROM users
+          WHERE id = ?
+          LIMIT 1
+          `,
+          [Number(id)]
+        );
+
+      return normalizeUser(
+        rows[0] || null
+      );
+    },
+
+    async updateAvatar(
+      id,
+      avatar_url
+    ) {
+      const [result] =
+        await pool.execute(
+          `
+          UPDATE users
+          SET avatar_url = ?
+          WHERE id = ?
+          `,
+          [
+            avatar_url,
+            Number(id)
+          ]
+        );
+
+      if (result.affectedRows === 0) {
         return null;
       }
 
-
-      const {
-        password_hash: _,
-        ...safe
-      } = u;
-
-
-      return safe;
+      return this.findById(id);
     },
 
-
-    // 根据 ID 获取原始用户数据
-    findByIdRaw(id) {
-
-      return (
-        data.users.find(
-          u => u.id === id
-        ) || null
-      );
-
-    },
-
-
-    // 修改用户头像
-    updateAvatar(id, avatar_url) {
-
-      const u =
-        data.users.find(
-          u => u.id === id
+    async all() {
+      const [rows] =
+        await pool.execute(
+          `
+          SELECT
+            id,
+            username,
+            email,
+            role,
+            avatar_url,
+            created_at
+          FROM users
+          ORDER BY id ASC
+          `
         );
 
-      if (!u) {
-        return null;
-      }
-
-      u.avatar_url = avatar_url;
-
-      save();
-
-      const {
-        password_hash: _,
-        ...safe
-      } = u;
-
-      return safe;
-
-    },
-
-
-    // 获取所有用户
-    all() {
-
-      return data.users.map(
-        ({
-          password_hash: _,
-          ...safe
-        }) => safe
+      return rows.map(
+        row => safeUser(row)
       );
-
     },
 
-    // 修改用户权限
-    updateRole(id, role) {
-
-      const u =
-        data.users.find(
-          u => u.id === id
+    async updateRole(
+      id,
+      role
+    ) {
+      const [result] =
+        await pool.execute(
+          `
+          UPDATE users
+          SET role = ?
+          WHERE id = ?
+          `,
+          [
+            role,
+            Number(id)
+          ]
         );
 
-
-      if (u) {
-
-        u.role = role;
-
-        save();
-
-        return true;
-
-      }
-
-
-      return false;
+      return result.affectedRows > 0;
     },
 
+    async count() {
+      const [rows] =
+        await pool.execute(
+          `
+          SELECT COUNT(*) AS total
+          FROM users
+          `
+        );
 
-    // 用户数量
-    count() {
-
-      return data.users.length;
-
-    },
-
+      return Number(
+        rows[0]?.total ?? 0
+      );
+    }
   },
 
-
-  // ==========================================================
-  // 作品模块
-  // ==========================================================
-
   exhibits: {
-
-    // --------------------------------------------------------
-    // 创建作品
-    // --------------------------------------------------------
-
-    create({
+    async create({
       title,
       description,
       creator_id,
@@ -354,518 +314,683 @@ const db = {
       model_url,
       thumbnail_url
     }) {
+      const [result] =
+        await pool.execute(
+          `
+          INSERT INTO exhibits (
+            title,
+            description,
+            creator_id,
+            creator_name,
+            category,
+            tags,
+            \`usage\`,
+            model_url,
+            thumbnail_url,
+            status,
+            likes,
+            created_at
+          )
+          VALUES (
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            'pending',
+            0,
+            ?
+          )
+          `,
+          [
+            title,
+            description || '',
+            Number(creator_id),
+            creator_name,
+            category,
+            jsonParam(tags),
+            jsonParam(usage),
+            model_url || '',
+            thumbnail_url || '',
+            toMySqlDateTime()
+          ]
+        );
 
-      const exhibit = {
-
-        id: nextExhibitId++,
-
-        title,
-
-        description:
-          description || '',
-
-        creator_id,
-
-        creator_name,
-
-        category,
-
-        tags:
-          tags || [],
-
-        usage:
-          usage || [],
-
-        model_url:
-          model_url || '',
-
-        thumbnail_url:
-          thumbnail_url || '',
-
-        status:
-          'pending',
-
-        likes:
-          0,
-
-        created_at:
-          new Date().toISOString(),
-
-      };
-
-
-      data.exhibits.push(exhibit);
-
-      save();
-
-
-      return exhibit;
-
+      return this.findById(
+        Number(result.insertId)
+      );
     },
 
-
-    // --------------------------------------------------------
-    // 获取审核通过的作品
-    // --------------------------------------------------------
-
-    findApproved(
+    async findApproved(
       category,
       search,
       tags,
       usage
     ) {
+      const [rows] =
+        await pool.execute(
+          `
+          SELECT
+            e.id,
+            e.title,
+            e.description,
+            e.creator_id,
+            e.creator_name,
+            e.category,
+            e.tags,
+            e.\`usage\`,
+            e.model_url,
+            e.thumbnail_url,
+            e.status,
+            e.likes,
+            e.created_at,
+            u.avatar_url AS creator_avatar
+          FROM exhibits e
+          LEFT JOIN users u
+            ON u.id = e.creator_id
+          WHERE e.status = 'approved'
+          ORDER BY e.created_at DESC
+          `
+        );
 
-      // 先获取所有已审核作品
       let list =
-        data.exhibits
-
-          .filter(
-            e => e.status === 'approved'
-          )
-
-          // 最新作品排在前面
-          .sort(
-            (a, b) =>
-              new Date(b.created_at).getTime()
-              -
-              new Date(a.created_at).getTime()
-          );
-
-
-      // ------------------------------------------------------
-      // 分类筛选
-      // ------------------------------------------------------
+        rows.map(
+          normalizeExhibit
+        );
 
       if (category) {
-
         list =
           list.filter(
-            e => e.category === category
+            exhibit =>
+              exhibit.category === category
           );
-
       }
 
-
-      // ------------------------------------------------------
-      // 标签筛选
-      // ------------------------------------------------------
-
       if (
-        tags &&
+        Array.isArray(tags) &&
         tags.length > 0
       ) {
-
         list =
           list.filter(
-            e =>
+            exhibit =>
               tags.every(
                 tag =>
-                  (e.tags || []).includes(tag)
+                  (exhibit.tags || [])
+                    .includes(tag)
               )
           );
-
       }
-
-
-      // ------------------------------------------------------
-      // 用途筛选
-      // ------------------------------------------------------
 
       if (
-        usage &&
+        Array.isArray(usage) &&
         usage.length > 0
       ) {
-
         list =
           list.filter(
-            e =>
+            exhibit =>
               usage.every(
                 item =>
-                  (e.usage || []).includes(item)
+                  (exhibit.usage || [])
+                    .includes(item)
               )
           );
-
       }
 
-
-      // ------------------------------------------------------
-      // 全局搜索
-      // 搜索：分类、标签、用途、描述
-      // ------------------------------------------------------
-
       if (search) {
-
-        // 去掉空格 + 转小写
         const normalize =
-          (value) =>
+          value =>
             String(value || '')
               .toLowerCase()
               .replace(/\s+/g, '');
 
-
         const s =
           normalize(search);
 
-
         list =
           list.filter(
-            e =>
+            exhibit =>
+              normalize(
+                exhibit.description
+              ).includes(s) ||
 
-              // 描述
-              normalize(e.description)
-                .includes(s)
+              normalize(
+                exhibit.category
+              ).includes(s) ||
 
-              ||
-
-              // 分类
-              normalize(e.category)
-                .includes(s)
-
-              ||
-
-              // 标签
-              (e.tags || []).some(
-                tag =>
+              (exhibit.tags || [])
+                .some(tag =>
                   normalize(tag)
                     .includes(s)
-              )
+                ) ||
 
-              ||
-
-              // 用途
-              (e.usage || []).some(
-                item =>
+              (exhibit.usage || [])
+                .some(item =>
                   normalize(item)
                     .includes(s)
-              )
-
+                )
           );
-
       }
 
-
-      // ------------------------------------------------------
-      // 给作品补充作者头像
-      // ------------------------------------------------------
-
-      const enriched =
-        list.map(e => ({
-
-          ...e,
-
-          creator_avatar:
-            db.users.findById(
-              e.creator_id
-            )?.avatar_url || null
-
-        }));
-
-
-      // ------------------------------------------------------
-      // 返回筛选后的全部作品
-      // ------------------------------------------------------
-
       return {
-
-        exhibits:
-          enriched,
-
-        total:
-          enriched.length
-
+        exhibits: list,
+        total: list.length
       };
-
     },
 
-
-    // --------------------------------------------------------
-    // 查看待审核作品
-    // 注意：这里保留分页，因为它属于管理员审核列表
-    // --------------------------------------------------------
-
-    findAllByStatus(
+    async findAllByStatus(
       status,
       page = 1,
       limit = 20
     ) {
+      const safeLimit =
+        Math.max(
+          1,
+          Number(limit) || 20
+        );
 
-      let list =
-        data.exhibits
+      const safePage =
+        Math.max(
+          1,
+          Number(page) || 1
+        );
 
-          .filter(
-            e =>
-              !status ||
-              e.status === status
+      const offset =
+        (safePage - 1) *
+        safeLimit;
+
+      let sql = `
+        SELECT
+          e.id,
+          e.title,
+          e.description,
+          e.creator_id,
+          e.creator_name,
+          e.category,
+          e.tags,
+          e.\`usage\`,
+          e.model_url,
+          e.thumbnail_url,
+          e.status,
+          e.likes,
+          e.created_at
+        FROM exhibits e
+      `;
+
+      const params = [];
+
+      if (status) {
+        sql += `
+          WHERE e.status = ?
+        `;
+
+        params.push(status);
+      }
+
+      sql += `
+        ORDER BY e.created_at DESC
+        LIMIT ?
+        OFFSET ?
+      `;
+
+      params.push(
+        safeLimit,
+        offset
+      );
+
+      const [rows] =
+        await pool.execute(
+          sql,
+          params
+        );
+
+      let countSql = `
+        SELECT COUNT(*) AS total
+        FROM exhibits
+      `;
+
+      const countParams = [];
+
+      if (status) {
+        countSql += `
+          WHERE status = ?
+        `;
+
+        countParams.push(
+          status
+        );
+      }
+
+      const [countRows] =
+        await pool.execute(
+          countSql,
+          countParams
+        );
+
+      return {
+        exhibits:
+          rows.map(
+            normalizeExhibit
+          ),
+
+        total:
+          Number(
+            countRows[0]?.total ?? 0
           )
+      };
+    },
 
-          .sort(
-            (a, b) =>
-              new Date(b.created_at).getTime()
-              -
-              new Date(a.created_at).getTime()
+    async findByCreatorId(id) {
+      const [rows] =
+        await pool.execute(
+          `
+          SELECT
+            e.id,
+            e.title,
+            e.description,
+            e.creator_id,
+            e.creator_name,
+            e.category,
+            e.tags,
+            e.\`usage\`,
+            e.model_url,
+            e.thumbnail_url,
+            e.status,
+            e.likes,
+            e.created_at,
+            u.avatar_url AS creator_avatar
+          FROM exhibits e
+          LEFT JOIN users u
+            ON u.id = e.creator_id
+          WHERE e.creator_id = ?
+          ORDER BY e.created_at DESC
+          `,
+          [Number(id)]
+        );
+
+      return rows.map(
+        normalizeExhibit
+      );
+    },
+
+    async findById(id) {
+      const [rows] =
+        await pool.execute(
+          `
+          SELECT
+            e.id,
+            e.title,
+            e.description,
+            e.creator_id,
+            e.creator_name,
+            e.category,
+            e.tags,
+            e.\`usage\`,
+            e.model_url,
+            e.thumbnail_url,
+            e.status,
+            e.likes,
+            e.created_at,
+            u.avatar_url AS creator_avatar
+          FROM exhibits e
+          LEFT JOIN users u
+            ON u.id = e.creator_id
+          WHERE e.id = ?
+          LIMIT 1
+          `,
+          [Number(id)]
+        );
+
+      return normalizeExhibit(
+        rows[0] || null
+      );
+    },
+
+    async update(
+      id,
+      updates
+    ) {
+      const allowedFields = [
+        'title',
+        'description',
+        'creator_name',
+        'category',
+        'tags',
+        'usage',
+        'model_url',
+        'thumbnail_url',
+        'status',
+        'likes'
+      ];
+
+      const setParts = [];
+      const params = [];
+
+      for (
+        const field
+        of allowedFields
+      ) {
+        if (
+          !Object.prototype.hasOwnProperty.call(
+            updates,
+            field
+          )
+        ) {
+          continue;
+        }
+
+        if (
+          field === 'tags' ||
+          field === 'usage'
+        ) {
+          setParts.push(
+            `\`${field}\` = ?`
           );
 
+          params.push(
+            jsonParam(
+              updates[field]
+            )
+          );
+        } else {
+          setParts.push(
+            `\`${field}\` = ?`
+          );
 
-      const total =
-        list.length;
+          params.push(
+            updates[field]
+          );
+        }
+      }
 
+      if (
+        setParts.length === 0
+      ) {
+        return this.findById(id);
+      }
 
-      const items =
-        list.slice(
-          (page - 1) * limit,
-          page * limit
+      params.push(
+        Number(id)
+      );
+
+      const [result] =
+        await pool.execute(
+          `
+          UPDATE exhibits
+          SET ${setParts.join(', ')}
+          WHERE id = ?
+          `,
+          params
         );
 
-
-      return {
-        exhibits: items,
-        total
-      };
-
-    },
-
-    findByCreatorId(id) {
-      return data.exhibits
-        .filter(e => e.creator_id === id)
-        .map(e => ({
-          ...e,
-          creator_avatar: db.users.findById(e.creator_id)?.avatar_url || null
-        }));
-    },
-
-    // --------------------------------------------------------
-    // 获取单个作品
-    // --------------------------------------------------------
-
-    findById(id) {
-
-      const e =
-        data.exhibits.find(
-          e => e.id === id
-        );
-
-
-      if (!e) {
+      if (
+        result.affectedRows === 0
+      ) {
         return null;
       }
 
-
-      return {
-
-        ...e,
-
-        creator_avatar:
-          db.users.findById(
-            e.creator_id
-          )?.avatar_url || null
-
-      };
-
+      return this.findById(id);
     },
 
-    
-    
-    // --------------------------------------------------------
-    // 修改作品
-    // --------------------------------------------------------
-
-    update(id, updates) {
-
-      const idx =
-        data.exhibits.findIndex(
-          e => e.id === id
+    async delete(id) {
+      const [result] =
+        await pool.execute(
+          `
+          DELETE FROM exhibits
+          WHERE id = ?
+          `,
+          [Number(id)]
         );
 
-
-      if (idx === -1) {
-        return null;
-      }
-
-
-      Object.assign(
-        data.exhibits[idx],
-        updates
-      );
-
-
-      save();
-
-
-      return data.exhibits[idx];
-
+      return result.affectedRows > 0;
     },
 
-
-    // --------------------------------------------------------
-    // 删除作品
-    // --------------------------------------------------------
-
-    delete(id) {
-
-      const idx =
-        data.exhibits.findIndex(
-          e => e.id === id
+    async findLikedByUserId(
+      userId
+    ) {
+      const [rows] =
+        await pool.execute(
+          `
+          SELECT
+            e.id,
+            e.title,
+            e.description,
+            e.creator_id,
+            e.creator_name,
+            e.category,
+            e.tags,
+            e.\`usage\`,
+            e.model_url,
+            e.thumbnail_url,
+            e.status,
+            e.likes,
+            e.created_at,
+            u.avatar_url AS creator_avatar
+          FROM like_records lr
+          INNER JOIN exhibits e
+            ON e.id = lr.exhibit_id
+          LEFT JOIN users u
+            ON u.id = e.creator_id
+          WHERE lr.user_id = ?
+          ORDER BY e.created_at DESC
+          `,
+          [Number(userId)]
         );
 
-
-      if (idx === -1) {
-        return false;
-      }
-
-
-      data.exhibits.splice(
-        idx,
-        1
+      return rows.map(
+        normalizeExhibit
       );
-
-
-      save();
-
-
-      return true;
-
     },
 
-    findLikedByUserId(userId) {
-      return data.likeRecords
-        .filter(record => record.user_id === userId)
-        .map(record => {
-          const exhibit = data.exhibits.find(e => e.id === record.exhibit_id);
+    async getLikers(
+      exhibitId
+    ) {
+      const [rows] =
+        await pool.execute(
+          `
+          SELECT
+            u.id,
+            u.username,
+            u.email,
+            u.role,
+            u.avatar_url,
+            u.created_at
+          FROM like_records lr
+          INNER JOIN users u
+            ON u.id = lr.user_id
+          WHERE lr.exhibit_id = ?
+          ORDER BY u.id ASC
+          `,
+          [Number(exhibitId)]
+        );
 
-          if (!exhibit) {
-            return null;
-          }
+      return rows.map(
+        row => safeUser(row)
+      );
+    },
+
+    async hasLiked(
+      userId,
+      exhibitId
+    ) {
+      const [rows] =
+        await pool.execute(
+          `
+          SELECT 1
+          FROM like_records
+          WHERE user_id = ?
+            AND exhibit_id = ?
+          LIMIT 1
+          `,
+          [
+            Number(userId),
+            Number(exhibitId)
+          ]
+        );
+
+      return rows.length > 0;
+    },
+
+    async like(
+      userId,
+      exhibitId
+    ) {
+      const connection =
+        await pool.getConnection();
+
+      const uid =
+        Number(userId);
+
+      const eid =
+        Number(exhibitId);
+
+      try {
+        await connection.beginTransaction();
+
+        const [exhibitRows] =
+          await connection.execute(
+            `
+            SELECT id
+            FROM exhibits
+            WHERE id = ?
+            FOR UPDATE
+            `,
+            [eid]
+          );
+
+        if (
+          exhibitRows.length === 0
+        ) {
+          await connection.rollback();
+          return null;
+        }
+
+        const [likeRows] =
+          await connection.execute(
+            `
+            SELECT 1
+            FROM like_records
+            WHERE user_id = ?
+              AND exhibit_id = ?
+            LIMIT 1
+            `,
+            [
+              uid,
+              eid
+            ]
+          );
+
+        if (
+          likeRows.length > 0
+        ) {
+          await connection.execute(
+            `
+            DELETE FROM like_records
+            WHERE user_id = ?
+              AND exhibit_id = ?
+            `,
+            [
+              uid,
+              eid
+            ]
+          );
+
+          await connection.execute(
+            `
+            UPDATE exhibits
+            SET likes =
+              GREATEST(likes - 1, 0)
+            WHERE id = ?
+            `,
+            [eid]
+          );
+
+          await connection.commit();
 
           return {
-            ...exhibit,
-            creator_avatar: db.users.findById(exhibit.creator_id)?.avatar_url || null
+            exhibit:
+              await this.findById(eid),
+
+            liked: false
           };
-        })
-        .filter(Boolean);
-    },
+        }
 
-      getLikers(exhibitId) {
-        const records = data.likeRecords.filter(record => record.exhibit_id === exhibitId);
-
-        return records
-          .map(record => db.users.findById(record.user_id))
-          .filter(Boolean);
-      },
-
-      // 查询当前用户是否已经点赞
-        hasLiked(userId, exhibitId) {
-
-            return data.likeRecords.some(
-                record =>
-                    record.user_id === userId &&
-                    record.exhibit_id === exhibitId
-            );
-
-        },
-
-   // --------------------------------------------------------
-   // 点赞 / 取消点赞
-   // --------------------------------------------------------
-
-        like(userId, exhibitId) {
-
-          // 根据作品 ID 找到作品
-          const exhibit =
-            data.exhibits.find(
-              e => e.id === exhibitId
-            );
-
-          // 作品不存在
-          if (!exhibit) {
-            return null;
-          }
-
-
-          // 查找当前用户是否已经给这个作品点过赞
-          const likeIndex =
-            data.likeRecords.findIndex(
-              record =>
-                record.user_id === userId &&
-                record.exhibit_id === exhibitId
-            );
-
-
-      // ======================================================
-      // 已经点过 → 取消点赞
-      // ======================================================
-
-      if (likeIndex !== -1) {
-
-        // 删除这条点赞记录
-        data.likeRecords.splice(
-          likeIndex,
-          1
+        await connection.execute(
+          `
+          INSERT INTO like_records (
+            user_id,
+            exhibit_id
+          )
+          VALUES (?, ?)
+          `,
+          [
+            uid,
+            eid
+          ]
         );
 
-        // 点赞数量 -1
-        exhibit.likes = Math.max(
-          0,
-          exhibit.likes - 1
+        await connection.execute(
+          `
+          UPDATE exhibits
+          SET likes = likes + 1
+          WHERE id = ?
+          `,
+          [eid]
         );
 
-        // 保存到 data.json
-        save();
+        await connection.commit();
 
         return {
-          exhibit,
-          liked: false
+          exhibit:
+            await this.findById(eid),
+
+          liked: true
         };
+      } catch (error) {
+        await connection.rollback();
+        throw error;
+      } finally {
+        connection.release();
       }
-
-
-      // ======================================================
-      // 没点过 → 添加点赞
-      // ======================================================
-
-      data.likeRecords.push({
-        user_id: userId,
-        exhibit_id: exhibitId
-      });
-
-      // 点赞数量 +1
-      exhibit.likes++;
-
-      // 保存到 data.json
-      save();
-
-      return {
-        exhibit,
-        liked: true
-      };
     },
 
+    async count() {
+      const [rows] =
+        await pool.execute(
+          `
+          SELECT COUNT(*) AS total
+          FROM exhibits
+          `
+        );
 
-    // --------------------------------------------------------
-    // 作品总数
-    // --------------------------------------------------------
-
-    count() {
-
-      return data.exhibits.length;
-
+      return Number(
+        rows[0]?.total ?? 0
+      );
     },
 
+    async countByStatus(
+      status
+    ) {
+      const [rows] =
+        await pool.execute(
+          `
+          SELECT COUNT(*) AS total
+          FROM exhibits
+          WHERE status = ?
+          `,
+          [status]
+        );
 
-    // --------------------------------------------------------
-    // 根据状态统计作品数量
-    // --------------------------------------------------------
-
-    countByStatus(status) {
-
-      return data.exhibits.filter(
-        e => e.status === status
-      ).length;
-
-    },
-
-  },
-
+      return Number(
+        rows[0]?.total ?? 0
+      );
+    }
+  }
 };
 
+export { pool };
 
 export default db;
