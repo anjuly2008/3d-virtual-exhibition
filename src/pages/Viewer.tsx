@@ -13,6 +13,8 @@ import { api } from '@/api/client';
 import type { Exhibit } from '@/types';
 import ModelViewer from '@/components/3D/ModelViewer';
 
+const baseUrl = import.meta.env.BASE_URL;
+
 export default function Viewer() {
   const { id } = useParams<{ id: string }>();
 
@@ -66,7 +68,7 @@ export default function Viewer() {
     <div
       className="relative min-h-screen pt-16"
       style={{
-        backgroundImage: "url('/backgrounds/4.gif')",
+        backgroundImage: `url(${baseUrl}backgrounds/4.gif)`,
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
@@ -81,7 +83,9 @@ export default function Viewer() {
             <p className="text-white">
               加载作品中...
               <br />
-              <span className="text-xs text-slate-300">Loading artworks...</span>
+              <span className="text-xs text-slate-300">
+                Loading artworks...
+              </span>
             </p>
           </div>
         </div>
@@ -95,7 +99,9 @@ export default function Viewer() {
             <h2 className="text-2xl font-bold text-white mb-2">
               作品未找到
               <br />
-              <span className="text-xs text-slate-300">Work Not Found</span>
+              <span className="text-xs text-slate-300">
+                Work Not Found
+              </span>
             </h2>
 
             <p className="text-slate-200 mb-6">
@@ -106,7 +112,10 @@ export default function Viewer() {
               </span>
             </p>
 
-            <Link to="/gallery" className="glass-btn inline-flex items-center gap-2">
+            <Link
+              to="/gallery"
+              className="glass-btn inline-flex items-center gap-2"
+            >
               <ArrowLeft className="w-4 h-4" />
               <span>
                 返回作品库
@@ -121,7 +130,10 @@ export default function Viewer() {
           <div className="h-[calc(100vh-96px)] flex flex-col lg:flex-row gap-4">
             <div className="lg:w-2/3 relative">
               <div className="absolute top-4 left-4 z-20">
-                <Link to="/gallery" className="glass-btn inline-flex items-center gap-2">
+                <Link
+                  to="/gallery"
+                  className="glass-btn inline-flex items-center gap-2"
+                >
                   <ArrowLeft className="w-4 h-4" />
                   <span>
                     返回
@@ -160,7 +172,9 @@ export default function Viewer() {
               }}
             >
               <div className="flex items-center gap-2 mb-4">
-                <span className="glass-badge px-3 py-1 text-xs">{exhibit.category}</span>
+                <span className="glass-badge px-3 py-1 text-xs">
+                  {exhibit.category}
+                </span>
 
                 {exhibit.status === 'pending' && (
                   <span className="glass-badge px-3 py-1 text-xs">
@@ -171,7 +185,9 @@ export default function Viewer() {
                 )}
               </div>
 
-              <h1 className="text-2xl font-bold text-white mb-2">{exhibit.title}</h1>
+              <h1 className="text-2xl font-bold text-white mb-2">
+                {exhibit.title}
+              </h1>
 
               <div className="flex items-center gap-4 mb-6">
                 <div className="flex items-center gap-2">
@@ -182,7 +198,10 @@ export default function Viewer() {
                   </div>
 
                   <div>
-                    <p className="text-white font-medium">{exhibit.creator_name}</p>
+                    <p className="text-white font-medium">
+                      {exhibit.creator_name}
+                    </p>
+
                     <p className="text-xs text-slate-300">
                       {new Date(exhibit.created_at).toLocaleDateString('zh-CN')}
                     </p>
@@ -190,18 +209,29 @@ export default function Viewer() {
                 </div>
               </div>
 
-              <p className="text-slate-200 mb-6">{exhibit.description}</p>
+              <p className="text-slate-200 mb-6">
+                {exhibit.description}
+              </p>
 
               <div className="flex items-center gap-3 mb-6 flex-wrap">
                 <button
                   onClick={handleLike}
-                  className={`glass-btn flex items-center gap-2 px-4 py-2 ${liked ? 'is-active' : ''}`}
+                  className={`glass-btn flex items-center gap-2 px-4 py-2 ${
+                    liked ? 'is-active' : ''
+                  }`}
                 >
-                  <Heart className={`w-5 h-5 ${liked ? 'fill-current' : ''}`} />
+                  <Heart
+                    className={`w-5 h-5 ${
+                      liked ? 'fill-current' : ''
+                    }`}
+                  />
                   <span>{exhibit.likes}</span>
                 </button>
 
-                <button type="button" className="glass-btn flex items-center gap-2 px-4 py-2">
+                <button
+                  type="button"
+                  className="glass-btn flex items-center gap-2 px-4 py-2"
+                >
                   <Download className="w-5 h-5" />
                   <span>
                     下载
@@ -219,7 +249,9 @@ export default function Viewer() {
                 <h3 className="text-white font-semibold mb-4">
                   操作提示
                   <br />
-                  <span className="text-xs text-slate-300">Operation Tips</span>
+                  <span className="text-xs text-slate-300">
+                    Operation Tips
+                  </span>
                 </h3>
 
                 <ul className="space-y-3 text-sm text-slate-200">
@@ -228,7 +260,9 @@ export default function Viewer() {
                     <span>
                       拖动鼠标旋转模型
                       <br />
-                      <span className="text-xs text-slate-400">Drag to rotate model</span>
+                      <span className="text-xs text-slate-400">
+                        Drag to rotate model
+                      </span>
                     </span>
                   </li>
 
@@ -237,7 +271,9 @@ export default function Viewer() {
                     <span>
                       滚轮缩放视角
                       <br />
-                      <span className="text-xs text-slate-400">Scroll to zoom</span>
+                      <span className="text-xs text-slate-400">
+                        Scroll to zoom
+                      </span>
                     </span>
                   </li>
 
@@ -246,7 +282,9 @@ export default function Viewer() {
                     <span>
                       右键拖动平移视角
                       <br />
-                      <span className="text-xs text-slate-400">Right-click drag to pan</span>
+                      <span className="text-xs text-slate-400">
+                        Right-click drag to pan
+                      </span>
                     </span>
                   </li>
                 </ul>

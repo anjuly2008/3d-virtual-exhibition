@@ -9,6 +9,8 @@ export default function AdminPreview() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
+  const baseUrl = import.meta.env.BASE_URL;
+
   const [exhibit, setExhibit] = useState<Exhibit | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -36,7 +38,7 @@ export default function AdminPreview() {
     <div
       className="relative min-h-screen pt-16"
       style={{
-        backgroundImage: "url('/backgrounds/4.gif')",
+        backgroundImage: `url(${baseUrl}backgrounds/4.gif)`,
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}

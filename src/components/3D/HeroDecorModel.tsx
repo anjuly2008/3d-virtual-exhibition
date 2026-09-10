@@ -11,7 +11,9 @@ export default function HeroDecorModel() {
     y: 0,
   });
 
-  const { scene } = useGLTF('/models/hero-decor.glb');
+  const baseUrl = import.meta.env.BASE_URL;
+
+  const { scene } = useGLTF(`${baseUrl}models/hero-decor.glb`);
 
   const model = useMemo(() => {
     const clone = scene.clone(true);
@@ -32,7 +34,9 @@ export default function HeroDecorModel() {
     }
   });
 
-  const handlePointerDown = (e: THREE.Event & { clientX?: number; clientY?: number }) => {
+  const handlePointerDown = (
+    e: THREE.Event & { clientX?: number; clientY?: number }
+  ) => {
     const event = e as unknown as PointerEvent;
 
     dragRef.current.active = true;
@@ -48,7 +52,9 @@ export default function HeroDecorModel() {
     }
   };
 
-  const handlePointerMove = (e: THREE.Event & { clientX?: number; clientY?: number }) => {
+  const handlePointerMove = (
+    e: THREE.Event & { clientX?: number; clientY?: number }
+  ) => {
     if (!dragRef.current.active || !groupRef.current) return;
 
     const event = e as unknown as PointerEvent;
@@ -63,7 +69,9 @@ export default function HeroDecorModel() {
     dragRef.current.y = event.clientY;
   };
 
-  const handlePointerUp = (e: THREE.Event & { clientX?: number; clientY?: number }) => {
+  const handlePointerUp = (
+    e: THREE.Event & { clientX?: number; clientY?: number }
+  ) => {
     const event = e as unknown as PointerEvent;
 
     dragRef.current.active = false;
@@ -92,4 +100,4 @@ export default function HeroDecorModel() {
   );
 }
 
-useGLTF.preload('/models/hero-decor.glb');
+useGLTF.preload(`${import.meta.env.BASE_URL}models/hero-decor.glb`);

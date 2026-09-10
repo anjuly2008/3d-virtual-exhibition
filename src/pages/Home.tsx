@@ -8,26 +8,28 @@ import type { Exhibit } from '@/types';
 import Card from '@/components/UI/Card';
 import HeroDecorModel from '@/components/3D/HeroDecorModel';
 
+const baseUrl = import.meta.env.BASE_URL;
+
 const categories = [
   {
     name: 'Character',
-    icon: '/category-gifs/6.gif',
+    icon: `${baseUrl}category-gifs/6.gif`,
   },
   {
     name: 'Architecture',
-    icon: '/category-gifs/7.gif',
+    icon: `${baseUrl}category-gifs/7.gif`,
   },
   {
     name: 'Vehicle',
-    icon: '/category-gifs/8.gif',
+    icon: `${baseUrl}category-gifs/8.gif`,
   },
   {
     name: 'Prop',
-    icon: '/category-gifs/9.gif',
+    icon: `${baseUrl}category-gifs/9.gif`,
   },
   {
     name: 'Environment',
-    icon: '/category-gifs/10.gif',
+    icon: `${baseUrl}category-gifs/10.gif`,
   },
 ];
 
@@ -87,7 +89,7 @@ export default function Home() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: "url('/backgrounds/4.gif')",
+          backgroundImage: `url(${baseUrl}backgrounds/4.gif)`,
           backgroundRepeat: 'repeat',
           backgroundAttachment: 'fixed',
         }}
@@ -95,7 +97,10 @@ export default function Home() {
 
       <div className="absolute inset-0 z-0 bg-black/20 pointer-events-none" />
 
-      <section className="relative z-10 overflow-hidden" style={{ height: 'calc(100vh - 72px)' }} >
+      <section
+        className="relative z-10 overflow-hidden"
+        style={{ height: 'calc(100vh - 72px)' }}
+      >
         <div className="absolute inset-0 z-20">
           <Canvas
             camera={{ position: [0, 0, 8], fov: 45 }}
@@ -145,7 +150,9 @@ export default function Home() {
                   src="https://text.glitter-graphics.net/blush_noise/l.gif"
                   alt="l"
                 />
+
                 <span className="inline-block w-5" />
+
                 <img
                   src="https://text.glitter-graphics.net/blush_noise/w.gif"
                   alt="w"
@@ -195,7 +202,7 @@ export default function Home() {
       </section>
 
       <Divider
-        image="/dividers/48.gif"
+        image={`${baseUrl}dividers/48.gif`}
         backgroundSize="5% auto"
       />
 
@@ -231,7 +238,7 @@ export default function Home() {
         </PageContainer>
       </Section>
 
-      <Divider image="/dividers/49.gif" />
+      <Divider image={`${baseUrl}dividers/49.gif`} />
 
       <Section>
         <PageContainer>
@@ -239,7 +246,9 @@ export default function Home() {
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
               作品分类
               <br />
-              <span className="text-sm text-slate-400">Categories</span>
+              <span className="text-sm text-slate-400">
+                Categories
+              </span>
             </h2>
           </div>
 
@@ -266,7 +275,7 @@ export default function Home() {
         </PageContainer>
       </Section>
 
-      <Divider image="/dividers/51.gif" />
+      <Divider image={`${baseUrl}dividers/51.gif`} />
 
       <footer className="relative z-10 py-12">
         <PageContainer>

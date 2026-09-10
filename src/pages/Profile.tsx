@@ -5,6 +5,8 @@ import { api } from '@/api/client';
 import Card from '@/components/UI/Card';
 import type { Exhibit } from '@/types';
 
+const baseUrl = import.meta.env.BASE_URL;
+
 export default function Profile() {
   const { user, updateAvatar } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -14,80 +16,84 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState<'works' | 'likes'>('works');
   const [myLikes, setMyLikes] = useState<Exhibit[]>([]);
   const [likesLoading, setLikesLoading] = useState(false);
+
   interface Liker {
-  id: number;
-  username: string;
-  avatar_url: string | null;
-}
+    id: number;
+    username: string;
+    avatar_url: string | null;
+  }
 
-const [likers, setLikers] = useState<Record<number, Liker[]>>({});
-const [likersLoading, setLikersLoading] = useState<number | null>(null);
-const [likersOpen, setLikersOpen] = useState<number | null>(null);
+  const [likers, setLikers] = useState<Record<number, Liker[]>>({});
+  const [likersLoading, setLikersLoading] = useState<number | null>(null);
+  const [likersOpen, setLikersOpen] = useState<number | null>(null);
+
   useEffect(() => {
-  api.exhibits
-    .mine()
-    .then((data) => setMyWorks(data.exhibits))
-    .catch(() => setMyWorks([]))
-    .finally(() => setWorksLoading(false));
-}, []);
+    api.exhibits
+      .mine()
+      .then((data) => setMyWorks(data.exhibits))
+      .catch(() => setMyWorks([]))
+      .finally(() => setWorksLoading(false));
+  }, []);
 
-const loadMyLikes = async () => {
-  setLikesLoading(true);
+  const loadMyLikes = async () => {
+    setLikesLoading(true);
 
-  try {
-    const data = await api.exhibits.likes();
-    setMyLikes(data.exhibits);
-  } catch {
-    setMyLikes([]);
-  } finally {
-    setLikesLoading(false);
-  }
-};
+    try {
+      const data = await api.exhibits.likes();
+      setMyLikes(data.exhibits);
+    } catch {
+      setMyLikes([]);
+    } finally {
+      setLikesLoading(false);
+    }
+  };
 
-const loadLikers = async (exhibitId: number) => {
-  if (likersOpen === exhibitId) {
-    setLikersOpen(null);
-    return;
-  }
+  const loadLikers = async (exhibitId: number) => {
+    if (likersOpen === exhibitId) {
+      setLikersOpen(null);
+      return;
+    }
 
-  setLikersOpen(exhibitId);
+    setLikersOpen(exhibitId);
 
-  if (likers[exhibitId]) return;
+    if (likers[exhibitId]) return;
 
-  setLikersLoading(exhibitId);
+    setLikersLoading(exhibitId);
 
-  try {
-    const data = await api.exhibits.getLikers(String(exhibitId));
-    setLikers((prev) => ({
-      ...prev,
-      [exhibitId]: data.users,
-    }));
-  } catch {
-    setLikers((prev) => ({
-      ...prev,
-      [exhibitId]: [],
-    }));
-  } finally {
-    setLikersLoading(null);
-  }
-};
+    try {
+      const data = await api.exhibits.getLikers(String(exhibitId));
+      setLikers((prev) => ({
+        ...prev,
+        [exhibitId]: data.users,
+      }));
+    } catch {
+      setLikers((prev) => ({
+        ...prev,
+        [exhibitId]: [],
+      }));
+    } finally {
+      setLikersLoading(null);
+    }
+  };
 
-  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
+  const handleAvatarChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
 
-  if (!file) return;
+    if (!file) return;
 
-  setAvatarLoading(true);
+    setAvatarLoading(true);
 
-  try {
-    await updateAvatar(file);
-  } catch (err) {
-    alert(err instanceof Error ? err.message : '头像上传失败');
-  } finally {
-    setAvatarLoading(false);
-    e.target.value = '';
-  }
-};
+    try {
+      await updateAvatar(file);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : '头像上传失败');
+    } finally {
+      setAvatarLoading(false);
+      e.target.value = '';
+    }
+  };
 
   if (!user) return null;
 
@@ -96,7 +102,7 @@ const loadLikers = async (exhibitId: number) => {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: "url('/backgrounds/4.gif')",
+          backgroundImage: `url(${baseUrl}backgrounds/4.gif)`,
           backgroundRepeat: 'repeat',
           backgroundAttachment: 'fixed',
         }}
@@ -118,7 +124,7 @@ const loadLikers = async (exhibitId: number) => {
             <div className="flex flex-col items-center">
               <div className="glass-avatar w-24 h-24 overflow-hidden">
                 <img
-                  src={user.avatar_url || '/icons/26.gif'}
+                  src={user.avatar_url || `${baseUrl}icons/26.gif`}
                   alt=""
                   className="w-full h-full object-cover"
                 />
@@ -155,7 +161,9 @@ const loadLikers = async (exhibitId: number) => {
             </div>
 
             <div className="flex-1 text-center md:text-left">
-              <h2 className="text-2xl font-bold text-white mb-2">{user.username}</h2>
+              <h2 className="text-2xl font-bold text-white mb-2">
+                {user.username}
+              </h2>
 
               <div className="space-y-2 text-slate-300">
                 <div className="flex items-center justify-center md:justify-start gap-2">
@@ -165,7 +173,11 @@ const loadLikers = async (exhibitId: number) => {
 
                 <div className="flex items-center justify-center md:justify-start gap-2">
                   <User className="w-4 h-4" />
-                  <span>{user.role === 'admin' ? '管理员 / Admin' : '普通用户 / User'}</span>
+                  <span>
+                    {user.role === 'admin'
+                      ? '管理员 / Admin'
+                      : '普通用户 / User'}
+                  </span>
                 </div>
 
                 <div className="flex items-center justify-center md:justify-start gap-2">
@@ -181,7 +193,9 @@ const loadLikers = async (exhibitId: number) => {
           <button
             type="button"
             onClick={() => setActiveTab('works')}
-            className={`glass-btn ${activeTab === 'works' ? 'is-active' : ''}`}
+            className={`glass-btn ${
+              activeTab === 'works' ? 'is-active' : ''
+            }`}
           >
             <Upload className="w-4 h-4" />
             我的作品
@@ -195,7 +209,9 @@ const loadLikers = async (exhibitId: number) => {
               setActiveTab('likes');
               if (myLikes.length === 0) loadMyLikes();
             }}
-            className={`glass-btn ${activeTab === 'likes' ? 'is-active' : ''}`}
+            className={`glass-btn ${
+              activeTab === 'likes' ? 'is-active' : ''
+            }`}
           >
             <Heart className="w-4 h-4" />
             我的点赞
@@ -224,7 +240,9 @@ const loadLikers = async (exhibitId: number) => {
               <p className="text-slate-400">
                 你还没有创建作品
                 <br />
-                <span className="text-xs text-slate-500">You haven't created any works yet</span>
+                <span className="text-xs text-slate-500">
+                  You haven't created any works yet
+                </span>
               </p>
             </div>
           ) : (
@@ -244,21 +262,34 @@ const loadLikers = async (exhibitId: number) => {
                   {likersOpen === exhibit.id && (
                     <div className="glass-card mt-2 rounded-xl p-4">
                       {likersLoading === exhibit.id ? (
-                        <p className="text-sm text-slate-400 text-center">加载中...</p>
+                        <p className="text-sm text-slate-400 text-center">
+                          加载中...
+                        </p>
                       ) : likers[exhibit.id]?.length === 0 ? (
-                        <p className="text-sm text-slate-400 text-center">还没有人点赞</p>
+                        <p className="text-sm text-slate-400 text-center">
+                          还没有人点赞
+                        </p>
                       ) : (
                         <div className="space-y-3">
                           {likers[exhibit.id].map((liker) => (
-                            <div key={liker.id} className="flex items-center gap-3">
+                            <div
+                              key={liker.id}
+                              className="flex items-center gap-3"
+                            >
                               <div className="glass-avatar w-8 h-8 overflow-hidden">
                                 <img
-                                  src={liker.avatar_url || '/icons/26.gif'}
+                                  src={
+                                    liker.avatar_url ||
+                                    `${baseUrl}icons/26.gif`
+                                  }
                                   alt=""
                                   className="w-full h-full object-cover"
                                 />
                               </div>
-                              <span className="text-sm text-white">{liker.username}</span>
+
+                              <span className="text-sm text-white">
+                                {liker.username}
+                              </span>
                             </div>
                           ))}
                         </div>
@@ -288,7 +319,9 @@ const loadLikers = async (exhibitId: number) => {
             <p className="text-slate-400">
               你还没有点赞任何作品
               <br />
-              <span className="text-xs text-slate-500">You haven't liked any works yet</span>
+              <span className="text-xs text-slate-500">
+                You haven't liked any works yet
+              </span>
             </p>
           </div>
         ) : (
