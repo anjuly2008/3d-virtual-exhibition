@@ -2,7 +2,7 @@
 
 一个基于 **React + TypeScript + Three.js** 构建的 Web 端 3D 虚拟作品展示平台，面向 3D 模型作品的上传、审核、浏览与在线预览场景。
 
-项目采用前后端分离式目录组织：前端负责页面展示、用户交互与 3D 可视化，后端基于 Node.js + Express 提供用户认证、作品管理、点赞、管理员审核以及 AI 展览助手等接口。
+项目采用前后端分离式目录组织：前端负责页面展示、用户交互与 3D 可视化，后端基于 Node.js + Express 提供用户认证、作品管理、点赞、管理员审核以及 AI 展览助手等接口。项目使用 **MySQL** 作为核心业务数据的持久化数据库。
 
 ---
 
@@ -10,21 +10,21 @@
 
 ### 核心能力
 
-- 3D 虚拟展览首页与沉浸式视觉界面
-- 3D 作品库浏览、搜索与分类筛选
-- GLB / GLTF / OBJ / FBX / STL 等 3D 模型上传
-- 作品缩略图上传与作品信息管理
-- Three.js 在线 3D 模型预览
-- 用户注册、登录与 JWT 身份认证
-- 用户头像上传与个人中心
-- 我的作品 / 我的点赞作品管理
-- 作品点赞与点赞用户查看
-- 管理员作品审核与状态管理
-- 管理员在线预览待审核作品
-- 管理员用户角色管理与数据统计
-- AI 虚拟展览助手
-- 中英文界面文案与双语页面展示
-- 响应式布局，兼容桌面端与移动端
+* 3D 虚拟展览首页与沉浸式视觉界面
+* 3D 作品库浏览、搜索与分类筛选
+* GLB / GLTF / OBJ / FBX / STL 等 3D 模型上传
+* 作品缩略图上传与作品信息管理
+* Three.js 在线 3D 模型预览
+* 用户注册、登录与 JWT 身份认证
+* 用户头像上传与个人中心
+* 我的作品 / 我的点赞作品管理
+* 作品点赞与点赞用户查看
+* 管理员作品审核与状态管理
+* 管理员在线预览待审核作品
+* 管理员用户角色管理与数据统计
+* AI 虚拟展览助手
+* 中英文界面文案与双语页面展示
+* 响应式布局，兼容桌面端与移动端
 
 ---
 
@@ -32,31 +32,32 @@
 
 ### 前端
 
-| 技术 | 用途 |
-| --- | --- |
-| React 18 | 用户界面与组件化开发 |
-| TypeScript 5 | 类型安全与工程化开发 |
-| Vite 5 | 前端开发与构建 |
-| React Router 6 | 页面路由管理 |
-| Three.js | 3D 场景与模型渲染 |
+| 技术                | 用途                  |
+| ----------------- | ------------------- |
+| React 18          | 用户界面与组件化开发          |
+| TypeScript 5      | 类型安全与工程化开发          |
+| Vite 5            | 前端开发与构建             |
+| React Router 6    | 页面路由管理              |
+| Three.js          | 3D 场景与模型渲染          |
 | React Three Fiber | React 与 Three.js 集成 |
-| @react-three/drei | Three.js 常用辅助组件 |
-| Zustand | 全局状态管理 |
-| Tailwind CSS 3 | UI 样式与响应式布局 |
-| Lucide React | 图标组件 |
+| @react-three/drei | Three.js 常用辅助组件     |
+| Zustand           | 全局状态管理              |
+| Tailwind CSS 3    | UI 样式与响应式布局         |
+| Lucide React      | 图标组件                |
 
 ### 后端
 
-| 技术 | 用途 |
-| --- | --- |
-| Node.js | JavaScript 服务端运行环境 |
-| Express | HTTP API 服务 |
-| JWT | 用户身份认证 |
-| bcryptjs | 用户密码哈希 |
-| Multer | 文件上传处理 |
-| CORS | 跨域请求处理 |
-| JSON 文件存储 | 项目当前的数据持久化方案 |
-| OpenRouter | AI 展览助手模型接口 |
+| 技术         | 用途                    |
+| ---------- | --------------------- |
+| Node.js    | JavaScript 服务端运行环境    |
+| Express    | HTTP API 服务           |
+| MySQL      | 用户、作品、点赞等核心业务数据持久化    |
+| mysql2     | Node.js 与 MySQL 数据库连接 |
+| JWT        | 用户身份认证                |
+| bcryptjs   | 用户密码哈希                |
+| Multer     | 文件上传处理                |
+| CORS       | 跨域请求处理                |
+| OpenRouter | AI 展览助手模型接口           |
 
 ---
 
@@ -83,12 +84,34 @@
 │  Role Control    Data Operations             │
 └───────────────┬──────────────────┬───────────┘
                 │                  │
+                │                  │
                 ▼                  ▼
-       ┌────────────────┐   ┌────────────────┐
-       │   data.json    │   │    uploads/    │
-       │ 用户 / 作品    │   │ 模型 / 图片    │
-       │ 点赞记录      │   │ 头像 / 缩略图  │
-       └────────────────┘   └────────────────┘
+      ┌──────────────────┐  ┌────────────────┐
+      │      MySQL       │  │    uploads/    │
+      │                  │  │                │
+      │ users            │  │ 模型 / 图片    │
+      │ exhibits         │  │ 头像 / 缩略图  │
+      │ like_records     │  │                │
+      └──────────────────┘  └────────────────┘
+```
+
+项目的核心业务数据通过 Node.js + Express 后端进行统一管理，并通过 `mysql2` 连接 MySQL 数据库。
+
+主要数据关系包括：
+
+```text
+用户 users
+   │
+   ├───────────────┐
+   │               │
+   ▼               ▼
+作品 exhibits   点赞记录 like_records
+   │
+   ▼
+模型 / 缩略图文件
+   │
+   ▼
+uploads/
 ```
 
 AI 助手的调用链为：
@@ -111,17 +134,17 @@ OpenRouter
 
 ## 页面结构
 
-| 路由 | 页面 | 说明 |
-| --- | --- | --- |
-| `/` | Home | 首页、3D Hero、精选作品、作品分类 |
-| `/gallery` | Gallery | 作品库、搜索、分类与筛选 |
-| `/viewer/:id` | Viewer | 普通用户查看审核通过的 3D 作品 |
-| `/upload` | Upload | 登录用户上传作品 |
-| `/login` | Login | 用户登录 |
-| `/register` | Register | 用户注册 |
-| `/profile` | Profile | 个人中心、我的作品、我的点赞、头像 |
-| `/admin` | Admin | 管理员后台、作品审核、用户管理、统计 |
-| `/admin-preview/:id` | Admin Preview | 管理员预览待审核或其他状态作品 |
+| 路由                   | 页面            | 说明                   |
+| -------------------- | ------------- | -------------------- |
+| `/`                  | Home          | 首页、3D Hero、精选作品、作品分类 |
+| `/gallery`           | Gallery       | 作品库、搜索、分类与筛选         |
+| `/viewer/:id`        | Viewer        | 普通用户查看审核通过的 3D 作品    |
+| `/upload`            | Upload        | 登录用户上传作品             |
+| `/login`             | Login         | 用户登录                 |
+| `/register`          | Register      | 用户注册                 |
+| `/profile`           | Profile       | 个人中心、我的作品、我的点赞、头像    |
+| `/admin`             | Admin         | 管理员后台、作品审核、用户管理、统计   |
+| `/admin-preview/:id` | Admin Preview | 管理员预览待审核或其他状态作品      |
 
 ---
 
@@ -130,6 +153,8 @@ OpenRouter
 ### 1. 用户注册与登录
 
 用户通过注册页面创建账号，后端使用 `bcryptjs` 对密码进行哈希处理，并通过 JWT 返回登录凭证。
+
+用户数据存储在 MySQL 的 `users` 表中。
 
 登录状态由前端 `AuthContext` 与 `localStorage` 共同维护，后续 API 请求会自动携带：
 
@@ -141,13 +166,13 @@ Authorization: Bearer <token>
 
 登录用户可以在 `/upload` 页面填写：
 
-- 作品标题
-- 作品描述
-- 作品分类
-- 标签
-- 使用场景
-- 3D 模型文件
-- 作品缩略图
+* 作品标题
+* 作品描述
+* 作品分类
+* 标签
+* 使用场景
+* 3D 模型文件
+* 作品缩略图
 
 模型文件当前支持：
 
@@ -170,6 +195,8 @@ Authorization: Bearer <token>
 .webp
 ```
 
+作品信息及其审核状态等核心数据保存至 MySQL，实际模型和图片文件保存于 `uploads/` 目录。
+
 ### 3. 作品审核
 
 用户提交作品后，作品进入待审核状态。
@@ -178,6 +205,7 @@ Authorization: Bearer <token>
 
 ```text
 待审核 → 通过
+
 待审核 → 拒绝
 ```
 
@@ -191,12 +219,12 @@ Authorization: Bearer <token>
 
 在线预览支持：
 
-- 鼠标旋转
-- 缩放
-- 平移
-- 模型自动归一化尺寸
-- 模型居中显示
-- 灯光与展示场景
+* 鼠标旋转
+* 缩放
+* 平移
+* 模型自动归一化尺寸
+* 模型居中显示
+* 灯光与展示场景
 
 首页还包含一个独立的 3D Hero 装饰模型，用于增强首页视觉表现。
 
@@ -208,25 +236,28 @@ Authorization: Bearer <token>
 
 ```text
 我的作品
+
 我的点赞
 ```
 
 作品详情还可以查询点赞用户。
 
+点赞关系存储在 MySQL 的 `like_records` 表中，作品点赞数量同步维护在作品数据中。
+
 ### 6. 管理员后台
 
 管理员后台包含：
 
-- 作品审核
-- 作品状态筛选
-- 作品预览
-- 删除作品
-- 用户列表
-- 用户角色调整
-- 用户数量统计
-- 作品数量统计
-- 已通过作品数量
-- 待审核作品数量
+* 作品审核
+* 作品状态筛选
+* 作品预览
+* 删除作品
+* 用户列表
+* 用户角色调整
+* 用户数量统计
+* 作品数量统计
+* 已通过作品数量
+* 待审核作品数量
 
 管理员接口通过 JWT 身份认证和管理员权限中间件进行保护。
 
@@ -255,19 +286,19 @@ POST /api/ai/chat
 │  ├─ backgrounds/          # 页面背景资源
 │  ├─ category-gifs/        # 作品分类图标
 │  ├─ dividers/             # 页面分隔装饰
-│  ├─ header-backgrounds/   # 顶部导航背景
-│  ├─ header-icons/         # 顶部导航图标
+│  ├─ header-backgrounds/    # 顶部导航背景
+│  ├─ header-icons/          # 顶部导航图标
 │  ├─ icons/                # 通用图标与 AI 助手图标
 │  ├─ models/               # 首页 Hero 3D 模型
-│  ├─ admin-icons/          # 管理员页面资源
-│  ├─ gallery-icons/        # 作品库资源
-│  ├─ login-icons/          # 登录页面资源
-│  ├─ register-icons/      # 注册页面资源
+│  ├─ admin-icons/           # 管理员页面资源
+│  ├─ gallery-icons/         # 作品库资源
+│  ├─ login-icons/           # 登录页面资源
+│  ├─ register-icons/       # 注册页面资源
 │  └─ upload-icons/         # 上传页面资源
 │
 ├─ src/
 │  ├─ api/
-│  │  └─ client.ts          # 前端 API 封装
+│  │  └─ client.ts           # 前端 API 封装
 │  │
 │  ├─ components/
 │  │  ├─ 3D/
@@ -283,7 +314,7 @@ POST /api/ai/chat
 │  │     └─ Header.tsx
 │  │
 │  ├─ context/
-│  │  └─ AuthContext.tsx     # 登录状态与用户信息
+│  │  └─ AuthContext.tsx      # 登录状态与用户信息
 │  │
 │  ├─ pages/
 │  │  ├─ Home.tsx
@@ -297,30 +328,33 @@ POST /api/ai/chat
 │  │  └─ AdminPreview.tsx
 │  │
 │  ├─ store/
-│  │  └─ appStore.ts         # 全局筛选与页面状态
+│  │  └─ appStore.ts          # 全局筛选与页面状态
 │  │
 │  ├─ types/
-│  │  └─ index.ts            # TypeScript 类型定义
+│  │  └─ index.ts             # TypeScript 类型定义
 │  │
-│  ├─ App.tsx                # 路由与全局布局
-│  ├─ index.css              # 全局样式
-│  └─ main.tsx               # 应用入口
+│  ├─ App.tsx                 # 路由与全局布局
+│  ├─ index.css               # 全局样式
+│  └─ main.tsx                # 应用入口
 │
 ├─ server/
 │  ├─ middleware/
-│  │  └─ auth.js             # JWT 与管理员权限中间件
+│  │  └─ auth.js              # JWT 与管理员权限中间件
 │  ├─ routes/
-│  │  ├─ auth.js             # 用户认证接口
-│  │  ├─ exhibits.js         # 作品与点赞接口
-│  │  ├─ admin.js            # 管理员接口
-│  │  └─ ai.js               # AI 接口
-│  ├─ db.js                  # JSON 数据读写与数据操作
-│  ├─ index.js               # Express 服务入口
+│  │  ├─ auth.js              # 用户认证接口
+│  │  ├─ exhibits.js          # 作品与点赞接口
+│  │  ├─ admin.js             # 管理员接口
+│  │  └─ ai.js                # AI 接口
+│  ├─ db.js                   # MySQL 数据库连接与数据操作
+│  ├─ index.js                # Express 服务入口
 │  ├─ package.json
-│  └─ .env                   # 本地环境变量，不应提交到仓库
+│  └─ .env                    # 本地环境变量，不应提交到仓库
 │
-├─ data.json                # 本地数据文件（运行后生成，通常不提交）
-├─ uploads/                 # 上传文件目录（运行后生成，通常不提交）
+├─ uploads/                   # 上传文件目录（运行后生成）
+│  ├─ avatars/
+│  ├─ models/
+│  └─ thumbnails/
+│
 ├─ index.html
 ├─ package.json
 ├─ vite.config.ts
@@ -338,9 +372,10 @@ POST /api/ai/chat
 
 建议使用：
 
-- Node.js 18+
-- npm 9+
-- 支持 WebGL 的现代浏览器
+* Node.js 18+
+* npm 9+
+* MySQL 8.0+
+* 支持 WebGL 的现代浏览器
 
 Chrome、Edge 等 Chromium 浏览器通常具有较好的 WebGL 兼容性。
 
@@ -360,7 +395,19 @@ npm install
 cd ..
 ```
 
-### 3. 配置环境变量
+### 3. 准备 MySQL 数据库
+
+首先确保本地 MySQL 服务已经启动，并准备好项目使用的数据库。
+
+项目默认数据库名称为：
+
+```text
+mart_community_3d
+```
+
+数据库连接信息通过后端环境变量配置。
+
+### 4. 配置环境变量
 
 在：
 
@@ -368,27 +415,44 @@ cd ..
 server/.env
 ```
 
-配置 AI 服务相关环境变量，例如：
+配置 MySQL 数据库连接信息：
 
 ```env
 PORT=3001
+
+MYSQL_HOST=127.0.0.1
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=your_mysql_password
+MYSQL_DATABASE=mart_community_3d
+```
+
+如果使用 AI 展览助手，还需要配置：
+
+```env
 OPENROUTER_API_KEY=your_api_key
 OPENROUTER_MODEL=openrouter/free
 ```
 
 其中：
 
-- `PORT`：后端服务端口，默认 `3001`
-- `OPENROUTER_API_KEY`：OpenRouter API Key
-- `OPENROUTER_MODEL`：OpenRouter 使用的模型
+* `PORT`：后端服务端口，默认 `3001`
+* `MYSQL_HOST`：MySQL 服务地址
+* `MYSQL_PORT`：MySQL 服务端口，默认 `3306`
+* `MYSQL_USER`：MySQL 用户名
+* `MYSQL_PASSWORD`：MySQL 密码
+* `MYSQL_DATABASE`：项目使用的数据库名称
+* `OPENROUTER_API_KEY`：OpenRouter API Key
+* `OPENROUTER_MODEL`：OpenRouter 使用的模型
 
-> 不要把真实 API Key 写入 Git 仓库。项目已经通过 `.gitignore` 忽略 `.env` 文件。
+> 不要把真实数据库密码、API Key 等敏感信息写入 Git 仓库。项目已经通过 `.gitignore` 忽略 `.env` 文件。
 
-### 4. 启动后端
+### 5. 启动后端
 
 打开一个终端：
 
 ```bash
+cd server
 npm run start
 ```
 
@@ -413,7 +477,7 @@ http://localhost:3001/api/health
 }
 ```
 
-### 5. 启动前端
+### 6. 启动前端
 
 再打开一个终端，在项目根目录执行：
 
@@ -443,7 +507,7 @@ npm run build
 
 1. 使用 TypeScript 进行类型检查
 2. 使用 Vite 构建前端
-3. 进入 `server/` 安装后端依赖
+3. 生成前端生产构建文件
 
 构建完成后会生成：
 
@@ -467,8 +531,11 @@ npm run start
 
 ```text
 POST /api/auth/register
+
 POST /api/auth/login
+
 GET  /api/auth/me
+
 PUT  /api/auth/avatar
 ```
 
@@ -476,11 +543,17 @@ PUT  /api/auth/avatar
 
 ```text
 GET    /api/exhibits
+
 GET    /api/exhibits/:id
+
 GET    /api/exhibits/mine
+
 GET    /api/exhibits/likes/mine
+
 POST   /api/exhibits
+
 PUT    /api/exhibits/:id
+
 DELETE /api/exhibits/:id
 ```
 
@@ -488,7 +561,9 @@ DELETE /api/exhibits/:id
 
 ```text
 GET  /api/exhibits/:id/like
+
 POST /api/exhibits/:id/like
+
 GET  /api/exhibits/:id/likers
 ```
 
@@ -496,11 +571,17 @@ GET  /api/exhibits/:id/likers
 
 ```text
 GET    /api/admin/exhibits
+
 GET    /api/admin/exhibits/:id/preview
+
 PUT    /api/admin/exhibits/:id/status
+
 DELETE /api/admin/exhibits/:id
+
 GET    /api/admin/users
+
 PUT    /api/admin/users/:id/role
+
 GET    /api/admin/stats
 ```
 
@@ -520,36 +601,48 @@ GET /api/health
 
 ## 数据存储
 
-项目当前采用轻量级 JSON 文件方案，不依赖 MySQL、PostgreSQL 或 MongoDB 等独立数据库服务。
+项目当前采用 **MySQL** 作为核心业务数据的持久化方案。
 
-主要数据存储在：
+Node.js 后端通过 `mysql2` 连接 MySQL，并由 `server/db.js` 统一处理数据库连接以及用户、作品、点赞等数据操作。
 
-```text
-data.json
-```
-
-当前包含的核心数据结构包括：
+当前核心数据主要包括：
 
 ```text
 users
 exhibits
-likeRecords
+like_records
 ```
 
 其中：
 
-- `users`：用户、角色、头像、注册信息
-- `exhibits`：作品、作者、分类、模型地址、缩略图、审核状态、点赞数等
-- `likeRecords`：用户与作品之间的点赞关系
+* `users`：用户、角色、头像、注册信息等
+* `exhibits`：作品、作者、分类、模型地址、缩略图、审核状态、点赞数等
+* `like_records`：用户与作品之间的点赞关系
 
-上传的实际文件保存于：
+数据关系可以概括为：
+
+```text
+users
+  │
+  ├─────── 用户上传 ───────► exhibits
+  │                              │
+  │                              │
+  └─────── 点赞关系 ───────► like_records
+```
+
+上传的实际文件不直接存储在 MySQL 中，而是保存于：
 
 ```text
 uploads/
+
 ├─ avatars/
+
 ├─ models/
+
 └─ thumbnails/
 ```
+
+数据库中主要保存用户、作品以及相关业务关系和文件访问地址等信息。
 
 ---
 
@@ -559,6 +652,7 @@ uploads/
 
 ```text
 user
+
 admin
 ```
 
@@ -566,25 +660,25 @@ admin
 
 可以：
 
-- 注册与登录
-- 浏览审核通过的作品
-- 上传作品
-- 管理自己的作品
-- 点赞作品
-- 查看自己的点赞作品
-- 修改个人头像
+* 注册与登录
+* 浏览审核通过的作品
+* 上传作品
+* 管理自己的作品
+* 点赞作品
+* 查看自己的点赞作品
+* 修改个人头像
 
 ### 管理员
 
 在普通用户能力基础上，可以：
 
-- 进入管理员后台
-- 查看所有作品
-- 审核作品
-- 预览待审核作品
-- 删除作品
-- 管理用户角色
-- 查看系统统计数据
+* 进入管理员后台
+* 查看所有作品
+* 审核作品
+* 预览待审核作品
+* 删除作品
+* 管理用户角色
+* 查看系统统计数据
 
 管理员 API 使用 JWT 身份认证与管理员权限中间件进行保护。
 
@@ -596,17 +690,29 @@ admin
 
 ```text
 3D 模型
+
    ↓
+
 Multer
+
    ↓
+
 uploads/models/
+
    ↓
+
 数据库保存 model_url
+
    ↓
+
 前端 useGLTF()
+
    ↓
+
 Three.js / React Three Fiber
+
    ↓
+
 在线 3D 展示
 ```
 
@@ -614,9 +720,11 @@ Three.js / React Three Fiber
 
 ```text
 Card3DPreview.tsx
+
 → 作品卡片悬停预览
 
 ModelViewer.tsx
+
 → 作品详情页完整 3D 查看
 ```
 
@@ -672,9 +780,13 @@ AI 功能需要满足：
 
 ```text
 有效的 OPENROUTER_API_KEY
+
 +
+
 可用的 OPENROUTER_MODEL
+
 +
+
 能够访问 OpenRouter API
 ```
 
@@ -692,7 +804,27 @@ AI 功能需要满足：
 http://localhost:3001/api/health
 ```
 
-然后确认 `data.json` 是否存在作品数据。
+然后检查：
+
+1. MySQL 服务是否正常启动
+2. `server/.env` 中的数据库连接信息是否正确
+3. `MYSQL_DATABASE` 是否配置为项目实际使用的数据库
+4. MySQL 中是否存在 `exhibits` 表以及作品数据
+5. 浏览器 Network 中 `/api/exhibits` 请求是否正常返回
+
+### MySQL 无法连接
+
+检查：
+
+1. MySQL 服务是否已经启动
+2. `MYSQL_HOST` 是否正确
+3. `MYSQL_PORT` 是否正确
+4. `MYSQL_USER` 是否正确
+5. `MYSQL_PASSWORD` 是否正确
+6. `MYSQL_DATABASE` 是否存在
+7. MySQL 用户是否具有对应数据库的访问权限
+
+如果后端启动时报数据库连接错误，可以优先查看后端终端输出。
 
 ### 3D 模型无法加载
 
@@ -739,15 +871,17 @@ approved
 
 上线部署前建议至少完成：
 
-- 移除代码中的默认管理员密码
-- 所有密钥放入服务器环境变量
-- 不提交 `.env`
-- 更换生产环境 JWT Secret
-- 增加上传文件内容校验
-- 增加更严格的文件访问权限
-- 使用正式数据库替代 JSON 文件存储
-- 对 API 增加请求频率限制
-- 增强管理员操作审计日志
+* 移除代码中的默认管理员密码
+* 所有密钥放入服务器环境变量
+* 不提交 `.env`
+* 更换生产环境 JWT Secret
+* 设置安全的 MySQL 用户和密码
+* 限制数据库用户的权限范围
+* 增加上传文件内容校验
+* 增加更严格的文件访问权限
+* 对 API 增加请求频率限制
+* 增强管理员操作审计日志
+* 定期备份 MySQL 数据库
 
 ---
 
@@ -757,9 +891,13 @@ approved
 
 ```bash
 npm run dev
+
 npm run build
+
 npm run start
+
 npm run preview
+
 npm run lint
 ```
 
@@ -767,7 +905,9 @@ npm run lint
 
 ```bash
 cd server
+
 npm run start
+
 npm run dev
 ```
 
@@ -775,34 +915,45 @@ npm run dev
 
 ## 项目特点
 
-本项目将 **Web 前端、3D 可视化、用户系统、内容审核和 AI 交互** 融合在同一个应用中，形成完整的作品展示闭环：
+本项目将 **Web 前端、3D 可视化、用户系统、内容审核、MySQL 数据库和 AI 交互** 融合在同一个应用中，形成完整的作品展示闭环：
 
 ```text
 注册 / 登录
+
      ↓
+
 上传 3D 作品
+
      ↓
+
 管理员审核
+
      ↓
+
 作品进入展览
+
      ↓
+
 3D 在线预览
+
      ↓
+
 点赞 / 个人中心
+
      ↓
+
 AI 展览助手
 ```
 
-相比普通的图片作品展示页面，本项目的核心特色在于使用 Three.js 构建真实的 Web 3D 浏览体验，并通过用户、作品、审核、点赞与 AI 助手等模块形成完整的虚拟展览系统。
+相比普通的图片作品展示页面，本项目的核心特色在于使用 Three.js 构建真实的 Web 3D 浏览体验，并通过用户、作品、审核、点赞、MySQL 数据持久化与 AI 助手等模块形成完整的虚拟展览系统。
 
 ---
 
 ## 项目状态
 
-当前项目已完成基础的 3D 展示、用户认证、作品上传、管理员审核、点赞、个人中心和 AI 助手等核心功能，适合作为：
+当前项目已完成基础的 3D 展示、用户认证、MySQL 数据持久化、作品上传、管理员审核、点赞、个人中心和 AI 助手等核心功能，适合作为：
 
-- Web 3D 虚拟展览课程项目
-- 个人前端 / 全栈项目作品集
-- 3D 模型在线展示平台原型
-- React + Three.js 综合实践项目
-
+* Web 3D 虚拟展览课程项目
+* 个人前端 / 全栈项目作品集
+* 3D 模型在线展示平台原型
+* React + Three.js 综合实践项目
