@@ -18,6 +18,8 @@ export default function AIExhibitionAssistant() {
   const [message, setMessage] = useState('');
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
+  const baseUrl = import.meta.env.BASE_URL;
+
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
@@ -157,7 +159,11 @@ export default function AIExhibitionAssistant() {
           }}
         >
           <img
-            src={active ? '/icons/54.gif' : '/icons/53.gif'}
+            src={
+              active
+                ? `${baseUrl}icons/54.gif`
+                : `${baseUrl}icons/53.gif`
+            }
             alt="AI助手小宇"
             className="w-20 h-20 object-contain"
           />
