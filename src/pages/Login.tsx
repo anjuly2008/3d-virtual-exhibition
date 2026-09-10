@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
+const baseUrl = import.meta.env.BASE_URL;
+
 export default function Login() {
   const navigate = useNavigate();
   const { user, login } = useAuth();
@@ -32,7 +34,7 @@ export default function Login() {
     <div
       className="relative min-h-screen pt-[72px]"
       style={{
-        backgroundImage: "url('/backgrounds/4.gif')",
+        backgroundImage: `url(${baseUrl}backgrounds/4.gif)`,
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
@@ -55,7 +57,9 @@ export default function Login() {
             <p className="text-slate-200 mb-6">
               欢迎回来，{user.username}
               <br />
-              <span className="text-xs text-slate-300">Welcome back, {user.username}</span>
+              <span className="text-xs text-slate-300">
+                Welcome back, {user.username}
+              </span>
             </p>
 
             <button onClick={() => navigate('/')} className="glass-btn">
@@ -81,20 +85,30 @@ export default function Login() {
             <p className="text-slate-100">
               请登录您的账号
               <br />
-              <span className="text-xs text-slate-300">Login to your account</span>
+              <span className="text-xs text-slate-300">
+                Login to your account
+              </span>
             </p>
           </div>
 
           {error && (
             <div className="error-message mb-4 flex items-center gap-3">
-              <img src="/icons/26.gif" alt="" className="w-10 h-10 object-contain flex-shrink-0" />
+              <img
+                src={`${baseUrl}icons/26.gif`}
+                alt=""
+                className="w-10 h-10 object-contain flex-shrink-0"
+              />
               <span>{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="glass-card rounded-2xl p-6 md:p-8 relative" style={{ overflow: 'visible' }}>
+          <form
+            onSubmit={handleSubmit}
+            className="glass-card rounded-2xl p-6 md:p-8 relative"
+            style={{ overflow: 'visible' }}
+          >
             <img
-              src="/login-icons/40.gif"
+              src={`${baseUrl}login-icons/40.gif`}
               alt=""
               className="absolute z-50 pointer-events-none"
               style={{
@@ -144,13 +158,25 @@ export default function Login() {
                   required
                 />
 
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="login-eye-btn">
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="login-eye-btn"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
 
-            <button type="submit" disabled={loading} className="glass-btn w-full disabled:opacity-50 disabled:cursor-not-allowed">
+            <button
+              type="submit"
+              disabled={loading}
+              className="glass-btn w-full disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               {loading ? (
                 <>
                   登录中...
@@ -171,10 +197,15 @@ export default function Login() {
             <p className="text-white/80">
               还没有账号？
               <br />
-              <span className="text-xs text-slate-300">Don't have an account?</span>
+              <span className="text-xs text-slate-300">
+                Don't have an account?
+              </span>
               <br />
 
-              <Link to="/register" className="inline-block mt-2 text-white hover:text-blue-100 font-medium transition-colors">
+              <Link
+                to="/register"
+                className="inline-block mt-2 text-white hover:text-blue-100 font-medium transition-colors"
+              >
                 立即注册
                 <br />
                 <span className="text-xs text-slate-300">Register</span>

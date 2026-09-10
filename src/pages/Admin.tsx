@@ -39,6 +39,8 @@ export default function Admin() {
   const [exhibitFilter, setExhibitFilter] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const baseUrl = import.meta.env.BASE_URL;
+
   const loadExhibits = () => {
     const params: Record<string, string> = {};
 
@@ -120,7 +122,7 @@ export default function Admin() {
       <div
         className="relative min-h-screen pt-16 flex items-center justify-center"
         style={{
-          backgroundImage: "url('/backgrounds/4.gif')",
+          backgroundImage: `url(${baseUrl}backgrounds/4.gif)`,
           backgroundRepeat: 'repeat',
           backgroundAttachment: 'fixed',
         }}
@@ -138,7 +140,7 @@ export default function Admin() {
     <div
       className="relative min-h-screen pt-[72px]"
       style={{
-        backgroundImage: "url('/backgrounds/4.gif')",
+        backgroundImage: `url(${baseUrl}backgrounds/4.gif)`,
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
@@ -147,7 +149,11 @@ export default function Admin() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center gap-3 mb-8">
-          <img src="/admin-icons/30.gif" alt="Admin" className="w-10 h-10 object-contain" />
+          <img
+            src={`${baseUrl}admin-icons/30.gif`}
+            alt="Admin"
+            className="w-10 h-10 object-contain"
+          />
 
           <h1 className="text-3xl font-bold text-white">
             管理员后台
@@ -164,7 +170,11 @@ export default function Admin() {
               className={`glass-btn relative ${tab === t ? 'is-active' : ''}`}
             >
               {tab === t && (
-                <img src="/admin-icons/36.gif" alt="" className="absolute -top-5 -left-1 w-10 h-7 object-contain pointer-events-none" />
+                <img
+                  src={`${baseUrl}admin-icons/36.gif`}
+                  alt=""
+                  className="absolute -top-5 -left-1 w-10 h-7 object-contain pointer-events-none"
+                />
               )}
 
               {t === 'exhibits' && (
@@ -207,7 +217,11 @@ export default function Admin() {
                   className={`glass-btn relative ${exhibitFilter === s ? 'is-active' : ''}`}
                 >
                   {exhibitFilter === s && (
-                    <img src="/admin-icons/39.gif" alt="" className="absolute -top-5 -right-1 w-10 h-7 object-contain pointer-events-none" />
+                    <img
+                      src={`${baseUrl}admin-icons/39.gif`}
+                      alt=""
+                      className="absolute -top-5 -right-1 w-10 h-7 object-contain pointer-events-none"
+                    />
                   )}
 
                   {s === '' ? (
@@ -248,31 +262,37 @@ export default function Admin() {
                       <br />
                       <span className="text-xs text-slate-300">Work</span>
                     </th>
+
                     <th className="text-left p-4 text-white/80 font-medium">
                       作者
                       <br />
                       <span className="text-xs text-slate-300">Author</span>
                     </th>
+
                     <th className="text-left p-4 text-white/80 font-medium">
                       分类
                       <br />
                       <span className="text-xs text-slate-300">Category</span>
                     </th>
+
                     <th className="text-center p-4 text-white/80 font-medium">
                       预览
                       <br />
                       <span className="text-xs text-slate-300">Preview</span>
                     </th>
+
                     <th className="text-left p-4 text-white/80 font-medium">
                       状态
                       <br />
                       <span className="text-xs text-slate-300">Status</span>
                     </th>
+
                     <th className="text-left p-4 text-white/80 font-medium">
                       时间
                       <br />
                       <span className="text-xs text-slate-300">Date</span>
                     </th>
+
                     <th className="text-right p-4 text-white/80 font-medium">
                       操作
                       <br />
@@ -283,8 +303,12 @@ export default function Admin() {
 
                 <tbody>
                   {exhibits.map((e) => (
-                    <tr key={e.id} className="border-b border-white/10 hover:bg-white/10 transition-colors">
+                    <tr
+                      key={e.id}
+                      className="border-b border-white/10 hover:bg-white/10 transition-colors"
+                    >
                       <td className="p-4 text-white font-medium">{e.title}</td>
+
                       <td className="p-4 text-slate-200">{e.creator_name}</td>
 
                       <td className="p-4">
@@ -295,7 +319,9 @@ export default function Admin() {
                         <button
                           type="button"
                           className="glass-btn px-3 py-1"
-                          onClick={() => window.open(`/admin-preview/${e.id}`, '_blank')}
+                          onClick={() =>
+                            window.open(`/admin-preview/${e.id}`, '_blank')
+                          }
                         >
                           <Eye className="w-4 h-4 inline mr-1" />
                           预览
@@ -310,7 +336,9 @@ export default function Admin() {
                             <Clock className="w-3 h-3" />
                             待审核
                             <br />
-                            <span className="text-xs text-slate-300">Pending</span>
+                            <span className="text-xs text-slate-300">
+                              Pending
+                            </span>
                           </span>
                         )}
 
@@ -319,7 +347,9 @@ export default function Admin() {
                             <CheckCircle className="w-3 h-3" />
                             已通过
                             <br />
-                            <span className="text-xs text-slate-300">Approved</span>
+                            <span className="text-xs text-slate-300">
+                              Approved
+                            </span>
                           </span>
                         )}
 
@@ -328,7 +358,9 @@ export default function Admin() {
                             <XCircle className="w-3 h-3" />
                             已拒绝
                             <br />
-                            <span className="text-xs text-slate-300">Rejected</span>
+                            <span className="text-xs text-slate-300">
+                              Rejected
+                            </span>
                           </span>
                         )}
                       </td>
@@ -341,13 +373,19 @@ export default function Admin() {
                         <div className="flex items-center justify-end gap-2">
                           {e.status === 'pending' && (
                             <>
-                              <button onClick={() => handleApprove(e.id)} className="glass-btn px-3 py-1">
+                              <button
+                                onClick={() => handleApprove(e.id)}
+                                className="glass-btn px-3 py-1"
+                              >
                                 通过
                                 <br />
                                 <span className="text-xs">Approve</span>
                               </button>
 
-                              <button onClick={() => handleReject(e.id)} className="glass-btn px-3 py-1">
+                              <button
+                                onClick={() => handleReject(e.id)}
+                                className="glass-btn px-3 py-1"
+                              >
                                 拒绝
                                 <br />
                                 <span className="text-xs">Reject</span>
@@ -355,7 +393,10 @@ export default function Admin() {
                             </>
                           )}
 
-                          <button onClick={() => handleDeleteExhibit(e.id)} className="glass-btn p-1.5">
+                          <button
+                            onClick={() => handleDeleteExhibit(e.id)}
+                            className="glass-btn p-1.5"
+                          >
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
@@ -365,10 +406,15 @@ export default function Admin() {
 
                   {exhibits.length === 0 && (
                     <tr>
-                      <td colSpan={7} className="p-8 text-center text-slate-200">
+                      <td
+                        colSpan={7}
+                        className="p-8 text-center text-slate-200"
+                      >
                         暂无作品数据
                         <br />
-                        <span className="text-xs text-slate-300">No works yet</span>
+                        <span className="text-xs text-slate-300">
+                          No works yet
+                        </span>
                       </td>
                     </tr>
                   )}
@@ -388,21 +434,25 @@ export default function Admin() {
                     <br />
                     <span className="text-xs text-slate-300">Username</span>
                   </th>
+
                   <th className="text-left p-4 text-white/80 font-medium">
                     邮箱
                     <br />
                     <span className="text-xs text-slate-300">Email</span>
                   </th>
+
                   <th className="text-left p-4 text-white/80 font-medium">
                     角色
                     <br />
                     <span className="text-xs text-slate-300">Role</span>
                   </th>
+
                   <th className="text-left p-4 text-white/80 font-medium">
                     注册时间
                     <br />
                     <span className="text-xs text-slate-300">Registered</span>
                   </th>
+
                   <th className="text-right p-4 text-white/80 font-medium">
                     操作
                     <br />
@@ -413,8 +463,14 @@ export default function Admin() {
 
               <tbody>
                 {users.map((u) => (
-                  <tr key={u.id} className="border-b border-white/10 hover:bg-white/10 transition-colors">
-                    <td className="p-4 text-white font-medium">{u.username}</td>
+                  <tr
+                    key={u.id}
+                    className="border-b border-white/10 hover:bg-white/10 transition-colors"
+                  >
+                    <td className="p-4 text-white font-medium">
+                      {u.username}
+                    </td>
+
                     <td className="p-4 text-slate-200">{u.email}</td>
 
                     <td className="p-4">
@@ -440,7 +496,10 @@ export default function Admin() {
                     </td>
 
                     <td className="p-4 text-right">
-                      <button onClick={() => handleToggleRole(u.id, u.role)} className="glass-btn px-3 py-1">
+                      <button
+                        onClick={() => handleToggleRole(u.id, u.role)}
+                        className="glass-btn px-3 py-1"
+                      >
                         {u.role === 'admin' ? (
                           <>
                             降为普通用户
@@ -461,10 +520,15 @@ export default function Admin() {
 
                 {users.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="p-8 text-center text-slate-200">
+                    <td
+                      colSpan={5}
+                      className="p-8 text-center text-slate-200"
+                    >
                       暂无用户数据
                       <br />
-                      <span className="text-xs text-slate-300">No users yet</span>
+                      <span className="text-xs text-slate-300">
+                        No users yet
+                      </span>
                     </td>
                   </tr>
                 )}
@@ -476,21 +540,35 @@ export default function Admin() {
         {tab === 'stats' && stats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="glass-card rounded-xl p-6 text-center">
-              <img src="/admin-icons/31.gif" alt="" className="w-10 h-10 object-contain mx-auto mb-3" />
+              <img
+                src={`${baseUrl}admin-icons/31.gif`}
+                alt=""
+                className="w-10 h-10 object-contain mx-auto mb-3"
+              />
 
-              <div className="text-3xl font-bold text-white">{stats.totalUsers}</div>
+              <div className="text-3xl font-bold text-white">
+                {stats.totalUsers}
+              </div>
 
               <div className="text-sm text-slate-200 mt-1">
                 注册用户
                 <br />
-                <span className="text-xs text-slate-300">Registered Users</span>
+                <span className="text-xs text-slate-300">
+                  Registered Users
+                </span>
               </div>
             </div>
 
             <div className="glass-card rounded-xl p-6 text-center">
-              <img src="/admin-icons/33.gif" alt="" className="w-10 h-10 object-contain mx-auto mb-3" />
+              <img
+                src={`${baseUrl}admin-icons/33.gif`}
+                alt=""
+                className="w-10 h-10 object-contain mx-auto mb-3"
+              />
 
-              <div className="text-3xl font-bold text-white">{stats.totalExhibits}</div>
+              <div className="text-3xl font-bold text-white">
+                {stats.totalExhibits}
+              </div>
 
               <div className="text-sm text-slate-200 mt-1">
                 作品总数
@@ -500,26 +578,42 @@ export default function Admin() {
             </div>
 
             <div className="glass-card rounded-xl p-6 text-center">
-              <img src="/admin-icons/34.gif" alt="" className="w-10 h-10 object-contain mx-auto mb-3" />
+              <img
+                src={`${baseUrl}admin-icons/34.gif`}
+                alt=""
+                className="w-10 h-10 object-contain mx-auto mb-3"
+              />
 
-              <div className="text-3xl font-bold text-white">{stats.approvedExhibits}</div>
+              <div className="text-3xl font-bold text-white">
+                {stats.approvedExhibits}
+              </div>
 
               <div className="text-sm text-slate-200 mt-1">
                 已通过作品
                 <br />
-                <span className="text-xs text-slate-300">Approved Works</span>
+                <span className="text-xs text-slate-300">
+                  Approved Works
+                </span>
               </div>
             </div>
 
             <div className="glass-card rounded-xl p-6 text-center">
-              <img src="/admin-icons/35.gif" alt="" className="w-10 h-10 object-contain mx-auto mb-3" />
+              <img
+                src={`${baseUrl}admin-icons/35.gif`}
+                alt=""
+                className="w-10 h-10 object-contain mx-auto mb-3"
+              />
 
-              <div className="text-3xl font-bold text-white">{stats.pendingExhibits}</div>
+              <div className="text-3xl font-bold text-white">
+                {stats.pendingExhibits}
+              </div>
 
               <div className="text-sm text-slate-200 mt-1">
                 待审核作品
                 <br />
-                <span className="text-xs text-slate-300">Pending Works</span>
+                <span className="text-xs text-slate-300">
+                  Pending Works
+                </span>
               </div>
             </div>
           </div>

@@ -28,6 +28,8 @@ export default function Gallery() {
   const [exhibits, setExhibits] = useState<Exhibit[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const baseUrl = import.meta.env.BASE_URL;
+
   useEffect(() => {
     const params: Record<string, string> = {};
 
@@ -63,7 +65,7 @@ export default function Gallery() {
     <div
       className="relative min-h-screen pt-[72px]"
       style={{
-        backgroundImage: "url('/backgrounds/1.jpg')",
+        backgroundImage: `url(${baseUrl}backgrounds/1.jpg)`,
         backgroundRepeat: 'repeat',
         backgroundAttachment: 'fixed',
       }}
@@ -82,10 +84,13 @@ export default function Gallery() {
         <p className="text-sm text-white/80 font-medium mb-2">作品种类 / Category</p>
 
         <div className="flex flex-wrap gap-2 mb-8">
-          <button onClick={() => handleCategoryClick('all')} className={`glass-btn relative ${!selectedCategory ? 'is-active' : ''}`}>
+          <button
+            onClick={() => handleCategoryClick('all')}
+            className={`glass-btn relative ${!selectedCategory ? 'is-active' : ''}`}
+          >
             {!selectedCategory && (
               <img
-                src="/gallery-icons/28.gif"
+                src={`${baseUrl}gallery-icons/28.gif`}
                 alt=""
                 className="absolute -top-5 -left-0.5 w-10 h-7 object-contain pointer-events-none"
               />
@@ -101,7 +106,7 @@ export default function Gallery() {
             >
               {selectedCategory === category && (
                 <img
-                  src="/gallery-icons/28.gif"
+                  src={`${baseUrl}gallery-icons/28.gif`}
                   alt=""
                   className="absolute -top-5 -left-0.5 w-10 h-7 object-contain pointer-events-none"
                 />
@@ -132,7 +137,7 @@ export default function Gallery() {
                 >
                   {selected && (
                     <img
-                      src="/gallery-icons/27.gif"
+                      src={`${baseUrl}gallery-icons/27.gif`}
                       alt=""
                       className="absolute -top-5 -right-2 w-10 h-7 object-contain pointer-events-none"
                     />
@@ -165,7 +170,7 @@ export default function Gallery() {
                 >
                   {selected && (
                     <img
-                      src="/gallery-icons/29.gif"
+                      src={`${baseUrl}gallery-icons/29.gif`}
                       alt=""
                       className="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-7 object-contain pointer-events-none"
                     />
@@ -196,7 +201,11 @@ export default function Gallery() {
         ) : (
           <div className="text-center py-16">
             <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <img src="/icons/26.gif" alt="No works found" className="w-12 h-12 object-contain" />
+              <img
+                src={`${baseUrl}icons/26.gif`}
+                alt="No works found"
+                className="w-12 h-12 object-contain"
+              />
             </div>
 
             <h3 className="text-xl font-semibold text-white mb-2">

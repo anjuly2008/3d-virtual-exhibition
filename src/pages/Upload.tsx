@@ -11,6 +11,8 @@ import { useAuth } from '@/context/AuthContext';
 import { api } from '@/api/client';
 import UploadModelPreview from '@/components/3D/UploadModelPreview';
 
+const baseUrl = import.meta.env.BASE_URL;
+
 function PageContainer({
   children,
   className = '',
@@ -132,7 +134,7 @@ export default function Upload() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: "url('/backgrounds/1.jpg')",
+          backgroundImage: `url(${baseUrl}backgrounds/1.jpg)`,
           backgroundRepeat: 'repeat',
           backgroundAttachment: 'fixed',
         }}
@@ -145,7 +147,7 @@ export default function Upload() {
           <div className="glass-card p-8 text-center max-w-md mx-4">
             <div className="flex items-center justify-center mx-auto mb-4">
               <img
-                src="/icons/26.gif"
+                src={`${baseUrl}icons/26.gif`}
                 alt=""
                 className="w-12 h-12 object-contain"
               />
@@ -176,10 +178,10 @@ export default function Upload() {
                   <img
                     src={
                       s === 1
-                        ? '/upload-icons/45.gif'
+                        ? `${baseUrl}upload-icons/45.gif`
                         : s === 2
-                          ? '/upload-icons/46.gif'
-                          : '/upload-icons/47.gif'
+                          ? `${baseUrl}upload-icons/46.gif`
+                          : `${baseUrl}upload-icons/47.gif`
                     }
                     alt={`Step ${s}`}
                     className={`w-10 h-10 object-contain transition-all duration-300 ${
