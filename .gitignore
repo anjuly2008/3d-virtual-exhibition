@@ -2,7 +2,6 @@ node_modules/
 dist/
 .env
 *.log
-data.json
 uploads/
 .DS_Store
 Thumbs.db

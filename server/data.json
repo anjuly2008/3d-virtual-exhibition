@@ -1,0 +1,154 @@
+{
+  "exported_at": "2026-09-23T02:23:02.448Z",
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@3dshow.com",
+      "role": "admin",
+      "avatar_url": null,
+      "created_at": "2026-08-22T01:04:46.617Z"
+    }
+  ],
+  "exhibits": [
+    {
+      "id": 43,
+      "title": "Blocks Humanoid",
+      "description": "无",
+      "creator_id": 1,
+      "creator_name": "admin",
+      "category": "Character",
+      "tags": [
+        "Low Poly"
+      ],
+      "usage": [],
+      "model_url": "/demo/models/Blocks Humanoid by 3Donimus - de1C80IeXE1.glb",
+      "thumbnail_url": "/demo/thumbnails/Blocks Humanoid.png",
+      "status": "approved",
+      "likes": 0,
+      "created_at": "2026-09-22T17:48:47.973Z"
+    },
+    {
+      "id": 44,
+      "title": "MechQuadruped",
+      "description": "无",
+      "creator_id": 1,
+      "creator_name": "admin",
+      "category": "Character",
+      "tags": [
+        "Low Poly"
+      ],
+      "usage": [
+        "Design"
+      ],
+      "model_url": "/demo/models/MechQuadruped by 3Donimus - 5xIhRpmbdfo.glb",
+      "thumbnail_url": "/demo/thumbnails/MechQuadruped.png",
+      "status": "approved",
+      "likes": 0,
+      "created_at": "2026-09-22T17:49:51.839Z"
+    },
+    {
+      "id": 45,
+      "title": "art statue",
+      "description": "无",
+      "creator_id": 1,
+      "creator_name": "admin",
+      "category": "Character",
+      "tags": [
+        "Low Poly"
+      ],
+      "usage": [
+        "Design"
+      ],
+      "model_url": "/demo/models/art statue by Kelli Ray - b3L5PKB4fsx.glb",
+      "thumbnail_url": "/demo/thumbnails/art statue.png",
+      "status": "approved",
+      "likes": 0,
+      "created_at": "2026-09-22T17:54:40.212Z"
+    },
+    {
+      "id": 46,
+      "title": "SF Street",
+      "description": "123",
+      "creator_id": 1,
+      "creator_name": "admin",
+      "category": "Architecture",
+      "tags": [
+        "Low Poly"
+      ],
+      "usage": [],
+      "model_url": "/demo/models/SF Street by Alan Zimmerman - cnTMgkFoTSO.glb",
+      "thumbnail_url": "/demo/thumbnails/SF Street.png",
+      "status": "approved",
+      "likes": 0,
+      "created_at": "2026-09-22T17:55:34.555Z"
+    },
+    {
+      "id": 47,
+      "title": "Ambulance",
+      "description": "无",
+      "creator_id": 1,
+      "creator_name": "admin",
+      "category": "Vehicle",
+      "tags": [
+        "Low Poly"
+      ],
+      "usage": [],
+      "model_url": "/demo/models/Ambulance by Poly by Google - beDwEv9UB7x.glb",
+      "thumbnail_url": "/demo/thumbnails/Ambulance.png",
+      "status": "approved",
+      "likes": 0,
+      "created_at": "2026-09-22T17:56:15.526Z"
+    },
+    {
+      "id": 48,
+      "title": "Pot Kit",
+      "description": "无",
+      "creator_id": 1,
+      "creator_name": "admin",
+      "category": "Prop",
+      "tags": [],
+      "usage": [],
+      "model_url": "/demo/models/Pot Kit by Charlie - iScZ4sRA7M.glb",
+      "thumbnail_url": "/demo/thumbnails/Pot Kit.png",
+      "status": "approved",
+      "likes": 0,
+      "created_at": "2026-09-22T17:58:10.985Z"
+    },
+    {
+      "id": 49,
+      "title": "Earth",
+      "description": "无",
+      "creator_id": 1,
+      "creator_name": "admin",
+      "category": "Environment",
+      "tags": [
+        "Low Poly"
+      ],
+      "usage": [],
+      "model_url": "/demo/models/Earth by Poly by Google - 58PjkNdPh.glb",
+      "thumbnail_url": "/demo/thumbnails/Earth.png",
+      "status": "approved",
+      "likes": 0,
+      "created_at": "2026-09-22T17:58:53.875Z"
+    },
+    {
+      "id": 50,
+      "title": "Cabin and environment",
+      "description": "无",
+      "creator_id": 1,
+      "creator_name": "admin",
+      "category": "Environment",
+      "tags": [
+        "Low Poly"
+      ],
+      "usage": [],
+      "model_url": "/demo/models/Cabin and environment by Poly by Google - e_OOhODxeJc.glb",
+      "thumbnail_url": "/demo/thumbnails/Cabin and environment.png",
+      "status": "approved",
+      "likes": 0,
+      "created_at": "2026-09-22T17:59:31.922Z"
+    }
+  ],
+  "like_records": []
+}

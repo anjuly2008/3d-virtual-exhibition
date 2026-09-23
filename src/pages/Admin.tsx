@@ -315,12 +315,15 @@ export default function Admin() {
                         <span className="glass-badge">{e.category}</span>
                       </td>
 
-                      <td className="p-4 text-center">
+                     <td className="p-4 text-center">
                         <button
                           type="button"
                           className="glass-btn px-3 py-1"
                           onClick={() =>
-                            window.open(`/admin-preview/${e.id}`, '_blank')
+                            window.open(
+                              `${import.meta.env.BASE_URL}admin-preview/${e.id}`,
+                              '_blank'
+                            )
                           }
                         >
                           <Eye className="w-4 h-4 inline mr-1" />

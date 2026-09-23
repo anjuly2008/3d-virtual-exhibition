@@ -1,5 +1,9 @@
 import 'dotenv/config';
 import mysql from 'mysql2/promise';
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import bcrypt from 'bcryptjs';
 
 const pool = mysql.createPool({
   host: process.env.MYSQL_HOST || '127.0.0.1',
@@ -130,6 +134,183 @@ function jsonParam(value) {
     Array.isArray(value) ? value : []
   );
 }
+// ================================
+// 如果 MySQL 是空的，就加载默认 data.json
+// ================================
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const dataFilePath = path.join(__dirname, 'data.json');
+
+async function initializeDemoData() {
+  // 检查 MySQL 里有没有数据
+  const [userCountRows] = await pool.execute(
+    'SELECT COUNT(*) AS total FROM users'
+  );
+
+  const [exhibitCountRows] = await pool.execute(
+    'SELECT COUNT(*) AS total FROM exhibits'
+  );
+
+  const userCount = Number(
+    userCountRows[0]?.total || 0
+  );
+
+  const exhibitCount = Number(
+    exhibitCountRows[0]?.total || 0
+  );
+
+  // 如果数据库已经有数据，就什么都不做
+  if (userCount > 0 || exhibitCount > 0) {
+    console.log(
+      `MySQL 已有数据，跳过默认 data.json 导入（users=${userCount}, exhibits=${exhibitCount}）`
+    );
+    return;
+  }
+
+  console.log('MySQL 是空的，开始读取 data.json...');
+
+  // 读取 data.json
+  const raw = await fs.readFile(
+    dataFilePath,
+    'utf8'
+  );
+
+  const data = JSON.parse(raw);
+
+  const users = Array.isArray(data.users)
+    ? data.users
+    : [];
+
+  const exhibits = Array.isArray(data.exhibits)
+    ? data.exhibits
+    : [];
+
+  const likeRecords = Array.isArray(
+    data.like_records
+  )
+    ? data.like_records
+    : [];
+
+  const connection = await pool.getConnection();
+
+  try {
+    await connection.beginTransaction();
+
+    // ================================
+    // 1. 导入用户
+    // ================================
+
+    for (const user of users) {
+      // Demo 用户统一设置一个演示密码
+      const passwordHash = await bcrypt.hash(
+        'Demo@123456',
+        10
+      );
+
+      await connection.execute(
+        `
+        INSERT INTO users (
+          id,
+          username,
+          email,
+          password_hash,
+          role,
+          avatar_url,
+          created_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        `,
+        [
+          Number(user.id),
+          user.username || 'admin',
+          user.email || '',
+          passwordHash,
+          user.role || 'user',
+          user.avatar_url || null,
+          toMySqlDateTime(user.created_at)
+        ]
+      );
+    }
+
+    // ================================
+    // 2. 导入作品
+    // ================================
+
+    for (const exhibit of exhibits) {
+      await connection.execute(
+        `
+        INSERT INTO exhibits (
+          id,
+          title,
+          description,
+          creator_id,
+          creator_name,
+          category,
+          tags,
+          \`usage\`,
+          model_url,
+          thumbnail_url,
+          status,
+          likes,
+          created_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `,
+        [
+          Number(exhibit.id),
+          exhibit.title || '',
+          exhibit.description || '',
+          Number(exhibit.creator_id),
+          exhibit.creator_name || '',
+          exhibit.category || '',
+          jsonParam(exhibit.tags),
+          jsonParam(exhibit.usage),
+          exhibit.model_url || '',
+          exhibit.thumbnail_url || '',
+          exhibit.status || 'approved',
+          Number(exhibit.likes || 0),
+          toMySqlDateTime(exhibit.created_at)
+        ]
+      );
+    }
+
+    // ================================
+    // 3. 导入点赞记录
+    // ================================
+
+    for (const record of likeRecords) {
+      await connection.execute(
+        `
+        INSERT INTO like_records (
+          user_id,
+          exhibit_id
+        )
+        VALUES (?, ?)
+        `,
+        [
+          Number(record.user_id),
+          Number(record.exhibit_id)
+        ]
+      );
+    }
+
+    await connection.commit();
+
+    console.log(
+      `✅ 默认数据导入成功：${users.length} 个用户，${exhibits.length} 个作品`
+    );
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+}
+
+// 启动 db.js 时自动执行一次
+await initializeDemoData();
 
 const db = {
   users: {
